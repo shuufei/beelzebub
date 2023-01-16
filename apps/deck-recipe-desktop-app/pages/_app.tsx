@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
@@ -6,11 +7,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to deck-recipe-desktop-app!</title>
+        <title>Deck Recipe</title>
       </Head>
-      <main className="app">
+      <ChakraProvider>
         <Component {...pageProps} />
-      </main>
+      </ChakraProvider>
     </>
   );
 }
