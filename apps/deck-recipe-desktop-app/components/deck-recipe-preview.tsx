@@ -1,56 +1,28 @@
 import { Card } from '@beelzebub/shared/domain';
-import { Box, Heading, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import { groupBy } from 'lodash';
+import { Box, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FC } from 'react';
 
 const CardList: FC<{ cards: Card[] }> = ({ cards }) => {
-  const groupedCardList = Object.values(groupBy(cards, 'imgFileName')).map(
-    (cards) => {
-      return {
-        card: cards[0],
-        count: cards.length,
-      };
-    }
-  );
   return (
-    <Wrap spacing={2}>
-      {groupedCardList.map((groupedCard) => {
+    <Wrap spacing={2} justify={'center'}>
+      {cards.map((card, i) => {
         return (
-          <WrapItem key={`${groupedCard.card.imgFileName}`}>
+          <WrapItem key={`${card.imgFileName}-${i}`}>
             <VStack spacing={0.5}>
-              <Image
-                src={getFilePath(groupedCard.card)}
-                alt=""
-                width={70}
-                height={70 * cardAspect}
-              />
-              <Text fontSize={'xs'} fontWeight={'semibold'}>
-                x {groupedCard.count}
-              </Text>
+              <Box boxShadow={'sm'}>
+                <Image
+                  src={getFilePath(card)}
+                  alt=""
+                  width={160}
+                  height={160 * cardAspect}
+                />
+              </Box>
             </VStack>
           </WrapItem>
         );
       })}
     </Wrap>
-  );
-};
-
-const CardListSection: FC<{ cards: Card[]; title: string }> = ({
-  cards,
-  title,
-}) => {
-  return (
-    cards.length > 0 && (
-      <Box as="section">
-        <Heading as="h2" fontSize={'xs'} color={'gray.600'}>
-          {title}
-        </Heading>
-        <Box mt="1.5">
-          <CardList cards={cards} />
-        </Box>
-      </Box>
-    )
   );
 };
 
@@ -73,36 +45,24 @@ export const DeckRecipePreview: FC<{ deckCards: Card[]; deckName: string }> = ({
   const tamerList = deckCards.filter((v) => v.cardtype === 'テイマー');
   const optionList = deckCards.filter((v) => v.cardtype === 'オプション');
   return (
-    <Box p="2">
-      <Text fontSize={'md'} fontWeight={'semibold'}>
+    <Box px="8" pt="4" pb="8" border="1px" borderColor={'gray.200'}>
+      <Text fontSize={'md'} fontWeight={'semibold'} textAlign={'center'}>
         {deckName}
       </Text>
-      <Wrap alignItems={'flex-start'} spacingX={8} spacingY={5} mt={'4'}>
-        <WrapItem>
-          <CardListSection cards={digitamaList} title="デジタマ" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={lv3List} title="Lv.3" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={lv4List} title="Lv.4" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={lv5List} title="Lv.5" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={lv6List} title="Lv.6" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={lv7List} title="Lv.7" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={tamerList} title="テイマー" />
-        </WrapItem>
-        <WrapItem>
-          <CardListSection cards={optionList} title="オプション" />
-        </WrapItem>
-      </Wrap>
+      <Box mt={'3'}>
+        <CardList
+          cards={[
+            ...digitamaList,
+            ...lv3List,
+            ...lv4List,
+            ...lv5List,
+            ...lv6List,
+            ...lv7List,
+            ...tamerList,
+            ...optionList,
+          ]}
+        />
+      </Box>
     </Box>
   );
 };
