@@ -11,3 +11,9 @@
    ```
    $ npx nx run desktop-app:serve
    ```
+
+## 新弾対応
+
+1. カード情報とカード画像を取得
+1. supabase storage の app-static-resources bucket に配置
+   - https://app.supabase.com/project/dpqtsdpnxddmnvofamtu/storage/buckets/app-static-resources
