@@ -1,9 +1,10 @@
 import { Card } from '@beelzebub/shared/domain';
-import { Button, Heading, VStack } from '@chakra-ui/react';
+import { Button, Heading, VStack, Text } from '@chakra-ui/react';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { CardImg } from '../components/card-img';
 import { APP_ACCESS_CHECK_KEY } from './api/set-cookie-app-access-key';
@@ -14,8 +15,13 @@ export function Index() {
   const router = useRouter();
 
   return (
-    <main>
+    <VStack as="main" alignItems={'flex-start'} spacing={4}>
       <Heading>Beelzebub Desktop App</Heading>
+      <Link href={'/_tmp/deck-recipe'}>
+        <Text textDecoration={'underline'} color="blue.600">
+          deck recipe
+        </Text>
+      </Link>
       <CardImg
         card={
           {
@@ -25,17 +31,15 @@ export function Index() {
         }
         width={100}
       />
-      <VStack alignItems={'flex-start'}>
-        <Button
-          onClick={async () => {
-            await supabaseClient.auth.signOut();
-            router.replace('/auth/sign-in');
-          }}
-        >
-          sign out
-        </Button>
-      </VStack>
-    </main>
+      <Button
+        onClick={async () => {
+          await supabaseClient.auth.signOut();
+          router.replace('/auth/sign-in');
+        }}
+      >
+        sign out
+      </Button>
+    </VStack>
   );
 }
 
