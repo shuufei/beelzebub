@@ -1,9 +1,12 @@
 import { Button, Heading, VStack } from '@chakra-ui/react';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { parse } from 'cookie';
+import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { APP_ACCESS_CHECK_KEY } from './api/set-cookie-app-access-key';
 
 const cardAspect = 600 / 430;
 
@@ -55,7 +58,20 @@ export function Index() {
 
 export default Index;
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const parsedCookies = parse(ctx.req.headers.cookie ?? '');
+  const correctRequest =
+    parsedCookies[APP_ACCESS_CHECK_KEY] ===
+    process.env.NEXT_BEELZEBUB_ACCESS_KEY;
+  if (!correctRequest) {
+    return {
+      redirect: {
+        permanent: true,
+        destination: '/service-suspended',
+      },
+    };
+  }
+
   const supabase = createServerSupabaseClient(ctx);
   const {
     data: { session },
