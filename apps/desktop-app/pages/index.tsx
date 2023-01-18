@@ -56,14 +56,10 @@ export function Index() {
 export default Index;
 
 export const getServerSideProps = async (ctx) => {
-  // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
-  // Check if we have a session
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  console.log('--- session: ', session);
 
   if (!session) {
     return {
