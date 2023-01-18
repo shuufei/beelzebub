@@ -24,7 +24,7 @@ export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
   }, [card.category, card.imgFileName, supabaseClient]);
   return (
     <Image
-      src={cardUrl ?? '/images/back.png'}
+      src={cardUrl ?? '/images/card-placeholder.png'}
       width={width}
       height={width * (CARD_HEIGHT / CARD_WIDTH)}
       alt=""
