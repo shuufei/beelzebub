@@ -268,3 +268,6 @@ export type CardsGropedByLvAndCardType = {
 export type CardsGroupedByLvAndCardTypeAndNo = {
   [key in keyof CardsGropedByLvAndCardType]: CardsGroupedByNo;
 };
+
+export const CARD_HEIGHT = 600;
+export const CARD_WIDTH = 430;
