@@ -1,12 +1,16 @@
+import { Box, Button } from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
-import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { APP_ACCESS_CHECK_KEY } from '../api/set-cookie-app-access-key';
 
-const SignInPage: FC = () => {
+type PageProps = {
+  redirectTo: string;
+};
+
+const SignInPage: FC<PageProps> = ({ redirectTo }) => {
   const supabaseClient = useSupabaseClient();
 
   const user = useUser();
@@ -19,20 +23,28 @@ const SignInPage: FC = () => {
   }, [router, supabaseClient, user]);
 
   return (
-    <Auth
-      redirectTo="/"
-      appearance={{ theme: ThemeSupa }}
-      supabaseClient={supabaseClient}
-      providers={['google']}
-      onlyThirdPartyProviders
-      socialLayout="horizontal"
-    />
+    <Box p={8}>
+      <Button
+        onClick={async () => {
+          await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo,
+            },
+          });
+        }}
+      >
+        sign in with google
+      </Button>
+    </Box>
   );
 };
 
 export default SignInPage;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  ctx
+) => {
   const parsedCookies = parse(ctx.req.headers.cookie ?? '');
   const correctRequest =
     parsedCookies[APP_ACCESS_CHECK_KEY] ===
@@ -46,6 +58,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {
-    props: {},
+    props: {
+      redirectTo: process.env.NEXT_APP_ENDPOINT,
+    },
   };
 };
