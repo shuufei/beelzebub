@@ -1,16 +1,14 @@
 import { z } from 'zod';
-import { CardType } from './card-type';
-import { Lv } from './lv';
-import { Color } from './color';
 
-export const Card = z.object({
+export const CardOriginal = z.object({
   no: z.string(),
-  lv: z.union([Lv, z.undefined()]),
+  lv: z.union([z.string(), z.undefined()]),
   rarity: z.string(),
-  cardtype: CardType,
+  cardtype: z.string(),
   parallel: z.union([z.string(), z.undefined()]),
   name: z.string(),
-  colors: z.array(Color),
+  color: z.string(),
+  imgFileName: z.string(),
   form: z.union([z.string(), z.undefined()]),
   attribute: z.string(),
   type: z.string(),
@@ -21,8 +19,6 @@ export const Card = z.object({
   effect: z.union([z.string(), z.undefined()]),
   evolutionaryOriginEffect: z.union([z.string(), z.undefined()]),
   securityEffect: z.union([z.string(), z.undefined()]),
-  imgFileName: z.string(),
-  category: z.string(),
 });
 
-export type Card = z.infer<typeof Card>;
+export type CardOriginal = z.infer<typeof CardOriginal>;
