@@ -5,5 +5,6 @@ declare namespace NodeJS {
     readonly NEXT_APP_ENDPOINT: string;
     readonly NEXT_SUPABASE_SERVICE_KEY: string;
     readonly NEXT_PUBLIC_SUPABASE_URL: string;
+    readonly NEXT_ADMIN_USER_EMAIL: string;
   }
 }

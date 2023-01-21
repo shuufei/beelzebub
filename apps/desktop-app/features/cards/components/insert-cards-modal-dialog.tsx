@@ -30,7 +30,8 @@ export const InsertCardsModalDialog: FC<{
       method: 'POST',
       body: JSON.stringify(cardsData),
     });
-  }, [cardsData, category]);
+    onClose();
+  }, [cardsData, category, onClose]);
 
   const loadDeckJsonFile = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {

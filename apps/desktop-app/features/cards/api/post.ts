@@ -6,6 +6,7 @@ import {
 import { NextApiRequest, NextApiResponse } from 'next';
 import { z, ZodError } from 'zod';
 import { supabaseForServer } from '../../../lib/supabase-client';
+import { isPermitted } from '../../auth/api/is-permitted';
 
 const upsertCard = async (card: Card) => {
   const data = await supabaseForServer.from('Cards').upsert({ ...card });
@@ -15,7 +16,9 @@ const upsertCard = async (card: Card) => {
 
 export const postCards = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    // TODO: 認証処理を追加。特定のユーザしか登録できないようにする
+    if (!(await isPermitted(req, res, true))) {
+      return res.status(401).json({ message: 'unauthorized' });
+    }
     const body = JSON.parse(req.body);
     const { category } = req.query;
     if (body.cardInfoList == null) {
