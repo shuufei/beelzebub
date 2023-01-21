@@ -1,4 +1,8 @@
-import { Card, CARD_HEIGHT, CARD_WIDTH } from '@beelzebub/shared/domain';
+import {
+  Card,
+  CARD_IMG_HEIGHT,
+  CARD_IMG_WIDTH,
+} from '@beelzebub/shared/domain';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
@@ -26,7 +30,7 @@ export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
     <Image
       src={cardUrl ?? '/images/card-placeholder.png'}
       width={width}
-      height={width * (CARD_HEIGHT / CARD_WIDTH)}
+      height={width * (CARD_IMG_HEIGHT / CARD_IMG_WIDTH)}
       alt=""
       priority={true}
     />

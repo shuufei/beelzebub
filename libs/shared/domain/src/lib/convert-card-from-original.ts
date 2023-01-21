@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { Card } from './card';
 import { CardOriginal } from './card-original';
 import { CardType } from './card-type';
-import { Category } from './category';
 import { Color } from './color';
 import { Lv } from './lv';
 
@@ -17,7 +16,7 @@ const convertColorsFromOriginalColor = (
 
 export const convertCardFromOriginal = (
   original: CardOriginal,
-  category: Category
+  category: Card['category']
 ): Card => {
   const parsedLv = Lv.parse(original.lv ?? '-');
   const parsdCardType = CardType.parse(original.cardtype);
@@ -27,7 +26,7 @@ export const convertCardFromOriginal = (
     lv: parsedLv,
     rarity: original.rarity,
     cardtype: parsdCardType,
-    parallel: original.parallel,
+    parallel: !!original.parallel,
     name: original.name,
     colors: parsedColors,
     form: original.form,

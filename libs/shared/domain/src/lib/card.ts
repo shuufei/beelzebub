@@ -8,7 +8,7 @@ export const Card = z.object({
   lv: z.union([Lv, z.undefined()]),
   rarity: z.string(),
   cardtype: CardType,
-  parallel: z.union([z.string(), z.undefined()]),
+  parallel: z.boolean(),
   name: z.string(),
   colors: z.array(Color),
   form: z.union([z.string(), z.undefined()]),
