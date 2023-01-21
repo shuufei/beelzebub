@@ -12,6 +12,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
+  useToast,
 } from '@chakra-ui/react';
 import { ChangeEvent, FC, memo, useCallback, useState } from 'react';
 
@@ -21,17 +23,28 @@ export const InsertCardsModalDialog: FC<{
 }> = memo(function InsertCardsModalDialog({ isOpen, onClose }) {
   const [category, setCategory] = useState('');
   const [cardsData, setCardsData] = useState<unknown | undefined>();
+  const [isLoading, setLoading] = useState(false);
+  const toast = useToast();
 
   const insertData = useCallback(async () => {
     if (cardsData == null || !category) {
       return;
     }
+    setLoading(true);
     await fetch(`/api/${category}/cards`, {
       method: 'POST',
       body: JSON.stringify(cardsData),
     });
+    setLoading(false);
     onClose();
-  }, [cardsData, category, onClose]);
+    toast({
+      title: '新しいカードを登録しました',
+      duration: 3000,
+      status: 'success',
+      isClosable: true,
+      position: 'top-right',
+    });
+  }, [cardsData, category, onClose, toast]);
 
   const loadDeckJsonFile = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,11 +94,11 @@ export const InsertCardsModalDialog: FC<{
           <ModalFooter p={0} py={4}>
             <HStack alignItems={'flex-start'} w={'full'}>
               <Button
-                disabled={!category || !cardsData}
+                disabled={!category || !cardsData || isLoading}
                 onClick={insertData}
                 colorScheme={'blue'}
               >
-                登録
+                {!isLoading ? '登録' : <Spinner size={'sm'} />}
               </Button>
               <Button onClick={onClose} variant={'ghost'} colorScheme={'blue'}>
                 キャンセル
