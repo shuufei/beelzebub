@@ -1,5 +1,6 @@
 import { Card } from '@beelzebub/shared/domain';
 import { NextApiHandler } from 'next';
+import { handleResponseError } from '../../shared/api/handle-response-error';
 import { getCards } from '../../features/cards/api/get';
 
 export type GetCardsResponseBody = {
@@ -9,7 +10,13 @@ export type GetCardsResponseBody = {
 export const handler: NextApiHandler = async (req, res) => {
   switch (req.method) {
     case 'GET':
-      return getCards(req, res);
+      try {
+        const { cards } = await getCards(req, res);
+        const body: GetCardsResponseBody = { cards };
+        return res.status(200).json(body);
+      } catch (error) {
+        return handleResponseError(res, error);
+      }
     default:
       return res.status(405).end();
   }

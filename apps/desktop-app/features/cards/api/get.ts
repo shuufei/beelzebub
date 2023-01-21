@@ -1,10 +1,16 @@
+import { Card } from '@beelzebub/shared/domain';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { InternalServerError } from '../../../errors/internal-server-error';
+import { UnauthorizedError } from '../../../errors/unauthorized-error';
 import { supabaseForServer } from '../../../lib/supabase-client';
 import { isPermitted } from '../../auth/api/is-permitted';
 
-export const getCards = async (req: NextApiRequest, res: NextApiResponse) => {
+export const getCards = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<{ cards: Card[] }> => {
   if (!(await isPermitted(req, res))) {
-    return res.status(401).json({ message: 'unauthorized' });
+    throw new UnauthorizedError();
   }
   // TODO: paging
   const { data, error } = await supabaseForServer
@@ -13,8 +19,9 @@ export const getCards = async (req: NextApiRequest, res: NextApiResponse) => {
     .limit(10);
   if (data != null) {
     // TODO: schema validate
-    return res.status(200).json({ cards: data });
+    return { cards: data };
   } else {
-    return res.status(500).json({ error });
+    console.error('failed get cards from supabase: ', error);
+    throw new InternalServerError();
   }
 };
