@@ -7,7 +7,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { z, ZodError } from 'zod';
 import { BadRequest } from '../../../errors/bad-request';
 import { InternalServerError } from '../../../errors/internal-server-error';
-import { UnauthorizedError } from '../../../errors/unauthorized-error';
+import { Unauthorized } from '../../../errors/unauthorized';
 import { supabaseForServer } from '../../../lib/supabase-client';
 import { isPermitted } from '../../auth/api/is-permitted';
 
@@ -23,7 +23,7 @@ export const postCards = async (
 ): Promise<void> => {
   try {
     if (!(await isPermitted(req, res, true))) {
-      throw new UnauthorizedError();
+      throw new Unauthorized();
     }
     const body = JSON.parse(req.body);
     const { category } = req.query;

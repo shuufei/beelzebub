@@ -1,7 +1,7 @@
 import { Card } from '@beelzebub/shared/domain';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { InternalServerError } from '../../../errors/internal-server-error';
-import { UnauthorizedError } from '../../../errors/unauthorized-error';
+import { Unauthorized } from '../../../errors/unauthorized';
 import { supabaseForServer } from '../../../lib/supabase-client';
 import { isPermitted } from '../../auth/api/is-permitted';
 
@@ -10,7 +10,7 @@ export const getCards = async (
   res: NextApiResponse
 ): Promise<{ cards: Card[] }> => {
   if (!(await isPermitted(req, res))) {
-    throw new UnauthorizedError();
+    throw new Unauthorized();
   }
   // TODO: paging
   const { data, error } = await supabaseForServer
