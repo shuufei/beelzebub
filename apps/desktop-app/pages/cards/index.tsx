@@ -7,7 +7,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { CardImg } from '../../components/card-img';
+import { CardImg } from '../../shared/components/card-img';
 import { GetServerSideProps } from 'next';
 import { FC } from 'react';
 import { InsertCardsModalDialog } from '../../features/cards/components/insert-cards-modal-dialog';

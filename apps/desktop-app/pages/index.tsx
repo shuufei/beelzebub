@@ -6,7 +6,7 @@ import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { CardImg } from '../components/card-img';
+import { CardImg } from '../shared/components/card-img';
 import { APP_ACCESS_CHECK_KEY } from './api/set-cookie-app-access-key';
 
 export function Index() {
