@@ -12,11 +12,9 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import { ChangeEvent, FC, useCallback, useState } from 'react';
-import { APP_ACCESS_CHECK_KEY } from '../api/set-cookie-app-access-key';
+import { validateAuthorizedRequest } from '../../shared/ssr/validate-authorized-request';
 
 const CardList: FC<{ cards: Card[] }> = ({ cards }) => {
   return (
@@ -130,36 +128,13 @@ export function Index() {
 export default Index;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const parsedCookies = parse(ctx.req.headers.cookie ?? '');
-  const correctRequest =
-    parsedCookies[APP_ACCESS_CHECK_KEY] ===
-    process.env.NEXT_BEELZEBUB_ACCESS_KEY;
-  if (!correctRequest) {
+  const validateResult = await validateAuthorizedRequest(ctx);
+  if (!validateResult.isValid) {
     return {
-      redirect: {
-        permanent: true,
-        destination: '/service-suspended',
-      },
+      redirect: validateResult.redirect,
     };
   }
-
-  const supabase = createServerSupabaseClient(ctx);
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/sign-in',
-        permanent: false,
-      },
-    };
-  }
-
   return {
-    props: {
-      initialSession: session,
-    },
+    props: {},
   };
 };

@@ -1,13 +1,11 @@
 import { Card } from '@beelzebub/shared/domain';
 import { CardImg } from '@beelzebub/shared/ui';
-import { Button, Heading, VStack, Text } from '@chakra-ui/react';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { Button, Heading, Text, VStack } from '@chakra-ui/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { APP_ACCESS_CHECK_KEY } from './api/set-cookie-app-access-key';
+import { validateAuthorizedRequest } from '../shared/ssr/validate-authorized-request';
 
 export function Index() {
   const supabaseClient = useSupabaseClient();
@@ -46,36 +44,14 @@ export function Index() {
 export default Index;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const parsedCookies = parse(ctx.req.headers.cookie ?? '');
-  const correctRequest =
-    parsedCookies[APP_ACCESS_CHECK_KEY] ===
-    process.env.NEXT_BEELZEBUB_ACCESS_KEY;
-  if (!correctRequest) {
+  const validateResult = await validateAuthorizedRequest(ctx);
+  if (!validateResult.isValid) {
     return {
-      redirect: {
-        permanent: true,
-        destination: '/service-suspended',
-      },
-    };
-  }
-
-  const supabase = createServerSupabaseClient(ctx);
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/sign-in',
-        permanent: false,
-      },
+      redirect: validateResult.redirect,
     };
   }
 
   return {
-    props: {
-      initialSession: session,
-    },
+    props: {},
   };
 };
