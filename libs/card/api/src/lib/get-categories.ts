@@ -16,7 +16,10 @@ export const getCategories = async (
   if (!(await isPermitted(req, res))) {
     throw new Unauthorized();
   }
-  const result = await supabaseServerClient.from('Categories').select();
+  const result = await supabaseServerClient
+    .from('Categories')
+    .select()
+    .order('categoryName', { ascending: true });
   if (result.error != null) {
     throw new InternalServerError(
       `failed select categories: ${JSON.stringify(result.error)}`
