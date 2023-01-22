@@ -1,4 +1,4 @@
-import { Button, HStack } from '@chakra-ui/react';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 import { CardTypeFilter } from './card-type-filter';
 import { CategoryFilter } from './category-filter';
@@ -6,17 +6,19 @@ import { ColorsFilter } from './colors-filter';
 import { IncludeParallelFilter } from './include-parallel-filter';
 import { LvFilter } from './lv-filter';
 
-export const FilterForm: FC<{
+export const CardsFilter: FC<{
   onExecuteFilter: () => void;
 }> = memo(({ onExecuteFilter }) => {
   return (
-    <HStack alignItems={'flex-start'}>
-      <ColorsFilter />
-      <LvFilter />
-      <CardTypeFilter />
-      <IncludeParallelFilter />
-      <CategoryFilter />
+    <VStack alignItems={'flex-start'}>
+      <HStack alignItems={'center'}>
+        <CategoryFilter />
+        <ColorsFilter />
+        <LvFilter />
+        <CardTypeFilter />
+        <IncludeParallelFilter />
+      </HStack>
       <Button onClick={onExecuteFilter}>再検索</Button>
-    </HStack>
+    </VStack>
   );
 });

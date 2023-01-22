@@ -1,11 +1,5 @@
 import { Color } from '@beelzebub/shared/domain';
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  HStack,
-  Stack,
-} from '@chakra-ui/react';
+import { Checkbox, HStack, Stack, Text } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -14,6 +8,7 @@ import {
 } from '../../state/filter-conditions';
 import { AllCheckButton } from './all-check-button';
 import { AllUncheckButton } from './all-uncheck-button';
+import { FilterPopup } from './filter-popup';
 
 const COLORS: Color[] = [
   'red',
@@ -29,36 +24,46 @@ export const ColorsFilter: FC = memo(() => {
   const [, setFilterCondition] = useRecoilState(filterConditionState);
   const condition = useRecoilValue(colorFilterConditionState);
   return (
-    <FormControl>
-      <FormLabel>色</FormLabel>
-      <HStack>
-        <AllCheckButton filterKey={'color'} />
-        <AllUncheckButton filterKey={'color'} />
-      </HStack>
-      <Stack>
-        {COLORS.map((color) => {
-          return (
-            <Checkbox
-              key={color}
-              isChecked={condition[color]}
-              onChange={() => {
-                const newCondition = {
-                  ...condition,
-                };
-                newCondition[color] = !newCondition[color];
-                setFilterCondition((current) => {
-                  return {
-                    ...current,
-                    color: newCondition,
+    <FilterPopup
+      triggerButtonLabel={`色: ${Object.entries(condition)
+        .filter(([, value]) => value)
+        .map(([key]) => key)
+        .join(', ')}`}
+      header={
+        <HStack justifyContent={'space-between'}>
+          <Text>色</Text>
+          <HStack pr={'6'}>
+            <AllCheckButton filterKey={'color'} />
+            <AllUncheckButton filterKey={'color'} />
+          </HStack>
+        </HStack>
+      }
+      body={
+        <Stack>
+          {COLORS.map((color) => {
+            return (
+              <Checkbox
+                key={color}
+                isChecked={condition[color]}
+                onChange={() => {
+                  const newCondition = {
+                    ...condition,
                   };
-                });
-              }}
-            >
-              {color}
-            </Checkbox>
-          );
-        })}
-      </Stack>
-    </FormControl>
+                  newCondition[color] = !newCondition[color];
+                  setFilterCondition((current) => {
+                    return {
+                      ...current,
+                      color: newCondition,
+                    };
+                  });
+                }}
+              >
+                {color}
+              </Checkbox>
+            );
+          })}
+        </Stack>
+      }
+    />
   );
 });

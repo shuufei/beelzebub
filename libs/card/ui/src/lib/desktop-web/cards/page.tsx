@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SWRConfig } from 'swr';
 import { CardList } from './components/card-list';
-import { FilterForm } from './components/filter-form/filter-form';
+import { CardsFilter } from './components/filter-form/cards-filter';
 import { InsertCardsModalDialog } from './components/insert-cards-modal-dialog';
 import { filterConditionState } from './state/filter-conditions';
 
@@ -58,7 +58,9 @@ export const CardsPage: FC = () => {
             <Button onClick={onOpen}>カードの登録</Button>
             <InsertCardsModalDialog isOpen={isOpen} onClose={onClose} />
           </Box>
-          <FilterForm onExecuteFilter={executeFilter} />
+          <Box mt="4">
+            <CardsFilter onExecuteFilter={executeFilter} />
+          </Box>
         </Box>
 
         <Wrap mt="4">
