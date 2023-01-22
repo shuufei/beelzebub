@@ -25,7 +25,7 @@ export const CardImg: FC<{
           onOpen();
         }}
         _hover={{
-          transform: isEnabledPreview ? 'translateY(-0.25rem)' : '',
+          transform: isEnabledPreview ? 'translateY(-0.15rem)' : '',
         }}
       >
         <Image

@@ -1,5 +1,13 @@
 import { GetCardsRequestQuery } from '@beelzebub/card/api';
-import { Box, Button, Heading, useDisclosure, Wrap } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  useDisclosure,
+  Wrap,
+} from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { InView } from 'react-intersection-observer';
 import { useRecoilValue } from 'recoil';
@@ -46,7 +54,7 @@ export const CardsPage: FC = () => {
   }, []);
 
   return (
-    <Box as="main" p="4">
+    <Box as="main" px="8" pt="4" pb="8">
       <SWRConfig
         value={{
           revalidateOnFocus: false,
@@ -56,17 +64,28 @@ export const CardsPage: FC = () => {
         }}
       >
         <Box>
-          <Heading as="h1">カード</Heading>
-          <Box mt="4">
-            <Button onClick={onOpen}>カードの登録</Button>
-            <InsertCardsModalDialog isOpen={isOpen} onClose={onClose} />
-          </Box>
+          <HStack justifyContent={'space-between'}>
+            <Heading as="h1" fontSize={'xl'}>
+              カード
+            </Heading>
+            <Box mt="4">
+              <Button
+                variant={'ghost'}
+                onClick={onOpen}
+                size={'sm'}
+                leftIcon={<AddIcon />}
+              >
+                カードの登録
+              </Button>
+              <InsertCardsModalDialog isOpen={isOpen} onClose={onClose} />
+            </Box>
+          </HStack>
           <Box mt="4">
             <CardsFilter onExecuteFilter={executeFilter} />
           </Box>
         </Box>
 
-        <Wrap mt="4" pb={8}>
+        <Wrap mt="4">
           {new Array(page).fill(null).map((_, index) => {
             return (
               <CardList
@@ -80,6 +99,7 @@ export const CardsPage: FC = () => {
             );
           })}
         </Wrap>
+
         {!finishedLoad && (
           <InView
             as="div"
