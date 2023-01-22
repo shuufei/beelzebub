@@ -1,4 +1,5 @@
 import { Card } from '@beelzebub/shared/domain';
+import { CardImg } from '@beelzebub/shared/ui';
 import { Button, Heading, VStack, Text } from '@chakra-ui/react';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -6,7 +7,6 @@ import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { CardImg } from '../shared/components/card-img';
 import { APP_ACCESS_CHECK_KEY } from './api/set-cookie-app-access-key';
 
 export function Index() {

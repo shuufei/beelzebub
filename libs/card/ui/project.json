@@ -3,22 +3,22 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/card/ui/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/card/ui/**/*.ts"]
+        "lintFilePatterns": ["libs/card/ui/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nrwl/vite:test",
+      "outputs": ["coverage/libs/card/ui"],
       "options": {
-        "jestConfig": "libs/card/ui/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "reportsDirectory": "../../../coverage/libs/card/ui"
       }
     }
-  },
-  "tags": []
+  }
 }

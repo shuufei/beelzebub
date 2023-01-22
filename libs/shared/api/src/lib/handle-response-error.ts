@@ -1,5 +1,5 @@
+import { HttpError } from '@beelzebub/shared/errors';
 import { NextApiResponse } from 'next';
-import { HttpError } from '../../errors/http-error';
 
 export const handleResponseError = (res: NextApiResponse, error: unknown) => {
   if (error instanceof HttpError) {

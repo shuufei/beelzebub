@@ -1,10 +1,9 @@
 import { Box, Button } from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
-import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
-import { APP_ACCESS_CHECK_KEY } from '../api/set-cookie-app-access-key';
+import { validateAppAccessRequest } from '../../shared/ssr/validate-app-access-request';
 
 type PageProps = {
   redirectTo: string;
@@ -45,16 +44,10 @@ export default SignInPage;
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   ctx
 ) => {
-  const parsedCookies = parse(ctx.req.headers.cookie ?? '');
-  const correctRequest =
-    parsedCookies[APP_ACCESS_CHECK_KEY] ===
-    process.env.NEXT_BEELZEBUB_ACCESS_KEY;
-  if (!correctRequest) {
+  const validateResult = validateAppAccessRequest(ctx.req);
+  if (!validateResult.isValid) {
     return {
-      redirect: {
-        permanent: true,
-        destination: '/service-suspended',
-      },
+      redirect: validateResult.redirect,
     };
   }
   return {

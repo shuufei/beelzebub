@@ -1,7 +1,7 @@
+import { getCards } from '@beelzebub/card/api';
+import { handleResponseError } from '@beelzebub/shared/api';
 import { Card } from '@beelzebub/shared/domain';
 import { NextApiHandler } from 'next';
-import { handleResponseError } from '../../shared/api/handle-response-error';
-import { getCards } from '../../features/cards/api/get';
 
 export type GetCardsResponseBody = {
   cards: Card[];

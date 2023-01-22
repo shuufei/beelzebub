@@ -1,1 +1,2 @@
-export * from './lib/card-api';
+export * from './lib/get';
+export * from './lib/post';

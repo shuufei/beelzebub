@@ -1,6 +1,6 @@
+import { postCards } from '@beelzebub/card/api';
+import { handleResponseError } from '@beelzebub/shared/api';
 import { NextApiHandler } from 'next';
-import { postCards } from '../../../features/cards/api/post';
-import { handleResponseError } from '../../../shared/api/handle-response-error';
 
 export const handler: NextApiHandler = async (req, res) => {
   switch (req.method) {

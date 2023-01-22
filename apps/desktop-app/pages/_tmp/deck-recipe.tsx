@@ -1,4 +1,5 @@
 import { Card } from '@beelzebub/shared/domain';
+import { CardImg } from '@beelzebub/shared/ui';
 import {
   Box,
   Divider,
@@ -15,7 +16,6 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { parse } from 'cookie';
 import { GetServerSideProps } from 'next';
 import { ChangeEvent, FC, useCallback, useState } from 'react';
-import { CardImg } from '../../shared/components/card-img';
 import { APP_ACCESS_CHECK_KEY } from '../api/set-cookie-app-access-key';
 
 const CardList: FC<{ cards: Card[] }> = ({ cards }) => {

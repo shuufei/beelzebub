@@ -1,9 +1,11 @@
+import {
+  InternalServerError,
+  isPermitted,
+  Unauthorized,
+} from '@beelzebub/shared/api';
 import { Card } from '@beelzebub/shared/domain';
+import { supabaseServerClient } from '@beelzebub/shared/libs';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { InternalServerError } from '../../../errors/internal-server-error';
-import { Unauthorized } from '../../../errors/unauthorized';
-import { supabaseForServer } from '../../../lib/supabase-client';
-import { isPermitted } from '../../auth/api/is-permitted';
 
 export const getCards = async (
   req: NextApiRequest,
@@ -13,7 +15,7 @@ export const getCards = async (
     throw new Unauthorized();
   }
   // TODO: paging
-  const { data, error } = await supabaseForServer
+  const { data, error } = await supabaseServerClient
     .from('Cards')
     .select()
     .limit(10);

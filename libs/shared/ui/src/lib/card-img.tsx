@@ -1,11 +1,10 @@
-import {
-  Card,
-  CARD_IMG_HEIGHT,
-  CARD_IMG_WIDTH,
-} from '@beelzebub/shared/domain';
+import { Card } from '@beelzebub/shared/domain';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
+
+const CARD_IMG_HEIGHT = 600;
+const CARD_IMG_WIDTH = 430;
 
 export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
   const supabaseClient = useSupabaseClient();
@@ -17,7 +16,6 @@ export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
       const { data, error } = await supabaseClient.storage
         .from('app-static-resources')
         .download(`cards/images/${card.category}/${card.imgFileName}`);
-      console.log('--- doanload card image: ', data, error);
       if (data == null) {
         return;
       }

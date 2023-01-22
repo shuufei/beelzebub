@@ -1,18 +1,20 @@
 import {
+  BadRequest,
+  InternalServerError,
+  isPermitted,
+  Unauthorized,
+} from '@beelzebub/shared/api';
+import {
   Card,
   CardOriginal,
   convertCardFromOriginal,
 } from '@beelzebub/shared/domain';
+import { supabaseServerClient } from '@beelzebub/shared/libs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { z, ZodError } from 'zod';
-import { BadRequest } from '../../../errors/bad-request';
-import { InternalServerError } from '../../../errors/internal-server-error';
-import { Unauthorized } from '../../../errors/unauthorized';
-import { supabaseForServer } from '../../../lib/supabase-client';
-import { isPermitted } from '../../auth/api/is-permitted';
 
 const upsertCard = async (card: Card) => {
-  const data = await supabaseForServer.from('Cards').upsert({ ...card });
+  const data = await supabaseServerClient.from('Cards').upsert({ ...card });
   console.info('insert result: ', data);
   return data;
 };
