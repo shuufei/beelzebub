@@ -16,6 +16,7 @@ export const validateAppAccessRequest = (
   try {
     validateAppAccessToken(req.headers.cookie ?? '');
   } catch (error) {
+    console.error(`[ERROR] ${error}`);
     if (error instanceof InvalidAppAccessToken) {
       return {
         isValid: false,

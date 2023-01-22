@@ -18,6 +18,7 @@ export const validateAuthorizedRequest = async (
     validateAppAccessToken(ctx.req.headers.cookie ?? '');
     await validateAuthorized(ctx);
   } catch (error) {
+    console.error(`[ERROR] ${error}`);
     if (error instanceof Unauthorized) {
       return {
         isValid: false,
