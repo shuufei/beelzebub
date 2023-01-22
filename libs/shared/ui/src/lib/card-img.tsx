@@ -15,7 +15,7 @@ export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
       // TODO: 画面の表示領域に入るまではdownloadしないようにしたい
       const { data, error } = await supabaseClient.storage
         .from('app-static-resources')
-        .download(`cards/images/${card.category}/${card.imgFileName}`);
+        .download(`cards/images/${card.categoryId}/${card.imgFileName}`);
       if (data == null) {
         return;
       }
@@ -23,7 +23,7 @@ export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
       setCardUrl(url);
     };
     downloadCardImage();
-  }, [card.category, card.imgFileName, supabaseClient]);
+  }, [card.categoryId, card.imgFileName, supabaseClient]);
   return (
     <Image
       src={cardUrl ?? '/images/card-placeholder.png'}

@@ -16,7 +16,7 @@ const convertColorsFromOriginalColor = (
 
 export const convertCardFromOriginal = (
   original: CardOriginal,
-  category: Card['category']
+  categoryId: Card['categoryId']
 ): Card => {
   const parsedLv = Lv.parse(original.lv ?? '-');
   const parsdCardType = CardType.parse(original.cardtype);
@@ -40,7 +40,7 @@ export const convertCardFromOriginal = (
     evolutionaryOriginEffect: original.evolutionaryOriginEffect,
     securityEffect: original.securityEffect,
     imgFileName: original.imgFileName,
-    category: category,
+    categoryId,
   };
   return card;
 };

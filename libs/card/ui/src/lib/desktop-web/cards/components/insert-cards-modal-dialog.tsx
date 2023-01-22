@@ -1,3 +1,4 @@
+import { PostCardsRequestBody } from '@beelzebub/card/api';
 import {
   Box,
   Button,
@@ -21,19 +22,25 @@ export const InsertCardsModalDialog: FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = memo(function InsertCardsModalDialog({ isOpen, onClose }) {
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [categoryName, setCategoryName] = useState('');
   const [cardsData, setCardsData] = useState<unknown | undefined>();
   const [isLoading, setLoading] = useState(false);
   const toast = useToast();
 
   const insertData = useCallback(async () => {
-    if (cardsData == null || !category) {
+    if (cardsData == null || !categoryName) {
       return;
     }
     setLoading(true);
-    await fetch(`/api/${category}/cards`, {
+    const body: PostCardsRequestBody = {
+      data: JSON.stringify(cardsData),
+      categoryId,
+      categoryName,
+    };
+    await fetch(`/api/cards`, {
       method: 'POST',
-      body: JSON.stringify(cardsData),
+      body: JSON.stringify(body),
     });
     setLoading(false);
     onClose();
@@ -44,7 +51,7 @@ export const InsertCardsModalDialog: FC<{
       isClosable: true,
       position: 'top-right',
     });
-  }, [cardsData, category, onClose, toast]);
+  }, [cardsData, categoryName, categoryId, onClose, toast]);
 
   const loadDeckJsonFile = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -71,11 +78,20 @@ export const InsertCardsModalDialog: FC<{
         <ModalBody>
           <Box maxW={'md'} as="form">
             <FormControl>
+              <FormLabel>カテゴリId</FormLabel>
+              <Input
+                type="text"
+                onChange={(event) => {
+                  setCategoryId(event.target.value);
+                }}
+              />
+            </FormControl>
+            <FormControl mt="4">
               <FormLabel>カテゴリ名</FormLabel>
               <Input
                 type="text"
                 onChange={(event) => {
-                  setCategory(event.target.value);
+                  setCategoryName(event.target.value);
                 }}
               />
             </FormControl>
@@ -94,7 +110,9 @@ export const InsertCardsModalDialog: FC<{
           <ModalFooter p={0} py={4}>
             <HStack alignItems={'flex-start'} w={'full'}>
               <Button
-                disabled={!category || !cardsData || isLoading}
+                disabled={
+                  !categoryName || !cardsData || !categoryId || isLoading
+                }
                 onClick={insertData}
                 colorScheme={'blue'}
               >

@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { CardType } from './card-type';
 import { Lv } from './lv';
 import { Color } from './color';
+import { Category } from './category';
 
 export const Card = z.object({
   no: z.string(),
@@ -22,7 +23,7 @@ export const Card = z.object({
   evolutionaryOriginEffect: z.union([z.string(), z.undefined()]),
   securityEffect: z.union([z.string(), z.undefined()]),
   imgFileName: z.string(),
-  category: z.string(),
+  categoryId: Category.shape.id,
 });
 
 export type Card = z.infer<typeof Card>;
