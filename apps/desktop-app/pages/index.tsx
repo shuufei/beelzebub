@@ -1,5 +1,3 @@
-import { Card } from '@beelzebub/shared/domain';
-import { CardImg } from '@beelzebub/shared/ui';
 import { Button, Heading, Text, VStack } from '@chakra-ui/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { GetServerSideProps } from 'next';
@@ -20,15 +18,7 @@ export function Index() {
           deck recipe
         </Text>
       </Link>
-      <CardImg
-        card={
-          {
-            category: 'BT01',
-            imgFileName: 'BT1-001.png',
-          } as Card
-        }
-        width={100}
-      />
+
       <Button
         onClick={async () => {
           await supabaseClient.auth.signOut();
