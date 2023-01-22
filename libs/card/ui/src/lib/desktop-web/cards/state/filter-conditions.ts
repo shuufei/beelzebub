@@ -4,11 +4,13 @@ import { atom, selector } from 'recoil';
 export type ColorsCondition = { [key in Color]: boolean };
 export type LvCondition = { [key in Lv]: boolean };
 export type CardTypeCondition = { [key in CardType]: boolean };
+export type CategoryCondition = { [key: string]: boolean };
 export type FilterCondition = {
   color: ColorsCondition;
   lv: LvCondition;
   cardType: CardTypeCondition;
   includeParallel: boolean;
+  category: CategoryCondition;
 };
 
 export const filterConditionState = atom<FilterCondition>({
@@ -39,6 +41,7 @@ export const filterConditionState = atom<FilterCondition>({
       オプション: true,
     },
     includeParallel: true,
+    category: {},
   },
 });
 
@@ -71,5 +74,13 @@ export const includeParallelConditionState = selector({
   get: ({ get }) => {
     const condition = get(filterConditionState);
     return condition.includeParallel;
+  },
+});
+
+export const categoryFilterConditionState = selector({
+  key: 'categoryFilterConditionState',
+  get: ({ get }) => {
+    const condition = get(filterConditionState);
+    return condition.category;
   },
 });

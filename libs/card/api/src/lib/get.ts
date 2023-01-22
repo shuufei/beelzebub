@@ -64,7 +64,7 @@ export const getCards = async (
       .in('parallel', ['false', reqQuery.includeParallel ?? true]);
 
     if (reqQuery.category) {
-      dbQuery.in('category', reqQuery.category.split(','));
+      dbQuery.in('categoryId', reqQuery.category.split(','));
     }
     if (reqQuery.lv) {
       dbQuery.in('lv', reqQuery.lv.split(','));

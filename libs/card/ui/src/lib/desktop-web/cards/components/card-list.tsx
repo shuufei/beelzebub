@@ -6,15 +6,11 @@ import { CardImg } from '@beelzebub/shared/ui';
 import { Box, Spinner, WrapItem } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 import useSWR from 'swr';
+import { fetcher } from '../libs/fetcher';
 
 export type CardsPageProps = {
   page: number;
   query: GetCardsRequestQuery;
-};
-
-const fetcher = async (...args: Parameters<typeof fetch>) => {
-  const res = await fetch(...args);
-  return res.json();
 };
 
 export const CardList: FC<CardsPageProps> = ({ page, query }) => {

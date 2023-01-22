@@ -28,6 +28,7 @@ export const CardsPage: FC = () => {
 
   useEffect(() => {
     const condition: GetCardsRequestQuery = {
+      category: convertQueryStringFromCondition(filterCondition.category),
       colors: convertQueryStringFromCondition(filterCondition.color),
       lv: convertQueryStringFromCondition(filterCondition.lv),
       cardtype: convertQueryStringFromCondition(filterCondition.cardType),
