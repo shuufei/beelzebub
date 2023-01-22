@@ -3,6 +3,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  Divider,
   Heading,
   HStack,
   useDisclosure,
@@ -85,6 +86,8 @@ export const CardsPage: FC = () => {
             <CardsFilter onExecuteFilter={executeFilter} />
           </Box>
         </Box>
+
+        <Divider mt="4" />
 
         <Wrap mt="4">
           {new Array(page).fill(null).map((_, index) => {
