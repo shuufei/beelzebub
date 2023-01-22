@@ -1,7 +1,7 @@
 import { GetCardsRequestQuery } from '@beelzebub/card/api';
 import { Box, Button, Heading, useDisclosure, Wrap } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { InView, useInView } from 'react-intersection-observer';
+import { InView } from 'react-intersection-observer';
 import { useRecoilValue } from 'recoil';
 import { SWRConfig } from 'swr';
 import { CardList } from './components/card-list';

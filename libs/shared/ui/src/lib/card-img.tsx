@@ -1,36 +1,42 @@
 import { Card } from '@beelzebub/shared/domain';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import Image from 'next/image';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
+import { CardPreviewModalDialog } from './card-preview-modal-dialog';
+import { useCardImageUrl } from './hooks/use-card-image-url';
 
 const CARD_IMG_HEIGHT = 600;
 const CARD_IMG_WIDTH = 430;
 
-export const CardImg: FC<{ card: Card; width: number }> = ({ card, width }) => {
-  const supabaseClient = useSupabaseClient();
-  const [cardUrl, setCardUrl] = useState<string | undefined>();
-
-  useEffect(() => {
-    const downloadCardImage = async () => {
-      // TODO: 画面の表示領域に入るまではdownloadしないようにしたい
-      const { data, error } = await supabaseClient.storage
-        .from('app-static-resources')
-        .download(`cards/images/${card.categoryId}/${card.imgFileName}`);
-      if (data == null) {
-        return;
-      }
-      const url = URL.createObjectURL(data);
-      setCardUrl(url);
-    };
-    downloadCardImage();
-  }, [card.categoryId, card.imgFileName, supabaseClient]);
+export const CardImg: FC<{
+  card: Card;
+  width: number;
+  isEnabledPreview?: boolean;
+}> = ({ card, width, isEnabledPreview = true }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cardUrl = useCardImageUrl(card);
   return (
-    <Image
-      src={cardUrl ?? '/images/card-placeholder.png'}
-      width={width}
-      height={width * (CARD_IMG_HEIGHT / CARD_IMG_WIDTH)}
-      alt=""
-      priority={true}
-    />
+    <>
+      <Box
+        onClick={() => {
+          if (!isEnabledPreview) {
+            return;
+          }
+          onOpen();
+        }}
+        _hover={{
+          transform: isEnabledPreview ? 'translateY(-0.25rem)' : '',
+        }}
+      >
+        <Image
+          src={cardUrl ?? '/images/card-placeholder.png'}
+          width={width}
+          height={width * (CARD_IMG_HEIGHT / CARD_IMG_WIDTH)}
+          alt=""
+          priority={true}
+        />
+      </Box>
+      <CardPreviewModalDialog card={card} isOpen={isOpen} onClose={onClose} />
+    </>
   );
 };
