@@ -2,7 +2,6 @@ import { Card } from '@beelzebub/shared/domain';
 import {
   Center,
   Modal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
