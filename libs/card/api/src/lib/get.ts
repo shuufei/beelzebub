@@ -11,7 +11,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 
 const GetCardsRequestQuery = z.object({
-  offset: z.union([z.undefined(), z.string()]),
+  page: z.union([z.undefined(), z.string()]),
   // limit: z.union([z.undefined(), z.number()]),
   category: z.union([z.undefined(), z.string()]),
   lv: z.union([z.undefined(), z.string()]),
@@ -45,15 +45,18 @@ export const getCards = async (
       throw new BadRequest(`query is invalid`);
     }
     const reqQuery = parsed.data;
-    const offset = Number(reqQuery.offset ?? 0);
-    if (Number.isNaN(offset)) {
-      throw new BadRequest(`offset is invalid`);
+    const page = Number(reqQuery.page ?? 1);
+    if (Number.isNaN(page)) {
+      throw new BadRequest(`page is invalid`);
     }
+
+    const offset = MAX_FETCH_COUNT * ((page <= 0 ? 1 : page) - 1);
+    const limit = MAX_FETCH_COUNT * page;
 
     const dbQuery = supabaseServerClient
       .from('Cards')
       .select()
-      .range(offset, offset + MAX_FETCH_COUNT)
+      .range(offset, limit)
       .order('cardtype', { ascending: false })
       .order('lv', { ascending: true })
       .order('colors', { ascending: true })
