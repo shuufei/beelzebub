@@ -30,7 +30,9 @@ export const LvFilter: FC = memo(() => {
         .join(', ')}`}
       header={
         <HStack justifyContent={'space-between'}>
-          <Text>Lv</Text>
+          <Text fontSize={'sm'} fontWeight={'semibold'}>
+            Lv
+          </Text>
           <HStack pr={'6'}>
             <AllCheckButton filterKey={'lv'} />
             <AllUncheckButton filterKey={'lv'} />
@@ -57,7 +59,7 @@ export const LvFilter: FC = memo(() => {
                   });
                 }}
               >
-                {lv}
+                <Text fontSize={'sm'}>{lv}</Text>
               </Checkbox>
             );
           })}

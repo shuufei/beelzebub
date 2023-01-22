@@ -18,7 +18,9 @@ export const CardsFilter: FC<{
         <CardTypeFilter />
         <IncludeParallelFilter />
       </HStack>
-      <Button onClick={onExecuteFilter}>再検索</Button>
+      <Button size={'sm'} colorScheme={'blue'} onClick={onExecuteFilter}>
+        再検索
+      </Button>
     </VStack>
   );
 });

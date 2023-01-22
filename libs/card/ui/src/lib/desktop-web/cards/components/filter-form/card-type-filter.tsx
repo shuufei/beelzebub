@@ -28,7 +28,9 @@ export const CardTypeFilter: FC = memo(() => {
         .join(', ')}`}
       header={
         <HStack justifyContent={'space-between'}>
-          <Text>カードタイプ</Text>
+          <Text fontSize={'sm'} fontWeight={'semibold'}>
+            カードタイプ
+          </Text>
           <HStack pr={'6'}>
             <AllCheckButton filterKey={'cardType'} />
             <AllUncheckButton filterKey={'cardType'} />
@@ -55,7 +57,7 @@ export const CardTypeFilter: FC = memo(() => {
                   });
                 }}
               >
-                {cardType}
+                <Text fontSize={'sm'}>{cardType}</Text>
               </Checkbox>
             );
           })}

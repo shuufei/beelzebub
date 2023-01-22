@@ -31,7 +31,9 @@ export const ColorsFilter: FC = memo(() => {
         .join(', ')}`}
       header={
         <HStack justifyContent={'space-between'}>
-          <Text>色</Text>
+          <Text fontSize={'sm'} fontWeight={'semibold'}>
+            色
+          </Text>
           <HStack pr={'6'}>
             <AllCheckButton filterKey={'color'} />
             <AllUncheckButton filterKey={'color'} />
@@ -58,7 +60,7 @@ export const ColorsFilter: FC = memo(() => {
                   });
                 }}
               >
-                {color}
+                <Text fontSize={'sm'}>{color}</Text>
               </Checkbox>
             );
           })}

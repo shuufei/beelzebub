@@ -68,7 +68,9 @@ export const CategoryFilter: FC = memo(() => {
       triggerButtonLabel={`カテゴリ: ${conditionString}`}
       header={
         <HStack justifyContent={'space-between'}>
-          <Text>カテゴリ</Text>
+          <Text fontSize={'sm'} fontWeight={'semibold'}>
+            カテゴリ
+          </Text>
           <HStack pr={'6'}>
             <AllCheckButton filterKey={'category'} />
             <AllUncheckButton filterKey={'category'} />
@@ -95,7 +97,7 @@ export const CategoryFilter: FC = memo(() => {
                   });
                 }}
               >
-                {category.categoryName}
+                <Text fontSize={'sm'}>{category.categoryName}</Text>
               </Checkbox>
             );
           })}

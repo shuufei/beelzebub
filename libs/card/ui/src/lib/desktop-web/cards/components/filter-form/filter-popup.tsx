@@ -17,7 +17,7 @@ export const FilterPopup: FC<{
   body: ReactNode;
 }> = memo(({ triggerButtonLabel, header, body }) => {
   return (
-    <Popover>
+    <Popover placement="bottom-start" size={'sm'}>
       <PopoverTrigger>
         <Button size={'sm'}>
           <Text
