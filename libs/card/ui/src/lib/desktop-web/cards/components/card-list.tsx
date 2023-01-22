@@ -4,16 +4,21 @@ import {
 } from '@beelzebub/card/api';
 import { CardImg } from '@beelzebub/shared/ui';
 import { Box, Spinner, WrapItem } from '@chakra-ui/react';
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../libs/fetcher';
 
 export type CardsPageProps = {
   page: number;
   query: GetCardsRequestQuery;
+  onFinishedLoadCards?: () => void;
 };
 
-export const CardList: FC<CardsPageProps> = ({ page, query }) => {
+export const CardList: FC<CardsPageProps> = ({
+  page,
+  query,
+  onFinishedLoadCards,
+}) => {
   const queryStrings = useMemo(() => {
     return new URLSearchParams({
       ...query,
@@ -24,6 +29,16 @@ export const CardList: FC<CardsPageProps> = ({ page, query }) => {
     `/api/cards?${queryStrings}`,
     fetcher
   );
+
+  useEffect(() => {
+    if (data == null) {
+      return;
+    }
+    if (!data.hasNext) {
+      onFinishedLoadCards?.();
+    }
+  }, [data, onFinishedLoadCards]);
+
   return (
     <>
       {isLoading ?? <Spinner size={'sm'} />}

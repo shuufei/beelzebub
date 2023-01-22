@@ -1,10 +1,4 @@
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Checkbox, Text } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {

@@ -1,12 +1,5 @@
 import { Lv } from '@beelzebub/shared/domain';
-import {
-  Text,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  HStack,
-  Stack,
-} from '@chakra-ui/react';
+import { Checkbox, HStack, Stack, Text } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {

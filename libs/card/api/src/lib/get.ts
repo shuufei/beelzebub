@@ -27,6 +27,7 @@ export type GetCardsRequestQuery = z.infer<typeof GetCardsRequestQuery>;
 
 const GetCardsResponseBody = z.object({
   cards: z.array(Card),
+  hasNext: z.boolean(),
 });
 export type GetCardsResponseBody = z.infer<typeof GetCardsResponseBody>;
 
@@ -78,7 +79,11 @@ export const getCards = async (
     const { data, error } = await dbQuery;
 
     if (data != null) {
-      const parsed = GetCardsResponseBody.parse({ cards: data });
+      const cards = z.array(Card).parse(data);
+      const parsed: GetCardsResponseBody = {
+        cards,
+        hasNext: cards.length >= MAX_FETCH_COUNT,
+      };
       return parsed;
     } else {
       throw new InternalServerError(

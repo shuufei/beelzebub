@@ -1,6 +1,7 @@
 import { GetCardsRequestQuery } from '@beelzebub/card/api';
 import { Box, Button, Heading, useDisclosure, Wrap } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { InView, useInView } from 'react-intersection-observer';
 import { useRecoilValue } from 'recoil';
 import { SWRConfig } from 'swr';
 import { CardList } from './components/card-list';
@@ -24,6 +25,7 @@ export const CardsPage: FC = () => {
   const [page, setPage] = useState(1);
   const tmpQueryRef = useRef<GetCardsRequestQuery>({});
   const [query, setQuery] = useState<GetCardsRequestQuery>({});
+  const [finishedLoad, setFinishedLoad] = useState(false);
   const filterCondition = useRecoilValue(filterConditionState);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export const CardsPage: FC = () => {
   const executeFilter = useCallback(() => {
     setPage(1);
     setQuery(tmpQueryRef.current);
+    setFinishedLoad(false);
   }, []);
 
   return (
@@ -63,19 +66,41 @@ export const CardsPage: FC = () => {
           </Box>
         </Box>
 
-        <Wrap mt="4">
+        <Wrap mt="4" pb={8}>
           {new Array(page).fill(null).map((_, index) => {
-            return <CardList key={index} page={index + 1} query={query} />;
+            return (
+              <CardList
+                key={index}
+                page={index + 1}
+                query={query}
+                onFinishedLoadCards={() => {
+                  setFinishedLoad(true);
+                }}
+              />
+            );
           })}
         </Wrap>
-        <Button
-          mt="3"
-          onClick={() => {
-            setPage((current) => current + 1);
-          }}
-        >
-          load more...
-        </Button>
+        {!finishedLoad && (
+          <InView
+            as="div"
+            onChange={(inView) => {
+              if (inView) {
+                setPage((current) => current + 1);
+              }
+            }}
+          >
+            <Button
+              mt="3"
+              size={'xs'}
+              variant={'outline'}
+              onClick={() => {
+                setPage((current) => current + 1);
+              }}
+            >
+              load more...
+            </Button>
+          </InView>
+        )}
       </SWRConfig>
     </Box>
   );

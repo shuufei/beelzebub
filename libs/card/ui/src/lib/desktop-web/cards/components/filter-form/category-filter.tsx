@@ -1,13 +1,5 @@
 import { GetCategoriesResponseBody } from '@beelzebub/card/api';
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  HStack,
-  Spinner,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Checkbox, HStack, Spinner, Stack, Text } from '@chakra-ui/react';
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import useSWR from 'swr';
