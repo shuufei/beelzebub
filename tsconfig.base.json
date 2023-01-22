@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@beelzebub/card/api": ["libs/card/api/src/index.ts"],
       "@beelzebub/shared/domain": ["libs/shared/domain/src/index.ts"]
     }
   },
