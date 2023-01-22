@@ -13,8 +13,77 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
-import { ChangeEvent, FC, useCallback, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react';
 import { validateAuthorizedRequest } from '../../shared/ssr/validate-authorized-request';
+
+const getCategoryId = (categoryName: string) => {
+  switch (categoryName) {
+    case 'BT01':
+      return '503001';
+    case 'BT02':
+      return '503002';
+    case 'BT03':
+      return '503003';
+    case 'BT04':
+      return '503004';
+    case 'BT05':
+      return '503005';
+    case 'BT06':
+      return '503006';
+    case 'BT07':
+      return '503008';
+    case 'BT08':
+      return '503009';
+    case 'BT09':
+      return '503011';
+    case 'BT10':
+      return '503012';
+    case 'BT11':
+      return '503014';
+    case 'BT12':
+      return '503015';
+    case 'ST01':
+      return '503101';
+    case 'ST02':
+      return '503102';
+    case 'ST03':
+      return '503103';
+    case 'ST04':
+      return '503104';
+    case 'ST05':
+      return '503105';
+    case 'ST06':
+      return '503106';
+    case 'ST07':
+      return '503107';
+    case 'ST08':
+      return '503108';
+    case 'ST09':
+      return '503109';
+    case 'ST10':
+      return '503110';
+    case 'ST11':
+      return '503111';
+    case 'ST12':
+      return '503112';
+    case 'ST13':
+      return '503113';
+    case 'ST14':
+      return '503114';
+    case 'EX01':
+      return '503007';
+    case 'EX02':
+      return '503010';
+    case 'EX03':
+      return '503013';
+    case 'EX04':
+      return '503016';
+    case 'PRO':
+      return '503901';
+    default:
+      return '';
+  }
+};
 
 const CardList: FC<{ cards: Card[] }> = ({ cards }) => {
   return (
@@ -24,7 +93,13 @@ const CardList: FC<{ cards: Card[] }> = ({ cards }) => {
           <WrapItem key={`${card.imgFileName}-${i}`}>
             <VStack spacing={0.5}>
               <Box boxShadow={'sm'}>
-                <CardImg card={card} width={160} />
+                <CardImg
+                  card={{
+                    ...card,
+                    categoryId: getCategoryId((card as any).category),
+                  }}
+                  width={160}
+                />
               </Box>
             </VStack>
           </WrapItem>
