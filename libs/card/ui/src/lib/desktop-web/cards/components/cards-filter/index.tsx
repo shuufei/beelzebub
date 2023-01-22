@@ -12,11 +12,13 @@ import { CategoryFilter } from './category-filter';
 import { ColorsFilter } from './colors-filter';
 import { IncludeParallelFilter } from './include-parallel-filter';
 import { LvFilter } from './lv-filter';
+import { NameFilter } from './name-filter';
 
 export const CardsFilter: FC<{
   onExecuteFilter: () => void;
 }> = memo(({ onExecuteFilter }) => {
   const [, setFilterCondition] = useRecoilState(filterConditionState);
+
   const resetFilter = useCallback(() => {
     setFilterCondition((current) => {
       const resetCondition = (condition: { [key: string]: boolean }) =>
@@ -32,13 +34,16 @@ export const CardsFilter: FC<{
         lv: resetCondition(current.lv) as LvCondition,
         cardType: resetCondition(current.cardType) as CardTypeCondition,
         includeParallel: true,
+        name: '',
       };
     });
     onExecuteFilter();
   }, [onExecuteFilter, setFilterCondition]);
+
   return (
     <VStack alignItems={'flex-start'}>
       <HStack alignItems={'center'}>
+        <NameFilter />
         <CategoryFilter />
         <ColorsFilter />
         <LvFilter />

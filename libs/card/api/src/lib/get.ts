@@ -21,7 +21,7 @@ const GetCardsRequestQuery = z.object({
     z.literal('true'),
     z.literal('false'),
   ]),
-  // name: z.union([z.undefined(), z.string()])
+  name: z.union([z.undefined(), z.string()]),
 });
 export type GetCardsRequestQuery = z.infer<typeof GetCardsRequestQuery>;
 
@@ -75,6 +75,9 @@ export const getCards = async (
     }
     if (reqQuery.colors) {
       dbQuery.containedBy('colors', reqQuery.colors.split(','));
+    }
+    if (reqQuery.name) {
+      dbQuery.like('name', `%${reqQuery.name}%`);
     }
     const { data, error } = await dbQuery;
 

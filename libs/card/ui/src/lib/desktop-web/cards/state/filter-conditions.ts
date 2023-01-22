@@ -11,6 +11,7 @@ export type FilterCondition = {
   cardType: CardTypeCondition;
   includeParallel: boolean;
   category: CategoryCondition;
+  name: string;
 };
 
 export const filterConditionState = atom<FilterCondition>({
@@ -42,6 +43,7 @@ export const filterConditionState = atom<FilterCondition>({
     },
     includeParallel: true,
     category: {},
+    name: '',
   },
 });
 

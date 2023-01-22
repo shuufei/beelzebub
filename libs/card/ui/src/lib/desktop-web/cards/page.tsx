@@ -13,7 +13,7 @@ import { InView } from 'react-intersection-observer';
 import { useRecoilValue } from 'recoil';
 import { SWRConfig } from 'swr';
 import { CardList } from './components/card-list';
-import { CardsFilter } from './components/filter-form/cards-filter';
+import { CardsFilter } from './components/cards-filter';
 import { InsertCardsModalDialog } from './components/insert-cards-modal-dialog';
 import { filterConditionState } from './state/filter-conditions';
 
@@ -43,6 +43,7 @@ export const CardsPage: FC = () => {
       lv: convertQueryStringFromCondition(filterCondition.lv),
       cardtype: convertQueryStringFromCondition(filterCondition.cardType),
       includeParallel: filterCondition.includeParallel ? 'true' : 'false',
+      name: filterCondition.name,
     };
     tmpQueryRef.current = condition;
   }, [filterCondition]);
