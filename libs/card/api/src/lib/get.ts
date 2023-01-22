@@ -12,7 +12,6 @@ import { z } from 'zod';
 
 const GetCardsRequestQuery = z.object({
   page: z.union([z.undefined(), z.string()]),
-  // limit: z.union([z.undefined(), z.number()]),
   category: z.union([z.undefined(), z.string()]),
   lv: z.union([z.undefined(), z.string()]),
   cardtype: z.union([z.undefined(), z.string()]),
@@ -22,6 +21,7 @@ const GetCardsRequestQuery = z.object({
     z.literal('true'),
     z.literal('false'),
   ]),
+  // name: z.union([z.undefined(), z.string()])
 });
 export type GetCardsRequestQuery = z.infer<typeof GetCardsRequestQuery>;
 

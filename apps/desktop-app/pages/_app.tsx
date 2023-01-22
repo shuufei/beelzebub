@@ -4,6 +4,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
+import { RecoilRoot } from 'recoil';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
@@ -18,7 +19,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
           supabaseClient={supabaseClient}
           initialSession={pageProps.initialSession}
         >
-          <Component {...pageProps} />
+          <RecoilRoot>
+            <Component {...pageProps} />
+          </RecoilRoot>
         </SessionContextProvider>
       </ChakraProvider>
     </>
