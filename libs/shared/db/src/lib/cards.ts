@@ -48,5 +48,31 @@ export const convertToCard = (data: CardDB): Card => {
     evolutionaryOriginEffect: data.evolutionary_origin_effect,
     securityEffect: data.security_effect,
     categoryId: data.category_id,
+    createdAt: data.created_at,
+  };
+};
+
+export const convertToCardDB = (data: Card): CardDB => {
+  return {
+    no: data.no,
+    img_file_name: data.imgFileName,
+    lv: data.lv ?? '',
+    rarity: data.rarity,
+    cardtype: data.cardtype,
+    parallel: data.parallel,
+    name: data.name,
+    colors: data.colors,
+    form: data.form,
+    attribute: data.attribute,
+    type: data.type,
+    dp: data.dp,
+    appearance_cost: data.appearanceCost,
+    evolution_cost1: data.evolutionCost1,
+    evolution_cost2: data.evolutionCost2,
+    effect: data.effect,
+    evolutionary_origin_effect: data.evolutionaryOriginEffect,
+    security_effect: data.securityEffect,
+    category_id: data.categoryId,
+    created_at: data.createdAt,
   };
 };

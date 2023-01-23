@@ -41,6 +41,7 @@ export const convertCardFromOriginal = (
     securityEffect: original.securityEffect,
     imgFileName: original.imgFileName,
     categoryId,
+    createdAt: new Date().toISOString(),
   };
   return card;
 };

@@ -1,4 +1,5 @@
 import { isPermitted } from '@beelzebub/shared/api';
+import { CardDB, CategoryDB, convertToCardDB } from '@beelzebub/shared/db';
 import {
   Card,
   CardOriginal,
@@ -21,15 +22,20 @@ export const PostCardsRequestBody = z.object({
 export type PostCardsRequestBody = z.infer<typeof PostCardsRequestBody>;
 
 const upsertCard = async (card: Card) => {
-  const data = await supabaseServerClient.from('Cards').upsert({ ...card });
+  const cardDb: CardDB = convertToCardDB(card);
+  const data = await supabaseServerClient.from('cards').upsert({ ...cardDb });
   console.info('upsert result: ', data);
   return data;
 };
 
 const upsertCategory = async (id: string, categoryName: string) => {
-  const data = await supabaseServerClient.from('Categories').upsert({
+  const categoryDb: CategoryDB = {
     id,
-    categoryName,
+    category_name: categoryName,
+    created_at: new Date().toISOString(),
+  };
+  const data = await supabaseServerClient.from('categories').upsert({
+    ...categoryDb,
   });
   console.info('upsert result: ', data);
   return data;

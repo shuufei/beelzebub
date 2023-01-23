@@ -24,6 +24,7 @@ export const Card = z.object({
   securityEffect: z.string().optional(),
   imgFileName: z.string(),
   categoryId: Category.shape.id,
+  createdAt: z.string(),
 });
 
 export type Card = z.infer<typeof Card>;
