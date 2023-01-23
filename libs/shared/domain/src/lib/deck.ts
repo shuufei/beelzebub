@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const Deck = z.object({
   id: z.string().uuid(),
-  created_at: z.string(),
+  createdAt: z.string(),
   userId: z.string().uuid(),
   public: z.boolean(),
 });

@@ -4,7 +4,7 @@ import { Deck } from './deck';
 
 export const DeckVersion = z.object({
   id: z.string().uuid(),
-  created_at: z.string(),
+  createdAt: z.string(),
   deckId: Deck.shape.id,
   name: z.string(),
   keyCard: z.string().optional(),
