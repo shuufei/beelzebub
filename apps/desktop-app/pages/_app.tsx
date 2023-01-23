@@ -5,6 +5,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
+import { Header } from '../components/header';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
@@ -20,6 +21,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
           initialSession={pageProps.initialSession}
         >
           <RecoilRoot>
+            <Header />
             <Component {...pageProps} />
           </RecoilRoot>
         </SessionContextProvider>

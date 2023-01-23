@@ -41,7 +41,7 @@ export const CardsFilter: FC<{
   }, [onExecuteFilter, setFilterCondition]);
 
   return (
-    <VStack alignItems={'flex-start'}>
+    <VStack alignItems={'flex-start'} spacing={2}>
       <HStack alignItems={'center'}>
         <NameFilter />
         <CategoryFilter />

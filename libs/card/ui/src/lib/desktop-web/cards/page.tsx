@@ -56,7 +56,7 @@ export const CardsPage: FC = () => {
   }, []);
 
   return (
-    <Box as="main" px="8" pt="4" pb="8">
+    <Box as="main" px="6" pt="4" pb="8">
       <SWRConfig
         value={{
           revalidateOnFocus: false,
@@ -67,14 +67,15 @@ export const CardsPage: FC = () => {
       >
         <Box>
           <HStack justifyContent={'space-between'}>
-            <Heading as="h1" fontSize={'xl'}>
-              カード
+            <Heading as="h1" fontSize={'lg'}>
+              カードリスト
             </Heading>
             <Box mt="4">
               <Button
                 variant={'ghost'}
+                colorScheme={'blue'}
                 onClick={onOpen}
-                size={'sm'}
+                size={'xs'}
                 leftIcon={<AddIcon />}
               >
                 カードの登録
@@ -89,7 +90,7 @@ export const CardsPage: FC = () => {
 
         <Divider mt="4" />
 
-        <Wrap mt="4">
+        <Wrap mt="4" px="3">
           {new Array(page).fill(null).map((_, index) => {
             return (
               <CardList
