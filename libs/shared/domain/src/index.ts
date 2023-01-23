@@ -5,3 +5,5 @@ export * from './lib/card-type';
 export * from './lib/color';
 export * from './lib/lv';
 export * from './lib/category';
+export * from './lib/deck';
+export * from './lib/deck-version';
