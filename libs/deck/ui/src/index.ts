@@ -1,1 +1,1 @@
-export * from './lib/deck-ui';
+export * from './lib/desktop-web';
