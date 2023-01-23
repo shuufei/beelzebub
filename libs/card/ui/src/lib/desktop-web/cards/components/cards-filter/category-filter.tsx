@@ -1,9 +1,10 @@
-import { GetCategoriesResponseBody } from '@beelzebub/card/api';
+import { CategoryDB } from '@beelzebub/shared/db';
 import { Checkbox, HStack, Spinner, Stack, Text } from '@chakra-ui/react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import useSWR from 'swr';
-import { fetcher } from '../../libs/fetcher';
+import { z } from 'zod';
 import {
   CategoryCondition,
   categoryFilterConditionState,
@@ -14,12 +15,22 @@ import { AllUncheckButton } from './all-uncheck-button';
 import { FilterPopup } from './filter-popup';
 
 export const CategoryFilter: FC = memo(() => {
+  const supabaseClient = useSupabaseClient();
   const [, setFilterCondition] = useRecoilState(filterConditionState);
   const condition = useRecoilValue(categoryFilterConditionState);
-  const { data } = useSWR<GetCategoriesResponseBody>(
-    '/api/categories',
-    fetcher
-  );
+  const { data } = useSWR('/supabase/db/categories', async () => {
+    const result = await supabaseClient
+      .from('categories')
+      .select()
+      .order('category_name', { ascending: true });
+    if (result.error != null) {
+      throw new Error(
+        `failed select categories: ${JSON.stringify(result.error)}`
+      );
+    }
+    const categories = z.array(CategoryDB).parse(result.data);
+    return { categories };
+  });
 
   useEffect(() => {
     if (data?.categories == null) {
@@ -46,7 +57,7 @@ export const CategoryFilter: FC = memo(() => {
     return `${Object.entries(condition)
       .filter(([, value]) => value)
       .map(([key]) => {
-        return data?.categories.find((v) => v.id === key)?.categoryName ?? '';
+        return data?.categories.find((v) => v.id === key)?.category_name ?? '';
       })
       .join(', ')}`;
   }, [condition, data?.categories]);
@@ -89,7 +100,7 @@ export const CategoryFilter: FC = memo(() => {
                   });
                 }}
               >
-                <Text fontSize={'sm'}>{category.categoryName}</Text>
+                <Text fontSize={'sm'}>{category.category_name}</Text>
               </Checkbox>
             );
           })}
