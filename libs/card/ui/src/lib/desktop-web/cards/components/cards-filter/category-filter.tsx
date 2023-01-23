@@ -1,4 +1,4 @@
-import { CategoryDB } from '@beelzebub/shared/db';
+import { CategoryDB, convertToCategory } from '@beelzebub/shared/db';
 import { Checkbox, HStack, Spinner, Stack, Text } from '@chakra-ui/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FC, memo, useEffect, useMemo } from 'react';
@@ -29,7 +29,8 @@ export const CategoryFilter: FC = memo(() => {
       );
     }
     const categories = z.array(CategoryDB).parse(result.data);
-    return { categories };
+    const convertedCategories = categories.map(convertToCategory);
+    return { categories: convertedCategories };
   });
 
   useEffect(() => {
@@ -57,7 +58,7 @@ export const CategoryFilter: FC = memo(() => {
     return `${Object.entries(condition)
       .filter(([, value]) => value)
       .map(([key]) => {
-        return data?.categories.find((v) => v.id === key)?.category_name ?? '';
+        return data?.categories.find((v) => v.id === key)?.categoryName ?? '';
       })
       .join(', ')}`;
   }, [condition, data?.categories]);
@@ -100,7 +101,7 @@ export const CategoryFilter: FC = memo(() => {
                   });
                 }}
               >
-                <Text fontSize={'sm'}>{category.category_name}</Text>
+                <Text fontSize={'sm'}>{category.categoryName}</Text>
               </Checkbox>
             );
           })}
