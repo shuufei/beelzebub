@@ -14,10 +14,8 @@ import { AllCheckButton } from './all-check-button';
 import { AllUncheckButton } from './all-uncheck-button';
 import { FilterPopup } from './filter-popup';
 
-export const CategoryFilter: FC = memo(() => {
+const useGetCategories = () => {
   const supabaseClient = useSupabaseClient();
-  const [, setFilterCondition] = useRecoilState(filterConditionState);
-  const condition = useRecoilValue(categoryFilterConditionState);
   const { data } = useSWR('/supabase/db/categories', async () => {
     const result = await supabaseClient
       .from('categories')
@@ -32,13 +30,20 @@ export const CategoryFilter: FC = memo(() => {
     const convertedCategories = categories.map(convertToCategory);
     return { categories: convertedCategories };
   });
+  return { categories: data?.categories };
+};
+
+export const CategoryFilter: FC = memo(() => {
+  const [, setFilterCondition] = useRecoilState(filterConditionState);
+  const condition = useRecoilValue(categoryFilterConditionState);
+  const { categories } = useGetCategories();
 
   useEffect(() => {
-    if (data?.categories == null) {
+    if (categories == null) {
       return;
     }
     setFilterCondition((current) => {
-      const categoryCondition: CategoryCondition = data.categories.reduce(
+      const categoryCondition: CategoryCondition = categories.reduce(
         (acc, curr) => {
           return {
             ...acc,
@@ -52,18 +57,18 @@ export const CategoryFilter: FC = memo(() => {
         category: categoryCondition,
       };
     });
-  }, [data?.categories, setFilterCondition]);
+  }, [categories, setFilterCondition]);
 
   const conditionString = useMemo(() => {
     return `${Object.entries(condition)
       .filter(([, value]) => value)
       .map(([key]) => {
-        return data?.categories.find((v) => v.id === key)?.categoryName ?? '';
+        return categories?.find((v) => v.id === key)?.categoryName ?? '';
       })
       .join(', ')}`;
-  }, [condition, data?.categories]);
+  }, [condition, categories]);
 
-  if (data == null) {
+  if (categories == null) {
     return <Spinner />;
   }
 
@@ -83,7 +88,7 @@ export const CategoryFilter: FC = memo(() => {
       }
       body={
         <Stack>
-          {data.categories.map((category) => {
+          {categories.map((category) => {
             return (
               <Checkbox
                 key={category.id}

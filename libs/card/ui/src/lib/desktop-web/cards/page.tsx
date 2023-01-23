@@ -1,4 +1,4 @@
-import { GetCardsRequestQuery } from '@beelzebub/card/api';
+import { CardType, Category, Color, Lv } from '@beelzebub/shared/domain';
 import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -13,37 +13,39 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { InView } from 'react-intersection-observer';
 import { useRecoilValue } from 'recoil';
 import { SWRConfig } from 'swr';
-import { CardList } from './components/card-list';
+import { CardList, CardsQuery } from './components/card-list';
 import { CardsFilter } from './components/cards-filter';
 import { InsertCardsModalDialog } from './components/insert-cards-modal-dialog';
 import { filterConditionState } from './state/filter-conditions';
 
-const convertQueryStringFromCondition = (condition: {
-  [key: string]: boolean;
-}) => {
-  return Object.entries(condition)
+const convertQueryFromCondition = (condition: { [key: string]: boolean }) => {
+  const values = Object.entries(condition)
     .filter(([, value]) => {
       return value;
     })
-    .map(([key]) => key)
-    .join(',');
+    .map(([key]) => key);
+  return values.length > 0 ? values : undefined;
 };
 
 export const CardsPage: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [page, setPage] = useState(1);
-  const tmpQueryRef = useRef<GetCardsRequestQuery>({});
-  const [query, setQuery] = useState<GetCardsRequestQuery>({});
+  const tmpQueryRef = useRef<CardsQuery>({});
+  const [query, setQuery] = useState<CardsQuery>({});
   const [finishedLoad, setFinishedLoad] = useState(false);
   const filterCondition = useRecoilValue(filterConditionState);
 
   useEffect(() => {
-    const condition: GetCardsRequestQuery = {
-      category: convertQueryStringFromCondition(filterCondition.category),
-      colors: convertQueryStringFromCondition(filterCondition.color),
-      lv: convertQueryStringFromCondition(filterCondition.lv),
-      cardtype: convertQueryStringFromCondition(filterCondition.cardType),
-      includeParallel: filterCondition.includeParallel ? 'true' : 'false',
+    const condition: CardsQuery = {
+      categories: convertQueryFromCondition(
+        filterCondition.category
+      ) as Category['id'][],
+      colors: convertQueryFromCondition(filterCondition.color) as Color[],
+      lvList: convertQueryFromCondition(filterCondition.lv) as Lv[],
+      cardTypes: convertQueryFromCondition(
+        filterCondition.cardType
+      ) as CardType[],
+      includeParallel: filterCondition.includeParallel,
       name: filterCondition.name,
     };
     tmpQueryRef.current = condition;
