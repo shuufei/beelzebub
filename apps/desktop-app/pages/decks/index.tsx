@@ -1,15 +1,8 @@
+import { DecksPage } from '@beelzebub/deck/ui';
 import { GetServerSideProps } from 'next';
-import { FC } from 'react';
 import { validateAuthorizedRequest } from '../../shared/ssr/validate-authorized-request';
 
-const DeckPage: FC = () => {
-  return (
-    <main>
-      <h2>Deck</h2>
-    </main>
-  );
-};
-export default DeckPage;
+export default DecksPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const validateResult = await validateAuthorizedRequest(ctx);
