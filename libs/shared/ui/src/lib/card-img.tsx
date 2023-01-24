@@ -1,4 +1,4 @@
-import { Card } from '@beelzebub/shared/domain';
+import { Card, Category } from '@beelzebub/shared/domain';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FC } from 'react';
@@ -9,12 +9,13 @@ const CARD_IMG_HEIGHT = 600;
 const CARD_IMG_WIDTH = 430;
 
 export const CardImg: FC<{
-  card: Card;
+  categoryId: Category['id'];
+  imgFileName: Card['imgFileName'];
   width: number;
   isEnabledPreview?: boolean;
-}> = ({ card, width, isEnabledPreview = true }) => {
+}> = ({ categoryId, imgFileName, width, isEnabledPreview = true }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const cardUrl = useCardImageUrl(card);
+  const cardUrl = useCardImageUrl(categoryId, imgFileName);
   return (
     <>
       <Box
@@ -36,7 +37,12 @@ export const CardImg: FC<{
           priority={true}
         />
       </Box>
-      <CardPreviewModalDialog card={card} isOpen={isOpen} onClose={onClose} />
+      <CardPreviewModalDialog
+        categoryId={categoryId}
+        imgFileName={imgFileName}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 };

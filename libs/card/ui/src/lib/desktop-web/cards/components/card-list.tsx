@@ -106,7 +106,11 @@ export const CardList: FC<CardsPageProps> = ({
         return (
           <WrapItem key={card.imgFileName}>
             <Box boxShadow={'sm'}>
-              <CardImg card={card} width={80} />
+              <CardImg
+                categoryId={card.categoryId}
+                imgFileName={card.imgFileName}
+                width={80}
+              />
             </Box>
           </WrapItem>
         );

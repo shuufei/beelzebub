@@ -94,10 +94,8 @@ const CardList: FC<{ cards: Card[] }> = ({ cards }) => {
             <VStack spacing={0.5}>
               <Box boxShadow={'sm'}>
                 <CardImg
-                  card={{
-                    ...card,
-                    categoryId: getCategoryId((card as any).category),
-                  }}
+                  categoryId={getCategoryId((card as any).category)}
+                  imgFileName={card.imgFileName}
                   width={160}
                 />
               </Box>

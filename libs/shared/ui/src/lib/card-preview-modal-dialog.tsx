@@ -1,4 +1,4 @@
-import { Card } from '@beelzebub/shared/domain';
+import { Card, Category } from '@beelzebub/shared/domain';
 import {
   Center,
   Modal,
@@ -14,11 +14,12 @@ const CARD_IMG_HEIGHT = 600;
 const CARD_IMG_WIDTH = 430;
 
 export const CardPreviewModalDialog: FC<{
-  card: Card;
+  categoryId: Category['id'];
+  imgFileName: Card['imgFileName'];
   isOpen: boolean;
   onClose: () => void;
-}> = ({ card, isOpen, onClose }) => {
-  const cardUrl = useCardImageUrl(card);
+}> = ({ categoryId, imgFileName, isOpen, onClose }) => {
+  const cardUrl = useCardImageUrl(categoryId, imgFileName);
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered size={'md'}>
       <ModalOverlay />
