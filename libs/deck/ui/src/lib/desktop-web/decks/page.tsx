@@ -1,18 +1,21 @@
 import {
+  convertToDeck,
+  convertToDeckVersion,
   DeckDB,
   DeckDBJoinedDeckVersionsDB,
   DeckVersionDB,
 } from '@beelzebub/shared/db';
-import { Deck } from '@beelzebub/shared/domain';
+import { Deck, DeckVersion } from '@beelzebub/shared/domain';
 import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
 import { FC, useCallback } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 import { z } from 'zod';
 
-type DeckJoinedLatestDeckVersion = DeckDB & {
-  latestDeckVersion: DeckVersionDB;
+type DeckJoinedLatestDeckVersion = Deck & {
+  latestDeckVersion: DeckVersion;
 };
 
 const useGetDecksJoinLatestDeckVersion = () => {
@@ -23,7 +26,7 @@ const useGetDecksJoinLatestDeckVersion = () => {
       .select(
         `
           *,
-          deck_versions:id ( * ) limit 1
+          deck_versions:id ( * )
         `
       )
       .order('created_at', { ascending: false, foreignTable: 'deck_versions' })
@@ -38,17 +41,25 @@ const useGetDecksJoinLatestDeckVersion = () => {
     }
     const response: DeckJoinedLatestDeckVersion[] = parsed.data.map((v) => {
       const latest: DeckVersionDB | undefined = v.deck_versions[0];
+      const deck = convertToDeck({
+        id: v.id,
+        created_at: v.created_at,
+        user_id: v.user_id,
+        public: v.public,
+      });
       return {
-        ...v,
-        latestDeckVersion: latest ?? {
-          id: v4(),
-          created_at: new Date().toISOString(),
-          deck_id: v.id,
-          name: 'placeholder',
-          cards: [],
-          adjustment_cards: [],
-          user_id: v.user_id,
-        },
+        ...deck,
+        latestDeckVersion: convertToDeckVersion(
+          latest ?? {
+            id: v4(),
+            created_at: new Date().toISOString(),
+            deck_id: v.id,
+            name: 'placeholder',
+            cards: [],
+            adjustment_cards: [],
+            user_id: v.user_id,
+          }
+        ),
       };
     });
     return response;
@@ -78,6 +89,7 @@ export const DecksPage: FC = () => {
       cards: [
         {
           img_file_name: 'BT9-033.png',
+          category_id: '503011',
           count: 4,
         },
       ],
@@ -130,16 +142,18 @@ export const DecksPage: FC = () => {
       {decks?.map((deck) => {
         return (
           <Box key={deck.id} p={4}>
-            <Text>
-              id: {deck.id} <br />
-              name: {deck.latestDeckVersion.name} <br />
-              keyCard: {deck.latestDeckVersion.key_card} <br />
-              public: {String(deck.public)}
-              <br />
-              user: {deck.user_id} <br />
-              createdAt: {deck.created_at}
-            </Text>
-            {user?.id === deck.user_id && (
+            <Link href={`/decks/${deck.id}`}>
+              <Text>
+                id: {deck.id} <br />
+                name: {deck.latestDeckVersion.name} <br />
+                keyCard: {deck.latestDeckVersion.keyCard} <br />
+                public: {String(deck.public)}
+                <br />
+                user: {deck.userId} <br />
+                createdAt: {deck.createdAt}
+              </Text>
+            </Link>
+            {user?.id === deck.userId && (
               <HStack spacing={'1'} mt={1}>
                 <Button
                   size={'sm'}
