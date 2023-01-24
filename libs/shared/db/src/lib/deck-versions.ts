@@ -8,7 +8,7 @@ export const DeckVersionDB = z.object({
   created_at: z.string(),
   deck_id: DeckDB.shape.id,
   name: z.string(),
-  key_card: z.string().optional(),
+  key_card: z.string().optional().nullable(),
   cards: z.array(
     z.object({
       img_file_name: CardDB.shape.img_file_name,
@@ -32,7 +32,7 @@ export const convertToDeckVersion = (data: DeckVersionDB): DeckVersion => {
     createdAt: data.created_at,
     deckId: data.deck_id,
     name: data.name,
-    keyCard: data.key_card,
+    keyCard: data.key_card ?? '',
     cards: data.cards.map((v) => ({
       imgFileName: v.img_file_name,
       count: v.count,
