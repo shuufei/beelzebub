@@ -173,8 +173,8 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
           <Button size={'xs'}>変更</Button>
         </VStack>
       </HStack>
-      <Divider />
-      <HStack alignItems={'flex-start'}>
+      <Divider borderColor={'gray.300'} />
+      <HStack alignItems={'flex-start'} spacing={4}>
         <Box flex={1} p={3}>
           <Box>
             <Text fontSize={'xs'} fontWeight={'semibold'}>

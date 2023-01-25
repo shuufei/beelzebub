@@ -14,7 +14,7 @@ export const Header: FC = () => {
       px={'6'}
       py={'2'}
       borderBottom={'1px'}
-      borderColor={'gray.300'}
+      borderColor={'gray.900'}
       position={'sticky'}
       top={0}
       bg={'white'}
