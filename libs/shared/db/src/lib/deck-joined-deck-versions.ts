@@ -23,6 +23,8 @@ export const convertToDeckJoinedDeckVersion = (
     created_at: data.created_at,
     user_id: data.user_id,
     public: data.public,
+    name: data.name,
+    key_card: data.key_card,
   });
   const deckVersions: DeckVersion[] =
     data.deck_versions.map(convertToDeckVersion);

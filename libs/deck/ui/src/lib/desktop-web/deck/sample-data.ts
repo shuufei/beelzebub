@@ -194,7 +194,7 @@ export const SAMPLE_DATA_VERSIONS: DeckVersionDB[] = [
     adjustment_cards: [
       {
         img_file_name: 'EX2-074_P1.png',
-        category_id: '503002',
+        category_id: '503010',
         count: 2,
       },
     ],

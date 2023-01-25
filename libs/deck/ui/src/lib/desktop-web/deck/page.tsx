@@ -8,13 +8,25 @@ import {
   DeckVersion,
 } from '@beelzebub/shared/domain';
 import { CardImg } from '@beelzebub/shared/ui';
-import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { ArrowBackIcon, LockIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Divider,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import d from 'dayjs';
+import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
+import { CardList } from './components/card-list';
+import { DeckVersionCard } from './components/deck-version-card';
 import { SAMPLE_DATA_VERSIONS } from './sample-data';
 
 export type DeckPageProps = {
@@ -61,12 +73,29 @@ const useGetDecksJoinDeckVersions = (deckId: Deck['id']) => {
 };
 
 export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
+  const [selectedVersion, setSelectedVersion] = useState<
+    DeckVersion | undefined
+  >();
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
   const user = useUser();
-  const latestDeckVersion: DeckVersion | undefined = useMemo(() => {
+
+  const latestVersion: DeckVersion | undefined = useMemo(() => {
     return data?.deckVersions[0];
   }, [data?.deckVersions]);
   const supabaseClient = useSupabaseClient();
+
+  useEffect(() => {
+    setSelectedVersion(latestVersion);
+  }, [latestVersion]);
+
+  const deckCards = useMemo(() => {
+    return (selectedVersion ?? latestVersion)?.cards ?? [];
+  }, [latestVersion, selectedVersion]);
+
+  const deckAdjustmentCards = useMemo(() => {
+    return (selectedVersion ?? latestVersion)?.adjustmentCards ?? [];
+  }, [latestVersion, selectedVersion]);
+
   if (user == null) {
     return <Text>unauthorized</Text>;
   }
@@ -81,60 +110,121 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
 
   return (
     <Box as="main" px="6" pt="2" pb="8">
-      <Link href="/decks">
-        <Button size={'sm'} variant={'ghost'} leftIcon={<ArrowBackIcon />}>
-          戻る
-        </Button>
-      </Link>
-      <Heading as="h1" fontSize={'lg'} mt="4">
-        デッキ
-      </Heading>
-      <Text>id: {data?.id}</Text>
-      <Text>name: {data?.name}</Text>
-      <Text>createdAt: {data?.createdAt}</Text>
-      <Text>public: {data?.public ? 'true' : 'false'}</Text>
-      <Text>user: {data?.userId}</Text>
-      {data?.keyCard && (
-        <CardImg
-          categoryId={data.keyCard.categoryId}
-          imgFileName={data.keyCard.imgFileName}
-          width={200}
-        />
-      )}
-      {latestDeckVersion?.cards.map((card) => {
-        return (
-          <CardImg
-            key={card.imgFileName}
-            categoryId={card.categoryId}
-            imgFileName={card.imgFileName}
-            width={100}
-          />
-        );
-      })}
-      {data?.deckVersions.map((deckVersion) => {
-        return (
-          <Box p={3} key={deckVersion.id}>
-            <Text>created at: {deckVersion.createdAt}</Text>
-            <Text>comment: {deckVersion.comment}</Text>
-            <Text>cards: {deckVersion.cards.length}</Text>
-            <Wrap>
-              {deckVersion.cards.map((card) => {
-                return new Array(card.count).fill(null).map((_, i) => {
-                  return (
-                    <WrapItem key={i}>
-                      <CardImg
-                        categoryId={card.categoryId}
-                        imgFileName={card.imgFileName}
-                        width={50}
-                      />
-                    </WrapItem>
-                  );
-                });
-              })}
-            </Wrap>
+      <Box pb={4}>
+        <HStack
+          justifyContent={'space-between'}
+          alignItems={'flex-start'}
+          pt={2}
+        >
+          <Box>
+            <Link href="/decks">
+              <Button
+                size={'sm'}
+                variant={'ghost'}
+                leftIcon={<ArrowBackIcon />}
+              >
+                戻る
+              </Button>
+            </Link>
+            <HStack alignItems={'center'} spacing={4} mt={1}>
+              <HStack spacing={2}>
+                <Heading as="h1" fontSize={'lg'}>
+                  {data?.name}
+                </Heading>
+                {data?.public === false && <LockIcon fontSize={'sm'} />}
+              </HStack>
+              <Button size={'xs'}>変更</Button>
+            </HStack>
+            <VStack
+              fontSize={'sm'}
+              color={'gray.600'}
+              mt={1}
+              spacing={0}
+              alignItems={'flex-start'}
+            >
+              <Text>{data?.userId}</Text>
+              <Text>
+                {d(data?.createdAt).format('YYYY年MM月D日 HH時mm分ss秒')}
+              </Text>
+            </VStack>
           </Box>
-        );
-      })}
+          <VStack spacing={1}>
+            {data?.keyCard != null ? (
+              <CardImg
+                categoryId={data?.keyCard.categoryId}
+                imgFileName={data?.keyCard.imgFileName}
+                width={70}
+              />
+            ) : (
+              <Image
+                src={'/images/card-placeholder.png'}
+                width={70}
+                height={70 * (600 / 430)}
+                alt=""
+              />
+            )}
+            <Text fontSize={'xs'} fontWeight={'semibold'} color={'gray.500'}>
+              キーカード
+            </Text>
+            <Button size={'xs'}>変更</Button>
+          </VStack>
+        </HStack>
+      </Box>
+      <Divider />
+      <HStack alignItems={'flex-start'}>
+        <Box flex={1} p={3}>
+          <Box>
+            <Text fontSize={'xs'} fontWeight={'semibold'}>
+              カードリスト
+            </Text>
+            {deckCards.length === 0 && (
+              <Text fontSize={'sm'} color={'gray.600'} mt={1}>
+                カードがありません
+              </Text>
+            )}
+            <Box mt="1">
+              <CardList cards={deckCards} />
+            </Box>
+          </Box>
+          <Box mt={8}>
+            <Text fontSize={'xs'} fontWeight={'semibold'}>
+              調整用カードリスト
+            </Text>
+            <Box mt="1">
+              {deckAdjustmentCards.length === 0 && (
+                <Text fontSize={'sm'} color={'gray.600'} mt={1}>
+                  カードがありません
+                </Text>
+              )}
+              <CardList cards={deckAdjustmentCards} />
+            </Box>
+          </Box>
+        </Box>
+        <VStack
+          alignItems={'flex-start'}
+          maxW={'xs'}
+          borderLeft={'1px'}
+          borderColor={'gray.300'}
+          p={2}
+          spacing={2}
+        >
+          <Text color={'gray.900'} fontSize={'xs'}>
+            変更履歴
+          </Text>
+          {data?.deckVersions.map((deckVersion, i) => {
+            return (
+              <DeckVersionCard
+                key={deckVersion.id}
+                deckVersion={deckVersion}
+                isSelected={selectedVersion?.id === deckVersion.id}
+                onPreview={() => {
+                  setSelectedVersion(deckVersion);
+                }}
+              />
+            );
+          })}
+        </VStack>
+      </HStack>
       {/* <Button onClick={insertVersions}>Input Sample Data</Button> */}
     </Box>
   );
