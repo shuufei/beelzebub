@@ -27,7 +27,7 @@ export const DeckVersionCard: FC<{
         </Text>
         <Text>{deckVersion.comment}</Text>
       </VStack>
-      <HStack alignItems={'flex-end'} spacing={2}>
+      <HStack alignItems={'flex-end'} spacing={1.5}>
         <Button
           size={'xs'}
           colorScheme={'blue'}

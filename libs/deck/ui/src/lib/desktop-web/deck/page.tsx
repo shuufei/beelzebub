@@ -12,6 +12,7 @@ import { ArrowBackIcon, LockIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  Checkbox,
   Divider,
   Heading,
   HStack,
@@ -31,6 +32,33 @@ import { SAMPLE_DATA_VERSIONS } from './sample-data';
 
 export type DeckPageProps = {
   deckId: Deck['id'];
+};
+
+export type DeckCardWithDiff = DeckVersion['cards'][number] & {
+  diff: number;
+};
+
+const getDeckCardsWithDiff = (
+  current: DeckVersion['cards'],
+  diff: DeckVersion['cards']
+): DeckCardWithDiff[] => {
+  const removedList = diff
+    .filter(
+      (card) => current.find((v) => v.imgFileName === card.imgFileName) == null
+    )
+    .map((v) => ({
+      ...v,
+      count: 0,
+      diff: v.count * -1,
+    }));
+  const changedList = current.map((card) => {
+    const diffTargetCard = diff.find((v) => v.imgFileName === card.imgFileName);
+    return {
+      ...card,
+      diff: card.count - (diffTargetCard?.count ?? 0),
+    };
+  });
+  return [...changedList, ...removedList];
 };
 
 const useGetDecksJoinDeckVersions = (deckId: Deck['id']) => {
@@ -76,6 +104,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   const [selectedVersion, setSelectedVersion] = useState<
     DeckVersion | undefined
   >();
+  const [showDiff, setShowDiff] = useState(true);
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
   const user = useUser();
 
@@ -96,6 +125,34 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
     return (selectedVersion ?? latestVersion)?.adjustmentCards ?? [];
   }, [latestVersion, selectedVersion]);
 
+  const diffTargetVersion = useMemo(() => {
+    const selectedVersioinIndex = data?.deckVersions.findIndex(
+      (v) => v.id === selectedVersion?.id
+    );
+    if (selectedVersioinIndex == null) {
+      return;
+    }
+    const diffTarget = data?.deckVersions[selectedVersioinIndex + 1];
+    return diffTarget;
+  }, [data?.deckVersions, selectedVersion?.id]);
+
+  const diffDeckCards: DeckCardWithDiff[] = useMemo(() => {
+    if (diffTargetVersion == null) {
+      return deckCards.map((v) => ({ ...v, diff: 0 }));
+    }
+    return getDeckCardsWithDiff(deckCards, diffTargetVersion.cards);
+  }, [deckCards, diffTargetVersion]);
+
+  const diffAdjustmentCards = useMemo(() => {
+    if (diffTargetVersion == null) {
+      return deckAdjustmentCards.map((v) => ({ ...v, diff: 0 }));
+    }
+    return getDeckCardsWithDiff(
+      deckAdjustmentCards,
+      diffTargetVersion.adjustmentCards
+    );
+  }, [deckAdjustmentCards, diffTargetVersion]);
+
   if (user == null) {
     return <Text>unauthorized</Text>;
   }
@@ -110,66 +167,64 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
 
   return (
     <Box as="main" px="6" pt="2" pb="8">
-      <Box pb={4}>
-        <HStack
-          justifyContent={'space-between'}
-          alignItems={'flex-start'}
-          pt={2}
-        >
-          <Box>
-            <Link href="/decks">
-              <Button
-                size={'sm'}
-                variant={'ghost'}
-                leftIcon={<ArrowBackIcon />}
-              >
-                戻る
-              </Button>
-            </Link>
-            <HStack alignItems={'center'} spacing={4} mt={1}>
-              <HStack spacing={2}>
-                <Heading as="h1" fontSize={'lg'}>
-                  {data?.name}
-                </Heading>
-                {data?.public === false && <LockIcon fontSize={'sm'} />}
-              </HStack>
-              <Button size={'xs'}>変更</Button>
+      <HStack
+        justifyContent={'space-between'}
+        alignItems={'flex-start'}
+        pt={2}
+        pb={4}
+      >
+        <Box>
+          <Link href="/decks">
+            <Button size={'sm'} variant={'ghost'} leftIcon={<ArrowBackIcon />}>
+              戻る
+            </Button>
+          </Link>
+          <HStack alignItems={'center'} spacing={4} mt={1}>
+            <HStack spacing={2}>
+              <Heading as="h1" fontSize={'lg'}>
+                {data?.name}
+              </Heading>
+              {data?.public === false && <LockIcon fontSize={'sm'} />}
             </HStack>
-            <VStack
-              fontSize={'sm'}
-              color={'gray.600'}
-              mt={1}
-              spacing={0}
-              alignItems={'flex-start'}
-            >
-              <Text>{data?.userId}</Text>
-              <Text>
-                {d(data?.createdAt).format('YYYY年MM月D日 HH時mm分ss秒')}
-              </Text>
-            </VStack>
-          </Box>
-          <VStack spacing={1}>
-            {data?.keyCard != null ? (
-              <CardImg
-                categoryId={data?.keyCard.categoryId}
-                imgFileName={data?.keyCard.imgFileName}
-                width={70}
-              />
-            ) : (
-              <Image
-                src={'/images/card-placeholder.png'}
-                width={70}
-                height={70 * (600 / 430)}
-                alt=""
-              />
-            )}
-            <Text fontSize={'xs'} fontWeight={'semibold'} color={'gray.500'}>
-              キーカード
-            </Text>
             <Button size={'xs'}>変更</Button>
+          </HStack>
+          <VStack
+            fontSize={'sm'}
+            color={'gray.600'}
+            mt={1}
+            spacing={0}
+            alignItems={'flex-start'}
+          >
+            <Text>{data?.userId}</Text>
+            <Text>
+              {d(data?.createdAt).format('YYYY年MM月D日 HH時mm分ss秒')}
+            </Text>
           </VStack>
-        </HStack>
-      </Box>
+          <Button variant={'outline'} size={'sm'} mt={3}>
+            デッキ編集
+          </Button>
+        </Box>
+        <VStack spacing={1}>
+          {data?.keyCard != null ? (
+            <CardImg
+              categoryId={data?.keyCard.categoryId}
+              imgFileName={data?.keyCard.imgFileName}
+              width={70}
+            />
+          ) : (
+            <Image
+              src={'/images/card-placeholder.png'}
+              width={70}
+              height={70 * (600 / 430)}
+              alt=""
+            />
+          )}
+          <Text fontSize={'xs'} fontWeight={'semibold'} color={'gray.500'}>
+            キーカード
+          </Text>
+          <Button size={'xs'}>変更</Button>
+        </VStack>
+      </HStack>
       <Divider />
       <HStack alignItems={'flex-start'}>
         <Box flex={1} p={3}>
@@ -177,13 +232,13 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
             <Text fontSize={'xs'} fontWeight={'semibold'}>
               カードリスト
             </Text>
-            {deckCards.length === 0 && (
+            {diffDeckCards.length === 0 && (
               <Text fontSize={'sm'} color={'gray.600'} mt={1}>
                 カードがありません
               </Text>
             )}
             <Box mt="1">
-              <CardList cards={deckCards} />
+              <CardList cards={diffDeckCards} showDiff={showDiff} />
             </Box>
           </Box>
           <Box mt={8}>
@@ -191,12 +246,12 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               調整用カードリスト
             </Text>
             <Box mt="1">
-              {deckAdjustmentCards.length === 0 && (
+              {diffAdjustmentCards.length === 0 && (
                 <Text fontSize={'sm'} color={'gray.600'} mt={1}>
                   カードがありません
                 </Text>
               )}
-              <CardList cards={deckAdjustmentCards} />
+              <CardList cards={diffAdjustmentCards} showDiff={showDiff} />
             </Box>
           </Box>
         </Box>
@@ -206,11 +261,23 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
           borderLeft={'1px'}
           borderColor={'gray.300'}
           p={2}
+          pb={10}
           spacing={2}
         >
-          <Text color={'gray.900'} fontSize={'xs'}>
-            変更履歴
-          </Text>
+          <HStack justifyContent={'space-between'} width={'full'}>
+            <Text color={'gray.900'} fontSize={'xs'}>
+              変更履歴
+            </Text>
+            <Checkbox
+              size={'sm'}
+              isChecked={showDiff}
+              onChange={(event) => {
+                setShowDiff(event.target.checked);
+              }}
+            >
+              <Text fontSize={'xs'}>差分表示</Text>
+            </Checkbox>
+          </HStack>
           {data?.deckVersions.map((deckVersion, i) => {
             return (
               <DeckVersionCard
