@@ -21,7 +21,8 @@ import {
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import d from 'dayjs';
 import Link from 'next/link';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, useEffect, useMemo, useState, useCallback } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
 import { KeyCardImg } from '../components/key-card-img';
@@ -74,17 +75,18 @@ const useGetDecksJoinDeckVersions = (deckId: Deck['id']) => {
 };
 
 export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
+  const supabaseClient = useSupabaseClient();
+  const router = useRouter();
+
   const [selectedVersion, setSelectedVersion] = useState<
     DeckVersion | undefined
   >();
   const [showDiff, setShowDiff] = useState(true);
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
   const user = useUser();
-
   const latestVersion: DeckVersion | undefined = useMemo(() => {
     return data?.deckVersions[0];
   }, [data?.deckVersions]);
-  const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
     setSelectedVersion(latestVersion);
@@ -99,6 +101,29 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
     }
     return getDiff(data, selectedVersion);
   }, [data, selectedVersion]);
+
+  const updateDeck = useCallback(async () => {
+    if (user == null) {
+      return;
+    }
+    await supabaseClient
+      .from('decks')
+      .update({ public: !data?.public })
+      .eq('id', deckId);
+    mutate();
+    return;
+  }, [data?.public, deckId, mutate, supabaseClient, user]);
+
+  const deleteDeck = useCallback(async () => {
+    if (user == null) {
+      return;
+    }
+    await supabaseClient.from('deck_versions').delete().eq('deck_id', deckId);
+    await supabaseClient.from('decks').delete().eq('id', deckId);
+    router.push('/decks');
+    mutate();
+    return;
+  }, [deckId, mutate, router, supabaseClient, user]);
 
   if (user == null) {
     return <Text>unauthorized</Text>;
@@ -147,9 +172,20 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               {d(data?.createdAt).format('YYYY年MM月D日 HH時mm分ss秒')}
             </Text>
           </VStack>
-          <Button variant={'outline'} size={'sm'} mt={3}>
-            デッキ編集
-          </Button>
+          <HStack mt={3}>
+            <Button variant={'outline'} size={'sm'} onClick={updateDeck}>
+              デッキ編集
+            </Button>
+            <Button
+              colorScheme={'red'}
+              variant={'outline'}
+              size={'sm'}
+              mt={3}
+              onClick={deleteDeck}
+            >
+              デッキ削除
+            </Button>
+          </HStack>
         </Box>
         <VStack spacing={1}>
           <KeyCardImg keyCard={data?.keyCard} width={70} />

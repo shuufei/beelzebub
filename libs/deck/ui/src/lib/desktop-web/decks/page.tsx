@@ -107,32 +107,6 @@ export const DecksPage: FC = () => {
     return;
   }, [mutate, supabaseClient, user]);
 
-  const updateDeck = useCallback(
-    async (id: Deck['id'], isPublic: boolean) => {
-      if (user == null) {
-        return;
-      }
-      await supabaseClient
-        .from('decks')
-        .update({ public: isPublic })
-        .eq('id', id);
-      mutate();
-      return;
-    },
-    [mutate, supabaseClient, user]
-  );
-  const deleteDeck = useCallback(
-    async (id: Deck['id']) => {
-      if (user == null) {
-        return;
-      }
-      await supabaseClient.from('decks').delete().eq('id', id);
-      mutate();
-      return;
-    },
-    [mutate, supabaseClient, user]
-  );
-
   return (
     <Box as="main" px="6" pt="4" pb="8">
       <Heading as="h1" fontSize={'lg'}>
@@ -152,38 +126,6 @@ export const DecksPage: FC = () => {
                 <DeckCard deck={deck} />
               </Link>
             </Box>
-            // <Box key={deck.id} p={4}>
-            //   <Link href={`/decks/${deck.id}`}>
-            //     <Text>
-            //       id: {deck.id} <br />
-            //       name: {deck.name} <br />
-            //       public: {String(deck.public)}
-            //       <br />
-            //       user: {deck.userId} <br />
-            //       createdAt: {deck.createdAt}
-            //     </Text>
-            //     {deck.keyCard && (
-            //       <CardImg
-            //         categoryId={deck.keyCard.categoryId}
-            //         imgFileName={deck.keyCard.imgFileName}
-            //         width={200}
-            //       />
-            //     )}
-            //   </Link>
-            //   {user?.id === deck.userId && (
-            //     <HStack spacing={'1'} mt={1}>
-            //       <Button
-            //         size={'sm'}
-            //         onClick={() => updateDeck(deck.id, !deck.public)}
-            //       >
-            //         更新
-            //       </Button>
-            //       <Button size={'sm'} onClick={() => deleteDeck(deck.id)}>
-            //         削除
-            //       </Button>
-            //     </HStack>
-            //   )}
-            // </Box>
           );
         })}
       </VStack>
