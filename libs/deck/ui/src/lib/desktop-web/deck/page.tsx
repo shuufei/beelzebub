@@ -7,7 +7,6 @@ import {
   DeckJoinedDeckVersions,
   DeckVersion,
 } from '@beelzebub/shared/domain';
-import { CardImg } from '@beelzebub/shared/ui';
 import { ArrowBackIcon, LockIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -21,11 +20,11 @@ import {
 } from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import d from 'dayjs';
-import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
+import { KeyCardImg } from '../components/key-card-img';
 import { CardList } from './components/card-list';
 import { DeckVersionCard } from './components/deck-version-card';
 import { SAMPLE_DATA_VERSIONS } from './sample-data';
@@ -153,20 +152,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
           </Button>
         </Box>
         <VStack spacing={1}>
-          {data?.keyCard != null ? (
-            <CardImg
-              categoryId={data?.keyCard.categoryId}
-              imgFileName={data?.keyCard.imgFileName}
-              width={70}
-            />
-          ) : (
-            <Image
-              src={'/images/card-placeholder.png'}
-              width={70}
-              height={70 * (600 / 430)}
-              alt=""
-            />
-          )}
+          <KeyCardImg keyCard={data?.keyCard} width={70} />
           <Text fontSize={'xs'} fontWeight={'semibold'} color={'gray.500'}>
             キーカード
           </Text>

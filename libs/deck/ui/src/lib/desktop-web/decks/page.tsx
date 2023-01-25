@@ -5,19 +5,16 @@ import {
   DeckDBJoinedDeckVersionsDB,
   DeckVersionDB,
 } from '@beelzebub/shared/db';
-import { Deck, DeckVersion } from '@beelzebub/shared/domain';
-import { CardImg } from '@beelzebub/shared/ui';
-import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
+import { Deck } from '@beelzebub/shared/domain';
+import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { FC, useCallback } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 import { z } from 'zod';
-
-type DeckJoinedLatestDeckVersion = Deck & {
-  latestDeckVersion: DeckVersion;
-};
+import { DeckCard } from './components/deck-card';
+import { DeckJoinedLatestDeckVersion } from './domain/deck-joined-latest-deck-version';
 
 const useGetDecksJoinLatestDeckVersion = () => {
   const supabaseClient = useSupabaseClient();
@@ -48,6 +45,7 @@ const useGetDecksJoinLatestDeckVersion = () => {
         user_id: v.user_id,
         public: v.public,
         name: v.name,
+        key_card: v.key_card,
       });
       return {
         ...deck,
@@ -145,43 +143,50 @@ export const DecksPage: FC = () => {
         新規作成
       </Button>
 
-      {decks?.length ?? 0}
-      {decks?.map((deck) => {
-        return (
-          <Box key={deck.id} p={4}>
-            <Link href={`/decks/${deck.id}`}>
-              <Text>
-                id: {deck.id} <br />
-                name: {deck.name} <br />
-                public: {String(deck.public)}
-                <br />
-                user: {deck.userId} <br />
-                createdAt: {deck.createdAt}
-              </Text>
-              {deck.keyCard && (
-                <CardImg
-                  categoryId={deck.keyCard.categoryId}
-                  imgFileName={deck.keyCard.imgFileName}
-                  width={200}
-                />
-              )}
-            </Link>
-            {user?.id === deck.userId && (
-              <HStack spacing={'1'} mt={1}>
-                <Button
-                  size={'sm'}
-                  onClick={() => updateDeck(deck.id, !deck.public)}
-                >
-                  更新
-                </Button>
-                <Button size={'sm'} onClick={() => deleteDeck(deck.id)}>
-                  削除
-                </Button>
-              </HStack>
-            )}
-          </Box>
-        );
-      })}
+      {decks?.length === 0 ?? <Text>デッキが登録されていません</Text>}
+      <VStack alignItems={'flex-start'} width={'full'} mt={6}>
+        {decks?.map((deck) => {
+          return (
+            <Box width={'full'} key={deck.id}>
+              <Link href={`/decks/${deck.id}`}>
+                <DeckCard deck={deck} />
+              </Link>
+            </Box>
+            // <Box key={deck.id} p={4}>
+            //   <Link href={`/decks/${deck.id}`}>
+            //     <Text>
+            //       id: {deck.id} <br />
+            //       name: {deck.name} <br />
+            //       public: {String(deck.public)}
+            //       <br />
+            //       user: {deck.userId} <br />
+            //       createdAt: {deck.createdAt}
+            //     </Text>
+            //     {deck.keyCard && (
+            //       <CardImg
+            //         categoryId={deck.keyCard.categoryId}
+            //         imgFileName={deck.keyCard.imgFileName}
+            //         width={200}
+            //       />
+            //     )}
+            //   </Link>
+            //   {user?.id === deck.userId && (
+            //     <HStack spacing={'1'} mt={1}>
+            //       <Button
+            //         size={'sm'}
+            //         onClick={() => updateDeck(deck.id, !deck.public)}
+            //       >
+            //         更新
+            //       </Button>
+            //       <Button size={'sm'} onClick={() => deleteDeck(deck.id)}>
+            //         削除
+            //       </Button>
+            //     </HStack>
+            //   )}
+            // </Box>
+          );
+        })}
+      </VStack>
     </Box>
   );
 };
