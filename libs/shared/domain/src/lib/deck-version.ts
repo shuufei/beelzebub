@@ -7,8 +7,6 @@ export const DeckVersion = z.object({
   id: z.string().uuid(),
   createdAt: z.string(),
   deckId: Deck.shape.id,
-  name: z.string(),
-  keyCard: z.string().optional(),
   cards: z.array(
     z.object({
       imgFileName: Card.shape.imgFileName,

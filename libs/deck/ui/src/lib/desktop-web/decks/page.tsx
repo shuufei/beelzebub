@@ -6,6 +6,7 @@ import {
   DeckVersionDB,
 } from '@beelzebub/shared/db';
 import { Deck, DeckVersion } from '@beelzebub/shared/domain';
+import { CardImg } from '@beelzebub/shared/ui';
 import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
@@ -46,6 +47,7 @@ const useGetDecksJoinLatestDeckVersion = () => {
         created_at: v.created_at,
         user_id: v.user_id,
         public: v.public,
+        name: v.name,
       });
       return {
         ...deck,
@@ -77,15 +79,20 @@ export const DecksPage: FC = () => {
     if (user == null) {
       return;
     }
+    const id = v4();
     const deck: Omit<DeckDB, 'created_at'> = {
-      id: v4(),
+      id,
+      name: `deck name ${id}`,
       user_id: user.id,
       public: true,
+      key_card: {
+        img_file_name: 'BT9-033.png',
+        category_id: '503011',
+      },
     };
     const deckVersions: Omit<DeckVersionDB, 'created_at'> = {
       id: v4(),
       deck_id: deck.id,
-      name: `deck name: ${deck.id}`,
       cards: [
         {
           img_file_name: 'BT9-033.png',
@@ -145,13 +152,19 @@ export const DecksPage: FC = () => {
             <Link href={`/decks/${deck.id}`}>
               <Text>
                 id: {deck.id} <br />
-                name: {deck.latestDeckVersion.name} <br />
-                keyCard: {deck.latestDeckVersion.keyCard} <br />
+                name: {deck.name} <br />
                 public: {String(deck.public)}
                 <br />
                 user: {deck.userId} <br />
                 createdAt: {deck.createdAt}
               </Text>
+              {deck.keyCard && (
+                <CardImg
+                  categoryId={deck.keyCard.categoryId}
+                  imgFileName={deck.keyCard.imgFileName}
+                  width={200}
+                />
+              )}
             </Link>
             {user?.id === deck.userId && (
               <HStack spacing={'1'} mt={1}>

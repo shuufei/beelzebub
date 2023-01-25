@@ -90,10 +90,17 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
         デッキ
       </Heading>
       <Text>id: {data?.id}</Text>
-      <Text>name: {latestDeckVersion?.name}</Text>
+      <Text>name: {data?.name}</Text>
       <Text>createdAt: {data?.createdAt}</Text>
       <Text>public: {data?.public ? 'true' : 'false'}</Text>
       <Text>user: {data?.userId}</Text>
+      {data?.keyCard && (
+        <CardImg
+          categoryId={data.keyCard.categoryId}
+          imgFileName={data.keyCard.imgFileName}
+          width={200}
+        />
+      )}
       {latestDeckVersion?.cards.map((card) => {
         return (
           <CardImg
@@ -107,7 +114,6 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
       {data?.deckVersions.map((deckVersion) => {
         return (
           <Box p={3} key={deckVersion.id}>
-            <Text>name: {deckVersion.name}</Text>
             <Text>created at: {deckVersion.createdAt}</Text>
             <Text>comment: {deckVersion.comment}</Text>
             <Text>cards: {deckVersion.cards.length}</Text>

@@ -57,9 +57,7 @@ export const SAMPLE_DATA_VERSIONS: DeckVersionDB[] = [
   {
     id: v4(),
     created_at: new Date('2023-01-23T10:00:00+0900').toISOString(),
-    deck_id: 'eb432c2a-7ac6-46d9-ad52-d7612da6caa4',
-    name: 'ルーチェモン ベルゼブモン 消滅特化',
-    // key_card: '',
+    deck_id: 'bc25f4b3-15a7-4760-bd9e-4ca45d4bef1d',
     cards: SAMPLE_DATA_CARDS,
     adjustment_cards: [
       {
@@ -74,9 +72,7 @@ export const SAMPLE_DATA_VERSIONS: DeckVersionDB[] = [
   {
     id: v4(),
     created_at: new Date('2023-01-23T10:11:00+0900').toISOString(),
-    deck_id: 'eb432c2a-7ac6-46d9-ad52-d7612da6caa4',
-    name: 'ルーチェモン ベルゼブモン 消滅特化',
-    // key_card: '',
+    deck_id: 'bc25f4b3-15a7-4760-bd9e-4ca45d4bef1d',
     cards: [
       {
         img_file_name: 'BT2-068.png',
@@ -142,9 +138,7 @@ export const SAMPLE_DATA_VERSIONS: DeckVersionDB[] = [
   {
     id: v4(),
     created_at: new Date('2023-01-23T10:22:00+0900').toISOString(),
-    deck_id: 'eb432c2a-7ac6-46d9-ad52-d7612da6caa4',
-    name: 'ルーチェモン ベルゼブモン 消滅特化',
-    // key_card: '',
+    deck_id: 'bc25f4b3-15a7-4760-bd9e-4ca45d4bef1d',
     cards: [
       {
         img_file_name: 'BT2-068.png',
