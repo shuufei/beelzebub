@@ -1,7 +1,7 @@
 import { CardImg } from '@beelzebub/shared/ui';
 import { Wrap, WrapItem } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
-import { DeckCardWithDiff } from '../page';
+import { DeckCardWithDiff } from '../utils/get-diff-version';
 
 type Mark = 'removed' | 'added' | 'nochanged';
 type MarkedCard = Pick<DeckCardWithDiff, 'categoryId' | 'imgFileName'> & {
@@ -26,7 +26,7 @@ export const CardList: FC<{
     return showDiff
       ? cards
           .map((card) => {
-            const current: MarkedCard[] = new Array(getCurrentCount(card))
+            const currentCards: MarkedCard[] = new Array(getCurrentCount(card))
               .fill(null)
               .map(() => ({
                 categoryId: card.categoryId,
@@ -39,7 +39,7 @@ export const CardList: FC<{
                 : card.diff > 0
                 ? 'added'
                 : 'removed';
-            const diff: MarkedCard[] = new Array(Math.abs(card.diff))
+            const diffCards: MarkedCard[] = new Array(Math.abs(card.diff))
               .fill(null)
               .map(() => ({
                 categoryId: card.categoryId,
@@ -47,7 +47,7 @@ export const CardList: FC<{
                 mark: mark,
               }));
 
-            return [...current, ...diff];
+            return [...currentCards, ...diffCards];
           })
           .flat()
       : cards

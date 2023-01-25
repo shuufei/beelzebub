@@ -29,36 +29,10 @@ import { z } from 'zod';
 import { CardList } from './components/card-list';
 import { DeckVersionCard } from './components/deck-version-card';
 import { SAMPLE_DATA_VERSIONS } from './sample-data';
+import { getDiff } from './utils/get-diff-version';
 
 export type DeckPageProps = {
   deckId: Deck['id'];
-};
-
-export type DeckCardWithDiff = DeckVersion['cards'][number] & {
-  diff: number;
-};
-
-const getDeckCardsWithDiff = (
-  current: DeckVersion['cards'],
-  diff: DeckVersion['cards']
-): DeckCardWithDiff[] => {
-  const removedList = diff
-    .filter(
-      (card) => current.find((v) => v.imgFileName === card.imgFileName) == null
-    )
-    .map((v) => ({
-      ...v,
-      count: 0,
-      diff: v.count * -1,
-    }));
-  const changedList = current.map((card) => {
-    const diffTargetCard = diff.find((v) => v.imgFileName === card.imgFileName);
-    return {
-      ...card,
-      diff: card.count - (diffTargetCard?.count ?? 0),
-    };
-  });
-  return [...changedList, ...removedList];
 };
 
 const useGetDecksJoinDeckVersions = (deckId: Deck['id']) => {
@@ -117,41 +91,15 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
     setSelectedVersion(latestVersion);
   }, [latestVersion]);
 
-  const deckCards = useMemo(() => {
-    return (selectedVersion ?? latestVersion)?.cards ?? [];
-  }, [latestVersion, selectedVersion]);
-
-  const deckAdjustmentCards = useMemo(() => {
-    return (selectedVersion ?? latestVersion)?.adjustmentCards ?? [];
-  }, [latestVersion, selectedVersion]);
-
-  const diffTargetVersion = useMemo(() => {
-    const selectedVersioinIndex = data?.deckVersions.findIndex(
-      (v) => v.id === selectedVersion?.id
-    );
-    if (selectedVersioinIndex == null) {
-      return;
+  const { cards, adjustmentCards } = useMemo(() => {
+    if (data == null || selectedVersion == null) {
+      return {
+        cards: [],
+        adjustmentCards: [],
+      };
     }
-    const diffTarget = data?.deckVersions[selectedVersioinIndex + 1];
-    return diffTarget;
-  }, [data?.deckVersions, selectedVersion?.id]);
-
-  const diffDeckCards: DeckCardWithDiff[] = useMemo(() => {
-    if (diffTargetVersion == null) {
-      return deckCards.map((v) => ({ ...v, diff: 0 }));
-    }
-    return getDeckCardsWithDiff(deckCards, diffTargetVersion.cards);
-  }, [deckCards, diffTargetVersion]);
-
-  const diffAdjustmentCards = useMemo(() => {
-    if (diffTargetVersion == null) {
-      return deckAdjustmentCards.map((v) => ({ ...v, diff: 0 }));
-    }
-    return getDeckCardsWithDiff(
-      deckAdjustmentCards,
-      diffTargetVersion.adjustmentCards
-    );
-  }, [deckAdjustmentCards, diffTargetVersion]);
+    return getDiff(data, selectedVersion);
+  }, [data, selectedVersion]);
 
   if (user == null) {
     return <Text>unauthorized</Text>;
@@ -232,13 +180,13 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
             <Text fontSize={'xs'} fontWeight={'semibold'}>
               カードリスト
             </Text>
-            {diffDeckCards.length === 0 && (
+            {cards.length === 0 && (
               <Text fontSize={'sm'} color={'gray.600'} mt={1}>
                 カードがありません
               </Text>
             )}
             <Box mt="1">
-              <CardList cards={diffDeckCards} showDiff={showDiff} />
+              <CardList cards={cards} showDiff={showDiff} />
             </Box>
           </Box>
           <Box mt={8}>
@@ -246,12 +194,12 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               調整用カードリスト
             </Text>
             <Box mt="1">
-              {diffAdjustmentCards.length === 0 && (
+              {adjustmentCards.length === 0 && (
                 <Text fontSize={'sm'} color={'gray.600'} mt={1}>
                   カードがありません
                 </Text>
               )}
-              <CardList cards={diffAdjustmentCards} showDiff={showDiff} />
+              <CardList cards={adjustmentCards} showDiff={showDiff} />
             </Box>
           </Box>
         </Box>
