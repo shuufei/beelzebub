@@ -19,7 +19,7 @@ export const DeckVersionCard: FC<{
       pt={2}
       pb={4}
       border={'2px'}
-      borderColor={isSelected ? 'gray.700' : 'gray.100'}
+      borderColor={isSelected ? 'gray.400' : 'gray.100'}
     >
       <VStack fontSize={'xs'} alignItems={'flex-start'} spacing={1}>
         <Text fontWeight={'semibold'}>

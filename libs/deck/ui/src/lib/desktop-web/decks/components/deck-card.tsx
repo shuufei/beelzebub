@@ -3,7 +3,7 @@ import { Box, HStack, Text } from '@chakra-ui/react';
 import d from 'dayjs';
 import { FC, memo } from 'react';
 import { KeyCardImg } from '../../components/key-card-img';
-import { DeckJoinedLatestDeckVersion } from '../domain/deck-joined-latest-deck-version';
+import { DeckJoinedLatestDeckVersion } from '../../domain/deck-joined-latest-deck-version';
 
 export const DeckCard: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
   ({ deck }) => {

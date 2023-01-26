@@ -24,12 +24,13 @@ import Link from 'next/link';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
-import { DeckDeleteButton } from '../components/deck-delete-button';
+import { DeckDeleteButton } from './components/deck-delete-button';
 import { KeyCardImg } from '../components/key-card-img';
 import { CardList } from './components/card-list';
 import { DeckVersionCard } from './components/deck-version-card';
 import { SAMPLE_DATA_VERSIONS } from './sample-data';
 import { getDiff } from './utils/get-diff-version';
+import { useRouter } from 'next/router';
 
 export type DeckPageProps = {
   deckId: Deck['id'];
@@ -76,13 +77,14 @@ const useGetDecksJoinDeckVersions = (deckId: Deck['id']) => {
 
 export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   const supabaseClient = useSupabaseClient();
-
+  const router = useRouter();
   const [selectedVersion, setSelectedVersion] = useState<
     DeckVersion | undefined
   >();
+  const user = useUser();
+
   const [showDiff, setShowDiff] = useState(true);
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
-  const user = useUser();
   const latestVersion: DeckVersion | undefined = useMemo(() => {
     return data?.deckVersions[0];
   }, [data?.deckVersions]);
@@ -101,17 +103,9 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
     return getDiff(data, selectedVersion);
   }, [data, selectedVersion]);
 
-  const updateDeck = useCallback(async () => {
-    if (user == null) {
-      return;
-    }
-    await supabaseClient
-      .from('decks')
-      .update({ public: !data?.public })
-      .eq('id', deckId);
-    mutate();
-    return;
-  }, [data?.public, deckId, mutate, supabaseClient, user]);
+  const edit = useCallback(async () => {
+    router.push(`/decks/${deckId}/edit`);
+  }, [deckId, router]);
 
   if (user == null) {
     return <Text>unauthorized</Text>;
@@ -161,8 +155,8 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
             </Text>
           </VStack>
           <HStack mt={3}>
-            <Button variant={'outline'} size={'sm'} onClick={updateDeck}>
-              デッキ編集
+            <Button variant={'outline'} size={'sm'} onClick={edit}>
+              カードリスト編集
             </Button>
             <DeckDeleteButton
               deckId={deckId}

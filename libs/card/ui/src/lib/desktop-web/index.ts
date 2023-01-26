@@ -1,2 +1,2 @@
 export * from './cards/page';
-export * from './cards/components/insert-cards-modal-dialog';
+export * from './cards/components/card-list-provider';
