@@ -1,12 +1,23 @@
-import { CardType, Category, Color, Lv } from '@beelzebub/shared/domain';
+import { Card, CardType, Category, Color, Lv } from '@beelzebub/shared/domain';
 import { Box, Button, Divider, Wrap } from '@chakra-ui/react';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  createContext,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { InView } from 'react-intersection-observer';
 import { useRecoilValue } from 'recoil';
 import { SWRConfig } from 'swr';
 import { filterConditionState } from '../state/filter-conditions';
 import { CardList, CardsQuery } from './card-list';
 import { CardsFilter } from './cards-filter';
+
+export const CardCustomButtonContext = createContext<
+  { label: string; onClick: (card: Card) => void } | undefined
+>(undefined);
 
 const convertQueryFromCondition = (condition: { [key: string]: boolean }) => {
   const values = Object.entries(condition)

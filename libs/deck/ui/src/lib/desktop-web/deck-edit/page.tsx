@@ -1,4 +1,4 @@
-import { CardListProvider } from '@beelzebub/card/ui';
+import { CardCustomButtonContext, CardListProvider } from '@beelzebub/card/ui';
 import {
   convertToDeck,
   convertToDeckVersion,
@@ -7,7 +7,7 @@ import {
 } from '@beelzebub/shared/db';
 import { Deck } from '@beelzebub/shared/domain';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { FC } from 'react';
@@ -15,6 +15,7 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 import { z } from 'zod';
 import { DeckCardList } from './components/deck-card-list';
+import { useAddRemoveDeckCard } from './hooks/use-add-remove-deck-card';
 
 const useGetDeckJoinLatestDeckVersion = (deckId: Deck['id']) => {
   const supabaseClient = useSupabaseClient();
@@ -82,6 +83,7 @@ export type DeckEditPageProps = {
 
 export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
   const { data: deck } = useGetDeckJoinLatestDeckVersion(deckId);
+  const { addDeckCard } = useAddRemoveDeckCard();
 
   return (
     <Box as="main" pb="8">
@@ -123,7 +125,16 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
 
       <HStack alignItems={'flex-start'} mt={4} px={4}>
         <Box flex={1}>
-          <CardListProvider />
+          <CardCustomButtonContext.Provider
+            value={{
+              label: '追加',
+              onClick: (card) => {
+                addDeckCard(card);
+              },
+            }}
+          >
+            <CardListProvider />
+          </CardCustomButtonContext.Provider>
         </Box>
         <Box
           pt={'3rem'}

@@ -1,11 +1,12 @@
 import { CardDB, convertToCard } from '@beelzebub/shared/db';
 import { Card, CardType, Category, Color, Lv } from '@beelzebub/shared/domain';
 import { CardImg } from '@beelzebub/shared/ui';
-import { Box, Spinner, WrapItem } from '@chakra-ui/react';
+import { Button, HStack, Spinner, VStack, WrapItem } from '@chakra-ui/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useContext, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
+import { CardCustomButtonContext } from './card-list-provider';
 
 const MAX_FETCH_COUNT = 50;
 
@@ -88,6 +89,7 @@ export const CardList: FC<CardsPageProps> = ({
   query,
   onFinishedLoadCards,
 }) => {
+  const customButton = useContext(CardCustomButtonContext);
   const data = useGetCards(page, query);
 
   useEffect(() => {
@@ -105,13 +107,25 @@ export const CardList: FC<CardsPageProps> = ({
       {(data?.cards ?? []).map((card) => {
         return (
           <WrapItem key={card.imgFileName}>
-            <Box boxShadow={'sm'}>
+            <VStack boxShadow={'sm'} spacing={1}>
               <CardImg
                 categoryId={card.categoryId}
                 imgFileName={card.imgFileName}
                 width={80}
               />
-            </Box>
+              {customButton != null ? (
+                <HStack pb={2}>
+                  <Button
+                    size={'xs'}
+                    onClick={() => {
+                      customButton.onClick(card);
+                    }}
+                  >
+                    {customButton.label}
+                  </Button>
+                </HStack>
+              ) : null}
+            </VStack>
           </WrapItem>
         );
       })}
