@@ -25,9 +25,6 @@ export const CardImg: FC<{
           }
           onOpen();
         }}
-        _hover={{
-          transform: isEnabledPreview ? 'translateY(-0.15rem)' : '',
-        }}
       >
         <Image
           src={cardUrl ?? '/images/card-placeholder.png'}
