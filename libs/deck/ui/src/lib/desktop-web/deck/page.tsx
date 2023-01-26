@@ -151,7 +151,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               戻る
             </Button>
           </Link>
-          <HStack alignItems={'center'} spacing={4} mt={1}>
+          <HStack alignItems={'center'} spacing={4} mt={2}>
             <HStack spacing={2}>
               <Heading as="h1" fontSize={'lg'}>
                 {data?.name}
@@ -163,7 +163,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
           <VStack
             fontSize={'sm'}
             color={'gray.600'}
-            mt={1}
+            mt={2}
             spacing={0}
             alignItems={'flex-start'}
           >

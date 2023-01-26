@@ -13,7 +13,7 @@ export const DeckCard: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
         pt={2}
         pl={3}
         pr={6}
-        pb={8}
+        pb={6}
         border={'1px'}
         borderColor={'white'}
         borderRadius={'md'}
@@ -27,7 +27,7 @@ export const DeckCard: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
             </Text>
             {deck.public === false && <LockIcon fontSize={'sm'} />}
           </HStack>
-          <Box fontSize={'xs'}>
+          <Box fontSize={'xs'} mt={1}>
             <Text>{deck.userId}</Text>
             <Text>
               最終更新:{' '}

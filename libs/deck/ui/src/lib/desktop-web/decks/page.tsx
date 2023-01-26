@@ -1,18 +1,26 @@
 import {
   convertToDeck,
   convertToDeckVersion,
-  DeckDB,
   DeckDBJoinedDeckVersionsDB,
   DeckVersionDB,
 } from '@beelzebub/shared/db';
-import { Deck } from '@beelzebub/shared/domain';
-import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import { AddIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { CreateDeckModalDialog } from './components/create-deck-modal-dialog';
 import { DeckCard } from './components/deck-card';
 import { DeckJoinedLatestDeckVersion } from './domain/deck-joined-latest-deck-version';
 
@@ -68,67 +76,49 @@ const useGetDecksJoinLatestDeckVersion = () => {
 };
 
 export const DecksPage: FC = () => {
-  const supabaseClient = useSupabaseClient();
-  const user = useUser();
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: decks, mutate } = useGetDecksJoinLatestDeckVersion();
 
-  const createDeck = useCallback(async () => {
-    if (user == null) {
-      return;
-    }
-    const id = v4();
-    const deck: Omit<DeckDB, 'created_at'> = {
-      id,
-      name: `deck name ${id}`,
-      user_id: user.id,
-      public: true,
-      key_card: {
-        img_file_name: 'BT9-033.png',
-        category_id: '503011',
-      },
-    };
-    const deckVersions: Omit<DeckVersionDB, 'created_at'> = {
-      id: v4(),
-      deck_id: deck.id,
-      cards: [
-        {
-          img_file_name: 'BT9-033.png',
-          category_id: '503011',
-          count: 4,
-        },
-      ],
-      adjustment_cards: [],
-      user_id: user.id,
-    };
-    await supabaseClient.from('decks').insert({ ...deck });
-    await supabaseClient.from('deck_versions').insert({ ...deckVersions });
-    mutate();
-    return;
-  }, [mutate, supabaseClient, user]);
-
   return (
-    <Box as="main" px="6" pt="4" pb="8">
-      <Heading as="h1" fontSize={'lg'}>
-        デッキリスト
-      </Heading>
+    <>
+      <Box as="main" px="6" pt="4" pb="8">
+        <HStack justifyContent={'space-between'} alignItems={'flex-start'}>
+          <Heading as="h1" fontSize={'lg'}>
+            デッキリスト
+          </Heading>
 
-      <Button mt={3} onClick={createDeck}>
-        新規作成
-      </Button>
+          <Button
+            variant={'ghost'}
+            mt={3}
+            onClick={onOpen}
+            colorScheme={'blue'}
+            size={'sm'}
+            leftIcon={<AddIcon />}
+          >
+            新規作成
+          </Button>
+        </HStack>
 
-      {decks?.length === 0 ?? <Text>デッキが登録されていません</Text>}
-      <VStack alignItems={'flex-start'} width={'full'} mt={6}>
-        {decks?.map((deck) => {
-          return (
-            <Box width={'full'} key={deck.id}>
-              <Link href={`/decks/${deck.id}`}>
-                <DeckCard deck={deck} />
-              </Link>
-            </Box>
-          );
-        })}
-      </VStack>
-    </Box>
+        {decks?.length === 0 ?? <Text>デッキが登録されていません</Text>}
+        <VStack alignItems={'flex-start'} width={'full'} mt={6}>
+          {decks?.map((deck) => {
+            return (
+              <Box width={'full'} key={deck.id}>
+                <Link href={`/decks/${deck.id}`}>
+                  <DeckCard deck={deck} />
+                </Link>
+              </Box>
+            );
+          })}
+        </VStack>
+      </Box>
+      <CreateDeckModalDialog
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          mutate();
+        }}
+      />
+    </>
   );
 };
