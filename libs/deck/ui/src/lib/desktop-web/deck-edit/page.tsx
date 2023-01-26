@@ -92,22 +92,33 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
         px={2}
         py={1.5}
       >
-        <Box flex={1}>
+        <Box>
           <Link href={`/decks/${deckId}`}>
             <Button
               size={'sm'}
-              variant={'solid'}
+              variant={'ghost'}
               leftIcon={<ArrowBackIcon />}
               colorScheme={'gray'}
+              color={'white'}
+              _hover={{ bg: 'transparent' }}
             >
               戻る
             </Button>
           </Link>
         </Box>
-        <Heading as="h1" fontSize={'sm'} mt={2} color={'white'}>
+        <Heading
+          as="h1"
+          fontSize={'sm'}
+          mt={2}
+          color={'white'}
+          flex={1}
+          textAlign={'center'}
+        >
           デッキ編集
         </Heading>
-        <Text flex={1}></Text>
+        <Box>
+          <Button size={'sm'}>保存</Button>
+        </Box>
       </HStack>
 
       <HStack alignItems={'flex-start'} mt={4} px={4}>
