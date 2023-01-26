@@ -139,7 +139,7 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
         <Box
           pt={'3rem'}
           pb={12}
-          w={'16rem'}
+          w={'18rem'}
           h={'100vh'}
           position={'sticky'}
           top={0}
