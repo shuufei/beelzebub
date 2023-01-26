@@ -7,15 +7,24 @@ import {
 } from '@beelzebub/shared/db';
 import { Deck } from '@beelzebub/shared/domain';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Spinner,
+  useToast,
+} from '@chakra-ui/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
-import { FC } from 'react';
+import { useRouter } from 'next/router';
+import { FC, useCallback, useState } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 import { z } from 'zod';
 import { DeckCardList } from './components/deck-card-list';
 import { useAddRemoveDeckCard } from './hooks/use-add-remove-deck-card';
+import { useSaveDeckVersion } from './hooks/use-save-deck-version';
 
 const useGetDeckJoinLatestDeckVersion = (deckId: Deck['id']) => {
   const supabaseClient = useSupabaseClient();
@@ -84,6 +93,24 @@ export type DeckEditPageProps = {
 export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
   const { data: deck } = useGetDeckJoinLatestDeckVersion(deckId);
   const { addDeckCard } = useAddRemoveDeckCard();
+  const saveDeckVersion = useSaveDeckVersion();
+  const router = useRouter();
+  const [isLoading, setLoading] = useState(false);
+  const toast = useToast();
+
+  const save = useCallback(async () => {
+    setLoading(true);
+    await saveDeckVersion(deckId);
+    toast({
+      title: 'デッキのカードリストを更新しました',
+      duration: 3000,
+      status: 'success',
+      isClosable: true,
+      position: 'top-right',
+    });
+    setLoading(false);
+    router.push(`/decks/${deckId}`);
+  }, [deckId, router, saveDeckVersion, toast]);
 
   return (
     <Box as="main" pb="8">
@@ -119,7 +146,9 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
           デッキ編集
         </Heading>
         <Box>
-          <Button size={'sm'}>保存</Button>
+          <Button size={'sm'} onClick={save} disabled={isLoading}>
+            {!isLoading ? '保存' : <Spinner size={'sm'} />}
+          </Button>
         </Box>
       </HStack>
 
