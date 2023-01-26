@@ -21,10 +21,10 @@ import {
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import d from 'dayjs';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { FC, useEffect, useMemo, useState, useCallback } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
+import { DeckDeleteButton } from '../components/deck-delete-button';
 import { KeyCardImg } from '../components/key-card-img';
 import { CardList } from './components/card-list';
 import { DeckVersionCard } from './components/deck-version-card';
@@ -76,7 +76,6 @@ const useGetDecksJoinDeckVersions = (deckId: Deck['id']) => {
 
 export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   const supabaseClient = useSupabaseClient();
-  const router = useRouter();
 
   const [selectedVersion, setSelectedVersion] = useState<
     DeckVersion | undefined
@@ -113,17 +112,6 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
     mutate();
     return;
   }, [data?.public, deckId, mutate, supabaseClient, user]);
-
-  const deleteDeck = useCallback(async () => {
-    if (user == null) {
-      return;
-    }
-    await supabaseClient.from('deck_versions').delete().eq('deck_id', deckId);
-    await supabaseClient.from('decks').delete().eq('id', deckId);
-    router.push('/decks');
-    mutate();
-    return;
-  }, [deckId, mutate, router, supabaseClient, user]);
 
   if (user == null) {
     return <Text>unauthorized</Text>;
@@ -176,15 +164,12 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
             <Button variant={'outline'} size={'sm'} onClick={updateDeck}>
               デッキ編集
             </Button>
-            <Button
-              colorScheme={'red'}
-              variant={'outline'}
-              size={'sm'}
-              mt={3}
-              onClick={deleteDeck}
-            >
-              デッキ削除
-            </Button>
+            <DeckDeleteButton
+              deckId={deckId}
+              onDeleted={() => {
+                mutate();
+              }}
+            />
           </HStack>
         </Box>
         <VStack spacing={1}>
