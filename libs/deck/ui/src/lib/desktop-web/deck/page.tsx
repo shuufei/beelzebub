@@ -83,7 +83,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   >();
   const user = useUser();
 
-  const [showDiff, setShowDiff] = useState(true);
+  const [showDiff, setShowDiff] = useState(false);
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
   const latestVersion: DeckVersion | undefined = useMemo(() => {
     return data?.deckVersions[0];
