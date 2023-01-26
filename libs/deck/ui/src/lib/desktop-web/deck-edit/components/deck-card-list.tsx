@@ -51,6 +51,7 @@ const useGetCards = (imgFileNames: Card['imgFileName'][]) => {
 
 type CategorizedCards = {
   digitama: DeckCard[];
+  LvNone: DeckCard[];
   Lv3: DeckCard[];
   Lv4: DeckCard[];
   Lv5: DeckCard[];
@@ -63,6 +64,7 @@ type CategorizedCards = {
 const categorizeDeckCards = (deckCards: DeckCard[]): CategorizedCards => {
   const init: CategorizedCards = {
     digitama: [],
+    LvNone: [],
     Lv3: [],
     Lv4: [],
     Lv5: [],
@@ -89,6 +91,8 @@ const categorizeDeckCards = (deckCards: DeckCard[]): CategorizedCards => {
       tmp.Lv6 = [...tmp.Lv6, curr];
     } else if (curr.card.lv === 'Lv.7') {
       tmp.Lv7 = [...tmp.Lv7, curr];
+    } else if (curr.card.lv === '-' && curr.card.cardtype === 'デジモン') {
+      tmp.LvNone = [...tmp.LvNone, curr];
     }
     return tmp;
   }, init);
