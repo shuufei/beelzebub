@@ -154,12 +154,41 @@ export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
       return categorizeDeckCards(adjustmentDeckCards);
     }, [adjustmentDeckCards]);
 
+    const cardTotalCount = useMemo(() => {
+      return deckCards.reduce((acc, curr) => {
+        return acc + curr.count;
+      }, 0);
+    }, [deckCards]);
+
     if (cards == null || adjustmentCards == null) {
       return <Spinner />;
     }
 
     return (
       <Box p={3}>
+        <HStack
+          justifyContent={'space-between'}
+          px={2}
+          py={1.5}
+          mb={4}
+          w={'full'}
+          bg={'gray.700'}
+          rounded={'sm'}
+        >
+          <Text color={'white'} fontSize={'sm'}>
+            Total
+          </Text>
+          <Text
+            py={0.5}
+            px={2}
+            bg={'white'}
+            rounded={'sm'}
+            color={'gray.700'}
+            fontSize={'xs'}
+          >
+            {cardTotalCount}
+          </Text>
+        </HStack>
         {Object.entries(categorizedDeckCards).map(([key, value]) => {
           return (
             <VStack key={key} pb={6} alignItems={'flex-start'} spacing={1}>
