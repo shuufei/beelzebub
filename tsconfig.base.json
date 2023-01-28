@@ -17,6 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@beelzebub/card/ui": ["libs/card/ui/src/index.ts"],
+      "@beelzebub/deck/domain": ["libs/deck/domain/src/index.ts"],
       "@beelzebub/deck/ui": ["libs/deck/ui/src/index.ts"],
       "@beelzebub/shared/api": ["libs/shared/api/src/index.ts"],
       "@beelzebub/shared/db": ["libs/shared/db/src/index.ts"],
