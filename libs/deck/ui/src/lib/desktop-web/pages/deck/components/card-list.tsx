@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import {
   DeckCardWithDiff,
   DeckAdjustmentCardWithDiff,
-} from '../utils/get-diff-version';
+} from '../../../domain/get-diff-version';
 
 type Mark = 'removed' | 'added' | 'nochanged';
 type MarkedCard = Pick<DeckCardWithDiff, 'categoryId' | 'imgFileName'> & {
