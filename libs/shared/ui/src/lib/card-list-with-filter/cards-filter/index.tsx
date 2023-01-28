@@ -6,7 +6,7 @@ import {
   ColorsCondition,
   filterConditionState,
   LvCondition,
-} from '../../state/filter-conditions';
+} from '../state/filter-conditions';
 import { CardTypeFilter } from './card-type-filter';
 import { CategoryFilter } from './category-filter';
 import { ColorsFilter } from './colors-filter';

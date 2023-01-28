@@ -1,68 +1,63 @@
-import { CardType } from '@beelzebub/shared/domain';
+import { Lv } from '@beelzebub/shared/domain';
 import { Checkbox, HStack, Stack, Text } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  cardTypeFilterConditionState,
   filterConditionState,
-} from '../../state/filter-conditions';
+  lvFilterConditionState,
+} from '../state/filter-conditions';
 import { AllCheckButton } from './all-check-button';
 import { AllUncheckButton } from './all-uncheck-button';
 import { FilterPopup } from './filter-popup';
 
-const CARD_TYPE_LIST: CardType[] = [
-  'デジモン',
-  'デジタマ',
-  'テイマー',
-  'オプション',
-];
+const LV_LIST: Lv[] = ['-', 'Lv.2', 'Lv.3', 'Lv.4', 'Lv.5', 'Lv.6', 'Lv.7'];
 
-export const CardTypeFilter: FC = memo(() => {
+export const LvFilter: FC = memo(() => {
   const [, setFilterCondition] = useRecoilState(filterConditionState);
-  const condition = useRecoilValue(cardTypeFilterConditionState);
+  const condition = useRecoilValue(lvFilterConditionState);
   return (
     <FilterPopup
-      triggerButtonLabel={`カードタイプ: ${Object.entries(condition)
+      triggerButtonLabel={`Lv: ${Object.entries(condition)
         .filter(([, value]) => value)
         .map(([key]) => key)
         .join(', ')}`}
       header={
         <HStack justifyContent={'space-between'}>
           <Text fontSize={'sm'} fontWeight={'semibold'}>
-            カードタイプ
+            Lv
           </Text>
           <HStack pr={'6'}>
-            <AllCheckButton filterKey={'cardType'} />
-            <AllUncheckButton filterKey={'cardType'} />
+            <AllCheckButton filterKey={'lv'} />
+            <AllUncheckButton filterKey={'lv'} />
           </HStack>
         </HStack>
       }
       body={
         <Stack>
-          {CARD_TYPE_LIST.map((cardType) => {
+          {LV_LIST.map((lv) => {
             return (
               <Checkbox
-                key={cardType}
-                isChecked={condition[cardType]}
+                key={lv}
+                isChecked={condition[lv]}
                 onChange={() => {
                   const newCondition = {
                     ...condition,
                   };
-                  newCondition[cardType] = !newCondition[cardType];
+                  newCondition[lv] = !newCondition[lv];
                   setFilterCondition((current) => {
                     return {
                       ...current,
-                      cardType: newCondition,
+                      lv: newCondition,
                     };
                   });
                 }}
               >
-                <Text fontSize={'sm'}>{cardType}</Text>
+                <Text fontSize={'sm'}>{lv}</Text>
               </Checkbox>
             );
           })}
         </Stack>
       }
-    />
+    ></FilterPopup>
   );
 });

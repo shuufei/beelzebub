@@ -5,7 +5,7 @@ import {
   ColorsCondition,
   FilterCondition,
   filterConditionState,
-} from '../../state/filter-conditions';
+} from '../state/filter-conditions';
 
 export const AllUncheckButton: FC<{ filterKey: keyof FilterCondition }> = ({
   filterKey,

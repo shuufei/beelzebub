@@ -1,4 +1,7 @@
-import { CardCustomButtonContext, CardListProvider } from '@beelzebub/card/ui';
+import {
+  CardCustomButtonContext,
+  CardListWithFilter,
+} from '@beelzebub/shared/ui';
 import {
   convertToDeck,
   convertToDeckVersion,
@@ -162,7 +165,7 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
               },
             }}
           >
-            <CardListProvider />
+            <CardListWithFilter />
           </CardCustomButtonContext.Provider>
         </Box>
         <Box

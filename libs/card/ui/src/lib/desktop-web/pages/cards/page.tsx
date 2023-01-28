@@ -1,8 +1,8 @@
+import { CardListWithFilter } from '@beelzebub/shared/ui';
 import { AddIcon } from '@chakra-ui/icons';
 import { Box, Button, Heading, HStack, useDisclosure } from '@chakra-ui/react';
 import { FC } from 'react';
 import { SWRConfig } from 'swr';
-import { CardListProvider } from './components/card-list-provider';
 import { InsertCardsModalDialog } from './components/insert-cards-modal-dialog';
 
 export const CardsPage: FC = () => {
@@ -39,7 +39,7 @@ export const CardsPage: FC = () => {
         </Box>
 
         <Box mt={3}>
-          <CardListProvider />
+          <CardListWithFilter />
         </Box>
       </SWRConfig>
     </Box>

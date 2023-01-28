@@ -9,7 +9,7 @@ import {
   CategoryCondition,
   categoryFilterConditionState,
   filterConditionState,
-} from '../../state/filter-conditions';
+} from '../state/filter-conditions';
 import { AllCheckButton } from './all-check-button';
 import { AllUncheckButton } from './all-uncheck-button';
 import { FilterPopup } from './filter-popup';

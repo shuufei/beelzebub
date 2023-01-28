@@ -1,7 +1,7 @@
 import { FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useRecoilState } from 'recoil';
-import { filterConditionState } from '../../state/filter-conditions';
+import { filterConditionState } from '../state/filter-conditions';
 
 export const NameFilter: FC = () => {
   const [, setFilterCondition] = useRecoilState(filterConditionState);

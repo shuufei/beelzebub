@@ -6,7 +6,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FC, useContext, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
-import { CardCustomButtonContext } from './card-list-provider';
+import { CardCustomButtonContext } from './card-custom-button-context';
 
 const MAX_FETCH_COUNT = 50;
 

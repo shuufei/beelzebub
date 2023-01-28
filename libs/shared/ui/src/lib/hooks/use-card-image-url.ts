@@ -11,7 +11,7 @@ export const useCardImageUrl = (
 
   useEffect(() => {
     const downloadCardImage = async () => {
-      const { data, error } = await supabaseClient.storage
+      const { data } = await supabaseClient.storage
         .from('app-static-resources')
         .download(`cards/images/${cardCategoryId}/${cardImgFileName}`);
       if (data == null) {

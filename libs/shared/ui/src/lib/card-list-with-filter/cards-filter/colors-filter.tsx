@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   colorFilterConditionState,
   filterConditionState,
-} from '../../state/filter-conditions';
+} from '../state/filter-conditions';
 import { AllCheckButton } from './all-check-button';
 import { AllUncheckButton } from './all-uncheck-button';
 import { FilterPopup } from './filter-popup';

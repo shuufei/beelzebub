@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   filterConditionState,
   includeParallelConditionState,
-} from '../../state/filter-conditions';
+} from '../state/filter-conditions';
 
 export const IncludeParallelFilter: FC = memo(() => {
   const [, setFilterCondition] = useRecoilState(filterConditionState);
