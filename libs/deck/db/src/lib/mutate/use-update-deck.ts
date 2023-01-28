@@ -10,6 +10,7 @@ export const useUpdateDeck = () => {
       .update({
         name: deck.name,
         public: deck.public,
+        key_card: deck.key_card,
       })
       .eq('id', deck.id);
     if (updateDeckResult.error != null) {

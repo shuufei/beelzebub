@@ -1,6 +1,6 @@
 import { useGetDecksJoinDeckVersions } from '@beelzebub/deck/db';
 import { Deck, DeckVersion } from '@beelzebub/shared/domain';
-import { ArrowBackIcon, LockIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -22,6 +22,7 @@ import { KeyCardImg } from '../../components/key-card-img';
 import { DeckDeleteButton } from './components/deck-delete-button';
 import { DeckVersionCard } from './components/deck-version-card';
 import { DeckVersionCardList } from './components/deck-version-card-list';
+import { UpdateDeckKeyCardModalDialog } from './components/update-deck-key-card-modal-dialog';
 import { UpdateDeckModalDialog } from './components/update-deck-modal-dialog';
 
 export type DeckPageProps = {
@@ -54,8 +55,13 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   }, [data?.deckVersions, selectedVersion?.id]);
   const {
     isOpen: isOpenUpdateDeckModal,
-    onOpen: onOpenUpateDeckModal,
-    onClose: onCloseDeckModal,
+    onOpen: onOpenUpdateDeckModal,
+    onClose: onCloseUpdateDeckModal,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenUpdateKeyCardModal,
+    onOpen: onOpenUpdateKeyCardModal,
+    onClose: onCloseUpdateKeyCardModal,
   } = useDisclosure();
 
   useEffect(() => {
@@ -100,7 +106,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
                   <Unlock size={'1rem'} />
                 )}
               </HStack>
-              <Button size={'xs'} onClick={onOpenUpateDeckModal}>
+              <Button size={'xs'} onClick={onOpenUpdateDeckModal}>
                 変更
               </Button>
             </HStack>
@@ -137,7 +143,9 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               キーカード
             </Text>
             <KeyCardImg keyCard={data?.keyCard} width={70} />
-            <Button size={'xs'}>変更</Button>
+            <Button size={'xs'} onClick={onOpenUpdateKeyCardModal}>
+              変更
+            </Button>
           </VStack>
         </HStack>
         <Divider borderColor={'gray.300'} />
@@ -195,7 +203,18 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
           deck={data}
           isOpen={isOpenUpdateDeckModal}
           onClose={() => {
-            onCloseDeckModal();
+            onCloseUpdateDeckModal();
+            mutate();
+          }}
+        />
+      )}
+      {data != null && latestVersion != null && (
+        <UpdateDeckKeyCardModalDialog
+          deck={data}
+          cards={latestVersion.cards}
+          isOpen={isOpenUpdateKeyCardModal}
+          onClose={() => {
+            onCloseUpdateKeyCardModal();
             mutate();
           }}
         />
