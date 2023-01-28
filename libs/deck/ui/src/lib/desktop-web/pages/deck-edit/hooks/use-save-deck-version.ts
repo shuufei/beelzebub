@@ -1,6 +1,6 @@
 import { useInsertDeckVersion } from '@beelzebub/deck/db';
 import { DeckVersionDB } from '@beelzebub/shared/db';
-import { Deck } from '@beelzebub/shared/domain';
+import { Deck, DeckVersion } from '@beelzebub/shared/domain';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -15,7 +15,7 @@ export const useSaveDeckVersion = () => {
   const insert = useInsertDeckVersion();
 
   const save = useCallback(
-    async (deckId: Deck['id']) => {
+    async (deckId: Deck['id'], comment?: DeckVersion['comment']) => {
       if (user == null) {
         return;
       }
@@ -33,7 +33,7 @@ export const useSaveDeckVersion = () => {
           img_file_name: v.imgFileName,
         })),
         user_id: user.id,
-        comment: '',
+        comment,
       };
       return insert(deckVersionDB);
     },
