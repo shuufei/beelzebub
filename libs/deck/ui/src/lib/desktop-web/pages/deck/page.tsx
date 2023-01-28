@@ -1,6 +1,5 @@
 import { useGetDecksJoinDeckVersions } from '@beelzebub/deck/db';
-import { getDiff } from '@beelzebub/deck/domain';
-import { Deck, DeckVersion } from '@beelzebub/shared/domain';
+import { Card, Deck, DeckVersion } from '@beelzebub/shared/domain';
 import { ArrowBackIcon, LockIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -18,9 +17,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { KeyCardImg } from '../../components/key-card-img';
-import { CardList } from './components/card-list';
 import { DeckDeleteButton } from './components/deck-delete-button';
 import { DeckVersionCard } from './components/deck-version-card';
+import { DeckVersionCardList } from './components/deck-version-card-list';
 
 export type DeckPageProps = {
   deckId: Deck['id'];
@@ -40,20 +39,20 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   const latestVersion: DeckVersion | undefined = useMemo(() => {
     return data?.deckVersions[0];
   }, [data?.deckVersions]);
+  const prevVersion: DeckVersion | undefined = useMemo(() => {
+    const selectedVersionIndex = data?.deckVersions.findIndex(
+      (v) => v.id === selectedVersion?.id
+    );
+    if (selectedVersionIndex == null || selectedVersionIndex === -1) {
+      return;
+    }
+    const prev = data?.deckVersions[selectedVersionIndex + 1];
+    return prev ?? undefined;
+  }, [data?.deckVersions, selectedVersion?.id]);
 
   useEffect(() => {
     setSelectedVersion(latestVersion);
   }, [latestVersion]);
-
-  const { cards, adjustmentCards } = useMemo(() => {
-    if (data == null || selectedVersion == null) {
-      return {
-        cards: [],
-        adjustmentCards: [],
-      };
-    }
-    return getDiff(data, selectedVersion);
-  }, [data, selectedVersion]);
 
   const edit = useCallback(async () => {
     router.push(`/decks/${deckId}/edit`);
@@ -121,32 +120,13 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
       <Divider borderColor={'gray.300'} />
       <HStack alignItems={'flex-start'} spacing={4}>
         <Box flex={1} p={3}>
-          <Box>
-            <Text fontSize={'xs'} fontWeight={'semibold'}>
-              カードリスト
-            </Text>
-            {cards.length === 0 && (
-              <Text fontSize={'sm'} color={'gray.600'} mt={1}>
-                カードがありません
-              </Text>
-            )}
-            <Box mt="1">
-              <CardList cards={cards} showDiff={showDiff} />
-            </Box>
-          </Box>
-          <Box mt={8}>
-            <Text fontSize={'xs'} fontWeight={'semibold'}>
-              調整用カードリスト
-            </Text>
-            <Box mt="1">
-              {adjustmentCards.length === 0 && (
-                <Text fontSize={'sm'} color={'gray.600'} mt={1}>
-                  カードがありません
-                </Text>
-              )}
-              <CardList cards={adjustmentCards} showDiff={showDiff} />
-            </Box>
-          </Box>
+          {selectedVersion != null && (
+            <DeckVersionCardList
+              selectedVersion={selectedVersion}
+              prevVersion={prevVersion}
+              showDiff={showDiff}
+            />
+          )}
         </Box>
         <VStack
           alignItems={'flex-start'}
@@ -185,7 +165,6 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
           })}
         </VStack>
       </HStack>
-      {/* <Button onClick={insertVersions}>Input Sample Data</Button> */}
     </Box>
   );
 };

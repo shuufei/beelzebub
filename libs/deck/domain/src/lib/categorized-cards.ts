@@ -12,8 +12,10 @@ export type CategorizedCards<T = Card> = {
   option: T[];
 };
 
-export const categorizeCards = (cards: Card[]): CategorizedCards => {
-  const init: CategorizedCards = {
+export const categorizeCards = <T extends Card>(
+  cards: T[]
+): CategorizedCards<T> => {
+  const init: CategorizedCards<T> = {
     digitama: [],
     LvNone: [],
     Lv3: [],
