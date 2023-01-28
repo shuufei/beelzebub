@@ -7,6 +7,7 @@ import {
   convertToDeckVersionDB,
   DeckDB,
   DeckVersionDB,
+  useGetUsers,
 } from '@beelzebub/shared/db';
 import { Deck, DeckVersion } from '@beelzebub/shared/domain';
 import { ArrowBackIcon } from '@chakra-ui/icons';
@@ -50,6 +51,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
 
   // component state
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
+  const { data: users } = useGetUsers();
   const [selectedVersion, setSelectedVersion] = useState<
     DeckVersion | undefined
   >();
@@ -160,7 +162,11 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               spacing={0}
               alignItems={'flex-start'}
             >
-              <Text>{data?.userId}</Text>
+              <Text>
+                @
+                {users?.find((v) => v.userId === data?.userId)?.name ??
+                  data?.userId}
+              </Text>
               <Text>
                 {d(latestVersion?.createdAt).format(
                   'YYYY年MM月D日 HH時mm分ss秒'

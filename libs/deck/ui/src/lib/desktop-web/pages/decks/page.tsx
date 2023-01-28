@@ -1,5 +1,6 @@
 import { useGetDecksJoinLatestDeckVersion } from '@beelzebub/deck/db';
 import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
+import { useGetUsers } from '@beelzebub/shared/db';
 import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -22,6 +23,7 @@ export const DecksPage: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: decks, mutate } = useGetDecksJoinLatestDeckVersion();
   const [onlyMe, setOnlyMe] = useState(false);
+  const { data: users } = useGetUsers();
 
   const filteredDecks: DeckJoinedLatestDeckVersion[] = useMemo(() => {
     return (
@@ -64,10 +66,11 @@ export const DecksPage: FC = () => {
         {filteredDecks.length === 0 ?? <Text>デッキが登録されていません</Text>}
         <VStack alignItems={'flex-start'} width={'full'} mt={6}>
           {filteredDecks.map((deck) => {
+            const userName = users?.find((v) => v.userId === deck.userId)?.name;
             return (
               <Box width={'full'} key={deck.id}>
                 <Link href={`/decks/${deck.id}`}>
-                  <DeckCard deck={deck} />
+                  <DeckCard deck={deck} userName={userName} />
                 </Link>
               </Box>
             );

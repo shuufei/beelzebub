@@ -8,3 +8,4 @@ export * from './lib/category';
 export * from './lib/deck';
 export * from './lib/deck-version';
 export * from './lib/deck-joined-deck-versions';
+export * from './lib/user';
