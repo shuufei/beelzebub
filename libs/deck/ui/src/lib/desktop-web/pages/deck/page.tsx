@@ -192,6 +192,9 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
                   onPreview={() => {
                     setSelectedVersion(deckVersion);
                   }}
+                  onRestored={() => {
+                    mutate();
+                  }}
                 />
               );
             })}

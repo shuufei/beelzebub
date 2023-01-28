@@ -2,12 +2,14 @@ import { DeckVersion } from '@beelzebub/shared/domain';
 import { Button, HStack, Text, VStack } from '@chakra-ui/react';
 import d from 'dayjs';
 import { FC } from 'react';
+import { DeckVersionRestoreButton } from './deck-version-restore-button';
 
 export const DeckVersionCard: FC<{
   deckVersion: DeckVersion;
   isSelected?: boolean;
   onPreview?: () => void;
-}> = ({ deckVersion, isSelected = false, onPreview }) => {
+  onRestored?: () => void;
+}> = ({ deckVersion, isSelected = false, onPreview, onRestored }) => {
   return (
     <VStack
       alignItems={'flex-start'}
@@ -37,9 +39,10 @@ export const DeckVersionCard: FC<{
         >
           表示
         </Button>
-        <Button size={'xs'} colorScheme={'blue'} variant={'outline'}>
-          復元
-        </Button>
+        <DeckVersionRestoreButton
+          deckVersioin={deckVersion}
+          onRestored={onRestored}
+        />
       </HStack>
     </VStack>
   );
