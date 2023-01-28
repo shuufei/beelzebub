@@ -1,4 +1,4 @@
-import { DeckJoinedDeckVersions, DeckVersion } from '@beelzebub/shared/domain';
+import { DeckVersion, DeckJoinedDeckVersions } from '@beelzebub/shared/domain';
 
 export type DeckCardWithDiff = DeckVersion['cards'][number] & {
   diff: number;

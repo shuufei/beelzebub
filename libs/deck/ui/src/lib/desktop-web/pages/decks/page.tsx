@@ -22,7 +22,7 @@ import { v4 } from 'uuid';
 import { z } from 'zod';
 import { CreateDeckModalDialog } from './components/create-deck-modal-dialog';
 import { DeckCard } from './components/deck-card';
-import { DeckJoinedLatestDeckVersion } from '../../domain/deck-joined-latest-deck-version';
+import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
 
 const useGetDecksJoinLatestDeckVersion = () => {
   const supabaseClient = useSupabaseClient();

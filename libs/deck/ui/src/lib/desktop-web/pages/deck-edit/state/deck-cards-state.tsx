@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { DeckCard } from '../../../domain/deck-card';
+import { DeckCard } from '@beelzebub/deck/domain';
 
 export type DeckCardsState = DeckCard[];
 

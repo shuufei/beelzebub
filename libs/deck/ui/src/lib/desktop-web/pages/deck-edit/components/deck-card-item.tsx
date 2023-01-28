@@ -1,7 +1,7 @@
 import { CardImg } from '@beelzebub/shared/ui';
 import { Button, HStack, Text, VStack } from '@chakra-ui/react';
 import { FC, memo } from 'react';
-import { DeckCard } from '../../../domain/deck-card';
+import { DeckCard } from '@beelzebub/deck/domain';
 import { useAddRemoveAdjustmentDeckCard } from '../hooks/use-add-remove-adjustment-deck-card';
 import { useAddRemoveDeckCard } from '../hooks/use-add-remove-deck-card';
 
