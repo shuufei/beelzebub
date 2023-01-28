@@ -19,7 +19,6 @@ export const DeckVersionDB = z.object({
     z.object({
       img_file_name: CardDB.shape.img_file_name,
       category_id: CategoryDB.shape.id,
-      count: z.number(),
     })
   ),
   user_id: z.string().uuid(),
@@ -41,7 +40,6 @@ export const convertToDeckVersion = (data: DeckVersionDB): DeckVersion => {
     adjustmentCards: data.adjustment_cards.map((v) => ({
       imgFileName: v.img_file_name,
       categoryId: v.category_id,
-      count: v.count,
     })),
     userId: data.user_id,
     comment: data.comment ?? undefined,
@@ -61,7 +59,6 @@ export const convertToDeckVersionDB = (data: DeckVersion): DeckVersionDB => {
     adjustment_cards: data.adjustmentCards.map((v) => ({
       img_file_name: v.imgFileName,
       category_id: v.categoryId,
-      count: v.count,
     })),
     user_id: data.userId,
     comment: data.comment,

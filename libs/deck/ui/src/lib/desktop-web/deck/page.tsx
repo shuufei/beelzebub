@@ -28,7 +28,6 @@ import { DeckDeleteButton } from './components/deck-delete-button';
 import { KeyCardImg } from '../components/key-card-img';
 import { CardList } from './components/card-list';
 import { DeckVersionCard } from './components/deck-version-card';
-import { SAMPLE_DATA_VERSIONS } from './sample-data';
 import { getDiff } from './utils/get-diff-version';
 import { useRouter } from 'next/router';
 
@@ -110,14 +109,6 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   if (user == null) {
     return <Text>unauthorized</Text>;
   }
-
-  const insertVersions = async () => {
-    for (const version of SAMPLE_DATA_VERSIONS) {
-      await supabaseClient.from('deck_versions').insert({ ...version });
-    }
-    mutate();
-    return;
-  };
 
   return (
     <Box as="main" px="6" pt="2" pb="8">

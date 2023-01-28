@@ -4,14 +4,14 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { v4 } from 'uuid';
-import { adjustmentDeckCardsState } from '../state/adjustment-deck-cards-state';
+import { adjustmentCardsState } from '../state/adjustment-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 
 export const useSaveDeckVersion = () => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const deckCards = useRecoilValue(deckCardsState);
-  const adjustmentDeckCards = useRecoilValue(adjustmentDeckCardsState);
+  const adjustmentCards = useRecoilValue(adjustmentCardsState);
 
   const save = useCallback(
     async (deckId: Deck['id']) => {
@@ -27,10 +27,9 @@ export const useSaveDeckVersion = () => {
           img_file_name: v.card.imgFileName,
           count: v.count,
         })),
-        adjustment_cards: adjustmentDeckCards.map((v) => ({
-          category_id: v.card.categoryId,
-          img_file_name: v.card.imgFileName,
-          count: v.count,
+        adjustment_cards: adjustmentCards.map((v) => ({
+          category_id: v.categoryId,
+          img_file_name: v.imgFileName,
         })),
         user_id: user.id,
         comment: '',
@@ -40,7 +39,7 @@ export const useSaveDeckVersion = () => {
         .insert({ ...deckVersionDB });
       return result.data != null;
     },
-    [adjustmentDeckCards, deckCards, supabaseClient, user]
+    [adjustmentCards, deckCards, supabaseClient, user]
   );
 
   return save;

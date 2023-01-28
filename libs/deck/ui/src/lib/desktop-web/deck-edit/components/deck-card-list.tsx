@@ -11,10 +11,11 @@ import {
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
 import { categorizeDeckCards } from '../../domain/categorized-deck-cards';
+import { categorizeCards } from '../../domain/categorized-cards';
 import { DeckCard } from '../../domain/deck-card';
 import { DeckJoinedLatestDeckVersion } from '../../domain/deck-joined-latest-deck-version';
 import { useGetCards } from '../../hooks/use-get-cards';
-import { adjustmentDeckCardsState } from '../state/adjustment-deck-cards-state';
+import { adjustmentCardsState } from '../state/adjustment-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 import { AdjustmentDeckCardItem } from './adjustment-deck-card-item';
 import { DeckCardItem } from './deck-card-item';
@@ -22,20 +23,21 @@ import { DeckCardItem } from './deck-card-item';
 export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
   ({ deck }) => {
     const [deckCards, setDeckCards] = useRecoilState(deckCardsState);
-    const [adjustmentDeckCards, setAdjustmentDeckCards] = useRecoilState(
-      adjustmentDeckCardsState
-    );
+    const [adjustmentCards, setAdjustmentCards] =
+      useRecoilState(adjustmentCardsState);
 
     const cardImgFileNames = deck.latestDeckVersion.cards.map(
       (v) => v.imgFileName
     );
     const adjustmentCardImgFileNames =
       deck.latestDeckVersion.adjustmentCards.map((v) => v.imgFileName);
-    const { data: cards } = useGetCards(cardImgFileNames);
-    const { data: adjustmentCards } = useGetCards(adjustmentCardImgFileNames);
+    const { data: currentCards } = useGetCards(cardImgFileNames);
+    const { data: currentAdjustmentCards } = useGetCards(
+      adjustmentCardImgFileNames
+    );
 
     useEffect(() => {
-      const _deckCards = cards?.map((card) => {
+      const _deckCards = currentCards?.map((card) => {
         const count =
           deck.latestDeckVersion.cards.find(
             (v) => v.imgFileName === card.imgFileName
@@ -47,33 +49,18 @@ export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
         return deckCard;
       });
       setDeckCards(_deckCards ?? []);
-    }, [cards, deck.latestDeckVersion.cards, setDeckCards]);
+    }, [currentCards, deck.latestDeckVersion.cards, setDeckCards]);
 
     useEffect(() => {
-      const _adjustmentDeckCards = adjustmentCards?.map((card) => {
-        const count =
-          deck.latestDeckVersion.adjustmentCards.find(
-            (v) => v.imgFileName === card.imgFileName
-          )?.count ?? 0;
-        const adjustmentCard: DeckCard = {
-          card,
-          count,
-        };
-        return adjustmentCard;
-      });
-      setAdjustmentDeckCards(_adjustmentDeckCards ?? []);
-    }, [
-      adjustmentCards,
-      deck.latestDeckVersion.adjustmentCards,
-      setAdjustmentDeckCards,
-    ]);
+      setAdjustmentCards(currentAdjustmentCards ?? []);
+    }, [currentAdjustmentCards, setAdjustmentCards]);
 
     const categorizedDeckCards = useMemo(() => {
       return categorizeDeckCards(deckCards);
     }, [deckCards]);
-    const categorizedAdjustmentDeckCards = useMemo(() => {
-      return categorizeDeckCards(adjustmentDeckCards);
-    }, [adjustmentDeckCards]);
+    const categorizedAdjustmentCards = useMemo(() => {
+      return categorizeCards(adjustmentCards);
+    }, [adjustmentCards]);
 
     const cardTotalCount = useMemo(() => {
       return deckCards.reduce((acc, curr) => {
@@ -81,7 +68,7 @@ export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
       }, 0);
     }, [deckCards]);
 
-    if (cards == null || adjustmentCards == null) {
+    if (currentCards == null || currentAdjustmentCards == null) {
       return <Spinner />;
     }
 
@@ -149,17 +136,15 @@ export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
           </HStack>
           <Divider borderColor={'gray.400'} mt={1} />
           <Wrap spacingX={3} spacingY={4} p={1} mt={1}>
-            {Object.entries(categorizedAdjustmentDeckCards).map(
-              ([key, value]) => {
-                return value.map(({ card }) => {
-                  return (
-                    <WrapItem key={card.imgFileName}>
-                      <AdjustmentDeckCardItem deckCard={{ card, count: 0 }} />
-                    </WrapItem>
-                  );
-                });
-              }
-            )}
+            {Object.entries(categorizedAdjustmentCards).map(([key, value]) => {
+              return value.map((card) => {
+                return (
+                  <WrapItem key={card.imgFileName}>
+                    <AdjustmentDeckCardItem deckCard={{ card, count: 0 }} />
+                  </WrapItem>
+                );
+              });
+            })}
           </Wrap>
         </Box>
       </Box>

@@ -4,6 +4,11 @@ export type DeckCardWithDiff = DeckVersion['cards'][number] & {
   diff: number;
 };
 
+export type DeckAdjustmentCardWithDiff =
+  DeckVersion['adjustmentCards'][number] & {
+    diff: number;
+  };
+
 export const getDeckCardsWithDiff = (
   current: DeckVersion['cards'],
   diff: DeckVersion['cards']
@@ -27,12 +32,34 @@ export const getDeckCardsWithDiff = (
   return [...changedList, ...removedList];
 };
 
+export const getDeckAdjustmentCardsWithDiff = (
+  current: DeckVersion['adjustmentCards'],
+  diffTarget: DeckVersion['adjustmentCards']
+): DeckAdjustmentCardWithDiff[] => {
+  const removedList = diffTarget
+    .filter(
+      (card) => current.find((v) => v.imgFileName === card.imgFileName) == null
+    )
+    .map((v) => ({
+      ...v,
+      diff: -1,
+    }));
+  const changedList = current.map((card) => {
+    const exists = diffTarget.find((v) => v.imgFileName === card.imgFileName);
+    return {
+      ...card,
+      diff: exists ? 0 : 1,
+    };
+  });
+  return [...changedList, ...removedList];
+};
+
 export const getDiff = (
   deck: DeckJoinedDeckVersions,
   selectedVersion: DeckVersion
 ): {
   cards: DeckCardWithDiff[];
-  adjustmentCards: DeckCardWithDiff[];
+  adjustmentCards: DeckAdjustmentCardWithDiff[];
 } => {
   const selectedVersioinIndex = deck.deckVersions.findIndex(
     (v) => v.id === selectedVersion.id
@@ -55,7 +82,7 @@ export const getDiff = (
   }
   return {
     cards: getDeckCardsWithDiff(selectedVersion.cards, diffTarget.cards),
-    adjustmentCards: getDeckCardsWithDiff(
+    adjustmentCards: getDeckAdjustmentCardsWithDiff(
       selectedVersion.adjustmentCards,
       diffTarget.adjustmentCards
     ),

@@ -18,7 +18,6 @@ export const DeckVersion = z.object({
     z.object({
       imgFileName: Card.shape.imgFileName,
       categoryId: Category.shape.id,
-      count: z.number(),
     })
   ),
   userId: z.string().uuid(),

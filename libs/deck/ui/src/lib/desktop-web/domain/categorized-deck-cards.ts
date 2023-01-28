@@ -1,16 +1,7 @@
+import { CategorizedCards } from './categorized-cards';
 import { DeckCard } from './deck-card';
 
-export type CategorizedDeckCards = {
-  digitama: DeckCard[];
-  LvNone: DeckCard[];
-  Lv3: DeckCard[];
-  Lv4: DeckCard[];
-  Lv5: DeckCard[];
-  Lv6: DeckCard[];
-  Lv7: DeckCard[];
-  tamer: DeckCard[];
-  option: DeckCard[];
-};
+export type CategorizedDeckCards = CategorizedCards<DeckCard>;
 
 export const categorizeDeckCards = (
   deckCards: DeckCard[]
