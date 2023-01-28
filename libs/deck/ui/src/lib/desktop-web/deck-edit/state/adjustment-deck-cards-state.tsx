@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { DeckCard } from '../domain/deck-card';
+import { DeckCard } from '../../domain/deck-card';
 
 export type AdjustmentDeckCardsState = DeckCard[];
 

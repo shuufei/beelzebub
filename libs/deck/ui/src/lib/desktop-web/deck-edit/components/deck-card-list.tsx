@@ -1,5 +1,3 @@
-import { CardDB, convertToCard } from '@beelzebub/shared/db';
-import { Card } from '@beelzebub/shared/domain';
 import {
   Box,
   Divider,
@@ -10,93 +8,16 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
-import useSWR from 'swr';
-import { z } from 'zod';
+import { categorizeDeckCards } from '../../domain/categorized-deck-cards';
+import { DeckCard } from '../../domain/deck-card';
 import { DeckJoinedLatestDeckVersion } from '../../domain/deck-joined-latest-deck-version';
-import { DeckCard } from '../domain/deck-card';
+import { useGetCards } from '../../hooks/use-get-cards';
 import { adjustmentDeckCardsState } from '../state/adjustment-deck-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 import { AdjustmentDeckCardItem } from './adjustment-deck-card-item';
 import { DeckCardItem } from './deck-card-item';
-
-const useGetCards = (imgFileNames: Card['imgFileName'][]) => {
-  const supabaseClient = useSupabaseClient();
-  return useSWR(
-    `/supabase/database/cards?imgFileNames=${imgFileNames.join(',')}`,
-    async () => {
-      const res = await supabaseClient
-        .from('cards')
-        .select()
-        .in('img_file_name', imgFileNames);
-      if (res.error != null) {
-        console.error('failed get cards: ', res.error);
-        return [];
-      }
-      const parsedCardDBList = z.array(CardDB).parse(res.data);
-      const cards = parsedCardDBList.map((cardDB) => {
-        return convertToCard(cardDB);
-      });
-      return cards;
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateIfStale: false,
-    }
-  );
-};
-
-type CategorizedCards = {
-  digitama: DeckCard[];
-  LvNone: DeckCard[];
-  Lv3: DeckCard[];
-  Lv4: DeckCard[];
-  Lv5: DeckCard[];
-  Lv6: DeckCard[];
-  Lv7: DeckCard[];
-  tamer: DeckCard[];
-  option: DeckCard[];
-};
-
-const categorizeDeckCards = (deckCards: DeckCard[]): CategorizedCards => {
-  const init: CategorizedCards = {
-    digitama: [],
-    LvNone: [],
-    Lv3: [],
-    Lv4: [],
-    Lv5: [],
-    Lv6: [],
-    Lv7: [],
-    tamer: [],
-    option: [],
-  };
-  return deckCards.reduce((acc, curr) => {
-    const tmp = { ...acc };
-    if (curr.card.cardtype === 'デジタマ') {
-      tmp.digitama = [...tmp.digitama, curr];
-    } else if (curr.card.cardtype === 'テイマー') {
-      tmp.tamer = [...tmp.tamer, curr];
-    } else if (curr.card.cardtype === 'オプション') {
-      tmp.option = [...tmp.option, curr];
-    } else if (curr.card.lv === 'Lv.3') {
-      tmp.Lv3 = [...tmp.Lv3, curr];
-    } else if (curr.card.lv === 'Lv.4') {
-      tmp.Lv4 = [...tmp.Lv4, curr];
-    } else if (curr.card.lv === 'Lv.5') {
-      tmp.Lv5 = [...tmp.Lv5, curr];
-    } else if (curr.card.lv === 'Lv.6') {
-      tmp.Lv6 = [...tmp.Lv6, curr];
-    } else if (curr.card.lv === 'Lv.7') {
-      tmp.Lv7 = [...tmp.Lv7, curr];
-    } else if (curr.card.lv === '-' && curr.card.cardtype === 'デジモン') {
-      tmp.LvNone = [...tmp.LvNone, curr];
-    }
-    return tmp;
-  }, init);
-};
 
 export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
   ({ deck }) => {
