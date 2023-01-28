@@ -97,17 +97,19 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               {d(data?.createdAt).format('YYYY年MM月D日 HH時mm分ss秒')}
             </Text>
           </VStack>
-          <HStack mt={3}>
-            <Button variant={'outline'} size={'sm'} onClick={edit}>
-              カードリスト編集
-            </Button>
-            <DeckDeleteButton
-              deckId={deckId}
-              onDeleted={() => {
-                mutate();
-              }}
-            />
-          </HStack>
+          {user.id === data?.userId && (
+            <HStack mt={3}>
+              <Button variant={'outline'} size={'sm'} onClick={edit}>
+                カードリスト編集
+              </Button>
+              <DeckDeleteButton
+                deckId={deckId}
+                onDeleted={() => {
+                  mutate();
+                }}
+              />
+            </HStack>
+          )}
         </Box>
         <VStack spacing={1}>
           <KeyCardImg keyCard={data?.keyCard} width={70} />

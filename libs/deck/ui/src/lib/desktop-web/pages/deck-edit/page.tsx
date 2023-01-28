@@ -13,6 +13,7 @@ import {
   Spinner,
   useToast,
 } from '@chakra-ui/react';
+import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useState } from 'react';
@@ -25,6 +26,7 @@ export type DeckEditPageProps = {
 };
 
 export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
+  const user = useUser();
   const { data: deck } = useGetDeckJoinLatestDeckVersion(deckId);
   const { addDeckCard } = useAddRemoveDeckCard();
   const saveDeckVersion = useSaveDeckVersion();
@@ -33,6 +35,9 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
   const toast = useToast();
 
   const save = useCallback(async () => {
+    if (user?.id !== deck?.userId) {
+      throw new Error('Permission Denied');
+    }
     setLoading(true);
     await saveDeckVersion(deckId);
     toast({
@@ -44,7 +49,7 @@ export const DeckEditPage: FC<DeckEditPageProps> = ({ deckId }) => {
     });
     setLoading(false);
     router.push(`/decks/${deckId}`);
-  }, [deckId, router, saveDeckVersion, toast]);
+  }, [deck?.userId, deckId, router, saveDeckVersion, toast, user?.id]);
 
   return (
     <Box as="main" pb="8">
