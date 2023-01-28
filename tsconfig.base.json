@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@beelzebub/card/db": ["libs/card/db/src/index.ts"],
       "@beelzebub/card/ui": ["libs/card/ui/src/index.ts"],
       "@beelzebub/deck/db": ["libs/deck/db/src/index.ts"],
       "@beelzebub/deck/domain": ["libs/deck/domain/src/index.ts"],
