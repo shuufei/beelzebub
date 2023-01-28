@@ -22,6 +22,7 @@ export const useGetDecksJoinLatestDeckVersion = () => {
         `
       )
       .order('created_at', { ascending: false, foreignTable: 'deck_versions' })
+      .order('created_at', { ascending: false })
       .limit(1, { foreignTable: 'deck_versions' });
 
     const parsed = z.array(DeckDBJoinedDeckVersionsDB).safeParse(data);
