@@ -14,11 +14,11 @@ import { categorizeDeckCards } from '@beelzebub/deck/domain';
 import { categorizeCards } from '@beelzebub/deck/domain';
 import { DeckCard } from '@beelzebub/deck/domain';
 import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
-import { useGetCards } from '../../../hooks/use-get-cards';
 import { adjustmentCardsState } from '../state/adjustment-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 import { AdjustmentDeckCardItem } from './adjustment-deck-card-item';
 import { DeckCardItem } from './deck-card-item';
+import { useGetCardsByImgFileNames } from '@beelzebub/deck/db';
 
 export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
   ({ deck }) => {
@@ -31,8 +31,8 @@ export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
     );
     const adjustmentCardImgFileNames =
       deck.latestDeckVersion.adjustmentCards.map((v) => v.imgFileName);
-    const { data: currentCards } = useGetCards(cardImgFileNames);
-    const { data: currentAdjustmentCards } = useGetCards(
+    const { data: currentCards } = useGetCardsByImgFileNames(cardImgFileNames);
+    const { data: currentAdjustmentCards } = useGetCardsByImgFileNames(
       adjustmentCardImgFileNames
     );
 

@@ -4,7 +4,9 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { z } from 'zod';
 import useSWR from 'swr';
 
-export const useGetCards = (imgFileNames: Card['imgFileName'][]) => {
+export const useGetCardsByImgFileNames = (
+  imgFileNames: Card['imgFileName'][]
+) => {
   const supabaseClient = useSupabaseClient();
   return useSWR(
     `/supabase/database/cards?imgFileNames=${imgFileNames.join(',')}`,

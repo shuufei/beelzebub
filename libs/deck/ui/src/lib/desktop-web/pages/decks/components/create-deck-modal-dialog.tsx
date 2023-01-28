@@ -1,4 +1,5 @@
-import { DeckDB, DeckVersionDB } from '@beelzebub/shared/db';
+import { useInsertDeck } from '@beelzebub/deck/db';
+import { DeckDB } from '@beelzebub/shared/db';
 import { Deck } from '@beelzebub/shared/domain';
 import {
   Button,
@@ -17,13 +18,13 @@ import {
   Spinner,
   useToast,
 } from '@chakra-ui/react';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import { useUser } from '@supabase/auth-helpers-react';
 import { FC, useCallback, useState } from 'react';
 import { v4 } from 'uuid';
 
 const usePostDeck = () => {
-  const supabaseClient = useSupabaseClient();
   const user = useUser();
+  const insertDeck = useInsertDeck();
   const post = useCallback(
     async (deckName: Deck['name'], isPublic: Deck['public']) => {
       try {
@@ -38,39 +39,13 @@ const usePostDeck = () => {
           created_at: new Date().toISOString(),
           user_id: user.id,
         };
-        const deckVersionDB: DeckVersionDB = {
-          id: v4(),
-          deck_id: deckId,
-          created_at: new Date().toISOString(),
-          user_id: user.id,
-          cards: [],
-          adjustment_cards: [],
-        };
-        const insertDeckResult = await supabaseClient
-          .from('decks')
-          .insert({ ...deckDB });
-        if (insertDeckResult.error != null) {
-          throw new Error(
-            `failed insert deck: ${JSON.stringify(insertDeckResult.error)}`
-          );
-        }
-        const insertDeckVersionResult = await supabaseClient
-          .from('deck_versions')
-          .insert({ ...deckVersionDB });
-        if (insertDeckVersionResult.error != null) {
-          throw new Error(
-            `failed insert deck: ${JSON.stringify(
-              insertDeckVersionResult.error
-            )}`
-          );
-        }
-        console.info('insert deck, deck_version: ');
+        await insertDeck(deckDB);
       } catch (error) {
         console.error('failed insert deck', error);
         throw error;
       }
     },
-    [supabaseClient, user]
+    [insertDeck, user]
   );
   return post;
 };

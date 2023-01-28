@@ -1,6 +1,7 @@
+import { useInsertDeckVersion } from '@beelzebub/deck/db';
 import { DeckVersionDB } from '@beelzebub/shared/db';
 import { Deck } from '@beelzebub/shared/domain';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import { useUser } from '@supabase/auth-helpers-react';
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { v4 } from 'uuid';
@@ -8,10 +9,10 @@ import { adjustmentCardsState } from '../state/adjustment-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 
 export const useSaveDeckVersion = () => {
-  const supabaseClient = useSupabaseClient();
   const user = useUser();
   const deckCards = useRecoilValue(deckCardsState);
   const adjustmentCards = useRecoilValue(adjustmentCardsState);
+  const insert = useInsertDeckVersion();
 
   const save = useCallback(
     async (deckId: Deck['id']) => {
@@ -34,12 +35,9 @@ export const useSaveDeckVersion = () => {
         user_id: user.id,
         comment: '',
       };
-      const result = await supabaseClient
-        .from('deck_versions')
-        .insert({ ...deckVersionDB });
-      return result.data != null;
+      return insert(deckVersionDB);
     },
-    [adjustmentCards, deckCards, supabaseClient, user]
+    [adjustmentCards, deckCards, insert, user]
   );
 
   return save;

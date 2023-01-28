@@ -1,7 +1,8 @@
+import { useDeleteDeckById } from '@beelzebub/deck/db';
 import { Deck } from '@beelzebub/shared/domain';
 import {
-  Text,
   Button,
+  HStack,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -9,9 +10,8 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  HStack,
+  Text,
 } from '@chakra-ui/react';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import { FC, memo, useCallback } from 'react';
 
@@ -19,19 +19,15 @@ export const DeckDeleteButton: FC<{
   deckId: Deck['id'];
   onDeleted?: () => void;
 }> = memo(({ deckId, onDeleted }) => {
-  const supabaseClient = useSupabaseClient();
   const router = useRouter();
-  const user = useUser();
+  const deleteDeckById = useDeleteDeckById();
+
   const deleteDeck = useCallback(async () => {
-    if (user == null) {
-      return;
-    }
-    await supabaseClient.from('deck_versions').delete().eq('deck_id', deckId);
-    await supabaseClient.from('decks').delete().eq('id', deckId);
+    deleteDeckById(deckId);
     router.push('/decks');
     onDeleted?.();
     return;
-  }, [deckId, onDeleted, router, supabaseClient, user]);
+  }, [deckId, deleteDeckById, onDeleted, router]);
 
   return (
     <Popover>
