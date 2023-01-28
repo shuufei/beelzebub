@@ -17,7 +17,7 @@ export const Header: FC = () => {
       borderColor={'gray.900'}
       position={'sticky'}
       top={0}
-      bg={'white'}
+      bg={'gray.50'}
       zIndex={'sticky'}
     >
       <Navigation />
