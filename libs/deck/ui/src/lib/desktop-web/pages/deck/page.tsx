@@ -242,6 +242,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
                   key={deckVersion.id}
                   deckVersion={deckVersion}
                   isSelected={selectedVersion?.id === deckVersion.id}
+                  canRestored={user.id === data.userId}
                   onPreview={() => {
                     setSelectedVersion(deckVersion);
                   }}

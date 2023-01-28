@@ -7,9 +7,16 @@ import { DeckVersionRestoreButton } from './deck-version-restore-button';
 export const DeckVersionCard: FC<{
   deckVersion: DeckVersion;
   isSelected?: boolean;
+  canRestored?: boolean;
   onPreview?: () => void;
   onRestored?: () => void;
-}> = ({ deckVersion, isSelected = false, onPreview, onRestored }) => {
+}> = ({
+  deckVersion,
+  isSelected = false,
+  canRestored = false,
+  onPreview,
+  onRestored,
+}) => {
   return (
     <VStack
       alignItems={'flex-start'}
@@ -39,10 +46,12 @@ export const DeckVersionCard: FC<{
         >
           表示
         </Button>
-        <DeckVersionRestoreButton
-          deckVersioin={deckVersion}
-          onRestored={onRestored}
-        />
+        {canRestored && (
+          <DeckVersionRestoreButton
+            deckVersioin={deckVersion}
+            onRestored={onRestored}
+          />
+        )}
       </HStack>
     </VStack>
   );
