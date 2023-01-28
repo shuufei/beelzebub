@@ -1,7 +1,7 @@
-import { LockIcon } from '@chakra-ui/icons';
 import { Box, HStack, Text } from '@chakra-ui/react';
 import d from 'dayjs';
 import { FC, memo } from 'react';
+import { Lock, Unlock } from 'react-feather';
 import { KeyCardImg } from '../../../components/key-card-img';
 import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
 
@@ -25,7 +25,11 @@ export const DeckCard: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
             <Text fontSize={'md'} fontWeight={'semibold'}>
               {deck.name}
             </Text>
-            {deck.public === false && <LockIcon fontSize={'sm'} />}
+            {deck.public === false ? (
+              <Lock size={'0.75rem'} />
+            ) : (
+              <Unlock size={'0.75rem'} />
+            )}
           </HStack>
           <Box fontSize={'xs'} mt={1}>
             <Text>{deck.userId}</Text>
