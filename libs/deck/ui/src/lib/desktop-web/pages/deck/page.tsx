@@ -1,5 +1,5 @@
 import { useGetDecksJoinDeckVersions } from '@beelzebub/deck/db';
-import { Card, Deck, DeckVersion } from '@beelzebub/shared/domain';
+import { Deck, DeckVersion } from '@beelzebub/shared/domain';
 import { ArrowBackIcon, LockIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -130,6 +130,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
             />
           )}
         </Box>
+
         <VStack
           alignItems={'flex-start'}
           maxW={'xs'}
