@@ -1,4 +1,13 @@
-import { useGetDecksJoinDeckVersions } from '@beelzebub/deck/db';
+import {
+  useDuplicateDeck,
+  useGetDecksJoinDeckVersions,
+} from '@beelzebub/deck/db';
+import {
+  convertToDeckDB,
+  convertToDeckVersionDB,
+  DeckDB,
+  DeckVersionDB,
+} from '@beelzebub/shared/db';
 import { Deck, DeckVersion } from '@beelzebub/shared/domain';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
@@ -8,8 +17,10 @@ import {
   Divider,
   Heading,
   HStack,
+  Spinner,
   Text,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useUser } from '@supabase/auth-helpers-react';
@@ -18,6 +29,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Lock, Unlock } from 'react-feather';
+import { v4 } from 'uuid';
 import { KeyCardImg } from '../../components/key-card-img';
 import { DeckDeleteButton } from './components/deck-delete-button';
 import { DeckVersionCard } from './components/deck-version-card';
@@ -33,6 +45,8 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   // hooks
   const router = useRouter();
   const user = useUser();
+  const duplicateDeck = useDuplicateDeck();
+  const toast = useToast();
 
   // component state
   const { data, mutate } = useGetDecksJoinDeckVersions(deckId);
@@ -63,6 +77,7 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
     onOpen: onOpenUpdateKeyCardModal,
     onClose: onCloseUpdateKeyCardModal,
   } = useDisclosure();
+  const [isDuplicating, setDuplicating] = useState(false);
 
   useEffect(() => {
     setSelectedVersion(latestVersion);
@@ -71,6 +86,34 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
   const edit = useCallback(async () => {
     router.push(`/decks/${deckId}/edit`);
   }, [deckId, router]);
+
+  const duplicate = useCallback(async () => {
+    if (data == null || user == null || latestVersion == null) {
+      return;
+    }
+    setDuplicating(true);
+    const deckDB: DeckDB = convertToDeckDB({
+      ...data,
+      id: v4(),
+      createdAt: new Date().toISOString(),
+      userId: user.id,
+      name: `${data.name} コピー`,
+    });
+    const deckVersionDB: DeckVersionDB = convertToDeckVersionDB(latestVersion);
+    await duplicateDeck(deckDB, {
+      cards: deckVersionDB.cards,
+      adjustment_cards: deckVersionDB.adjustment_cards,
+    });
+    setDuplicating(false);
+    toast({
+      title: 'デッキを複製しました',
+      duration: 3000,
+      status: 'success',
+      isClosable: true,
+      position: 'top-right',
+    });
+    router.push('/decks');
+  }, [data, duplicateDeck, latestVersion, router, toast, user]);
 
   if (user == null) {
     return <Text>unauthorized</Text>;
@@ -124,19 +167,29 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
                 )}
               </Text>
             </VStack>
-            {user.id === data?.userId && (
-              <HStack mt={3}>
-                <Button variant={'outline'} size={'sm'} onClick={edit}>
-                  カードリスト編集
-                </Button>
-                <DeckDeleteButton
-                  deckId={deckId}
-                  onDeleted={() => {
-                    mutate();
-                  }}
-                />
-              </HStack>
-            )}
+            <HStack mt={3}>
+              <Button
+                variant={'outline'}
+                size={'sm'}
+                onClick={duplicate}
+                disabled={isDuplicating}
+              >
+                {!isDuplicating ? 'デッキ複製' : <Spinner size={'sm'} />}
+              </Button>
+              {user.id === data?.userId && (
+                <>
+                  <Button variant={'outline'} size={'sm'} onClick={edit}>
+                    カードリスト編集
+                  </Button>
+                  <DeckDeleteButton
+                    deckId={deckId}
+                    onDeleted={() => {
+                      mutate();
+                    }}
+                  />
+                </>
+              )}
+            </HStack>
           </Box>
           <VStack spacing={1}>
             <Text fontSize={'xs'} fontWeight={'semibold'} color={'gray.500'}>
