@@ -1,3 +1,3 @@
-export * from './decks/page';
-export * from './deck/page';
-export * from './deck-edit/page';
+export * from './pages/decks/page';
+export * from './pages/deck/page';
+export * from './pages/deck-edit/page';

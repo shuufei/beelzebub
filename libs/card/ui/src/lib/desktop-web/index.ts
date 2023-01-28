@@ -1,2 +1,2 @@
-export * from './cards/page';
-export * from './cards/components/card-list-provider';
+export * from './pages/cards/page';
+export * from './pages/cards/components/card-list-provider';

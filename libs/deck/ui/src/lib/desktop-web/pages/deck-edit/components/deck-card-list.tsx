@@ -10,11 +10,11 @@ import {
 } from '@chakra-ui/react';
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
-import { categorizeDeckCards } from '../../domain/categorized-deck-cards';
-import { categorizeCards } from '../../domain/categorized-cards';
-import { DeckCard } from '../../domain/deck-card';
-import { DeckJoinedLatestDeckVersion } from '../../domain/deck-joined-latest-deck-version';
-import { useGetCards } from '../../hooks/use-get-cards';
+import { categorizeDeckCards } from '../../../domain/categorized-deck-cards';
+import { categorizeCards } from '../../../domain/categorized-cards';
+import { DeckCard } from '../../../domain/deck-card';
+import { DeckJoinedLatestDeckVersion } from '../../../domain/deck-joined-latest-deck-version';
+import { useGetCards } from '../../../hooks/use-get-cards';
 import { adjustmentCardsState } from '../state/adjustment-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 import { AdjustmentDeckCardItem } from './adjustment-deck-card-item';

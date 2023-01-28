@@ -25,7 +25,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
 import { DeckDeleteButton } from './components/deck-delete-button';
-import { KeyCardImg } from '../components/key-card-img';
+import { KeyCardImg } from '../../components/key-card-img';
 import { CardList } from './components/card-list';
 import { DeckVersionCard } from './components/deck-version-card';
 import { getDiff } from './utils/get-diff-version';
