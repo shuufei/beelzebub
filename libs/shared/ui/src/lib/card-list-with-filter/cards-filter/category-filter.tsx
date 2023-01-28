@@ -1,10 +1,7 @@
-import { CategoryDB, convertToCategory } from '@beelzebub/shared/db';
+import { useGetCategories } from '@beelzebub/shared/db';
 import { Checkbox, HStack, Spinner, Stack, Text } from '@chakra-ui/react';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import useSWR from 'swr';
-import { z } from 'zod';
 import {
   CategoryCondition,
   categoryFilterConditionState,
@@ -14,29 +11,10 @@ import { AllCheckButton } from './all-check-button';
 import { AllUncheckButton } from './all-uncheck-button';
 import { FilterPopup } from './filter-popup';
 
-const useGetCategories = () => {
-  const supabaseClient = useSupabaseClient();
-  const { data } = useSWR('/supabase/db/categories', async () => {
-    const result = await supabaseClient
-      .from('categories')
-      .select()
-      .order('category_name', { ascending: true });
-    if (result.error != null) {
-      throw new Error(
-        `failed select categories: ${JSON.stringify(result.error)}`
-      );
-    }
-    const categories = z.array(CategoryDB).parse(result.data);
-    const convertedCategories = categories.map(convertToCategory);
-    return { categories: convertedCategories };
-  });
-  return { categories: data?.categories };
-};
-
 export const CategoryFilter: FC = memo(() => {
   const [, setFilterCondition] = useRecoilState(filterConditionState);
   const condition = useRecoilValue(categoryFilterConditionState);
-  const { categories } = useGetCategories();
+  const { data: categories } = useGetCategories();
 
   useEffect(() => {
     if (categories == null) {
