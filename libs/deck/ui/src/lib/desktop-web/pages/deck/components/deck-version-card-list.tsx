@@ -15,7 +15,9 @@ export const DeckVersionCardList: FC<{
   prevVersion?: DeckVersion;
   showDiff?: boolean;
 }> = ({ selectedVersion, prevVersion, showDiff = false }) => {
-  const diff = getDeckVersionDiff(selectedVersion, prevVersion);
+  const diff = useMemo(() => {
+    return getDeckVersionDiff(selectedVersion, prevVersion);
+  }, [prevVersion, selectedVersion]);
 
   const existsCards = useMemo(() => {
     return selectedVersion.cards.length !== 0;
@@ -24,11 +26,21 @@ export const DeckVersionCardList: FC<{
     return selectedVersion.adjustmentCards.length !== 0;
   }, [selectedVersion.adjustmentCards.length]);
 
+  const cardsCount = useMemo(() => {
+    return showDiff
+      ? diff.cards.reduce((acc, curr) => {
+          return acc + curr.currentCount;
+        }, 0)
+      : selectedVersion.cards.reduce((acc, curr) => {
+          return acc + curr.count;
+        }, 0);
+  }, [diff.cards, selectedVersion.cards, showDiff]);
+
   return (
     <>
       <Box>
         <Text fontSize={'xs'} fontWeight={'semibold'}>
-          カードリスト
+          カードリスト ({cardsCount}枚)
         </Text>
         <Box mt="1">
           {!existsCards && (
