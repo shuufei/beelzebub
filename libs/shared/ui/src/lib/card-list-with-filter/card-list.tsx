@@ -62,7 +62,7 @@ const useGetCards = (page: number, query: CardsQuery) => {
       dbQuery.in('cardtype', query.cardTypes);
     }
     if (query.colors) {
-      dbQuery.containedBy('colors', query.colors);
+      dbQuery.contains('colors', query.colors);
     }
     if (query.name) {
       dbQuery.like('name', `%${query.name}%`);
