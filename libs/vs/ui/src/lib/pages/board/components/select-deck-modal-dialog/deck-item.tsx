@@ -24,7 +24,12 @@ export const DeckItem: FC<{
         <HStack alignItems={'flex-start'}>
           <KeyCardImg keyCard={deck.keyCard} width={50} />
           <Box alignItems={'flex-start'}>
-            <Text noOfLines={1} fontSize={'sm'} mt={0.5}>
+            <Text
+              noOfLines={1}
+              fontSize={'sm'}
+              mt={0.5}
+              fontWeight={'semibold'}
+            >
               {deck.name}
             </Text>
             <Text noOfLines={1} fontSize={'xs'}>
