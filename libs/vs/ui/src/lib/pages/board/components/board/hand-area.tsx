@@ -21,6 +21,7 @@ export const HandArea: FC = () => {
       borderColor={'gray.300'}
       borderRadius={'md'}
       w={'full'}
+      boxShadow={'sm'}
     >
       <HStack fontSize={'xs'} fontWeight={'semibold'}>
         <Text>手札</Text>
