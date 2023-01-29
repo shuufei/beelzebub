@@ -1,4 +1,4 @@
-import { useGetDeckJoinLatestDeckVersion } from '@beelzebub/deck/db';
+import { useGetDeckJoinLatestDeckVersion } from '@beelzebub/shared/db';
 import { Deck } from '@beelzebub/shared/domain';
 import {
   CardCustomButtonContext,

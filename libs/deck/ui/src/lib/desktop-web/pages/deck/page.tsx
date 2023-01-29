@@ -174,14 +174,6 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
               </Text>
             </VStack>
             <HStack mt={3}>
-              <Button
-                variant={'outline'}
-                size={'sm'}
-                onClick={duplicate}
-                disabled={isDuplicating}
-              >
-                {!isDuplicating ? 'デッキ複製' : <Spinner size={'sm'} />}
-              </Button>
               {user.id === data?.userId && (
                 <>
                   <Button variant={'outline'} size={'sm'} onClick={edit}>
@@ -195,6 +187,14 @@ export const DeckPage: FC<DeckPageProps> = ({ deckId }) => {
                   />
                 </>
               )}
+              <Button
+                variant={'outline'}
+                size={'sm'}
+                onClick={duplicate}
+                disabled={isDuplicating}
+              >
+                {!isDuplicating ? 'デッキ複製' : <Spinner size={'sm'} />}
+              </Button>
             </HStack>
           </Box>
           <VStack spacing={1}>
