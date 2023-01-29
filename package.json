@@ -31,6 +31,7 @@
     "recoil": "^0.7.6",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
+    "skyway-js": "^4.4.5",
     "swr": "^2.0.1",
     "tslib": "^2.3.0",
     "uuid": "^9.0.0",

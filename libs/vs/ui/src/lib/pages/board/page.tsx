@@ -1,22 +1,37 @@
 import { Box, Button, Heading, useDisclosure } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useRecoilValue } from 'recoil';
 import { Board } from './components/board';
+import { PeerConnectionSetUpAccordion } from './components/peer-connection-accordion';
 import { SelectDeckModalDialog } from './components/select-deck-modal-dialog';
 import { PlayerContext } from './context/player-context';
+import { boardDeckIdSelector } from './state/selectors/board-deck-id-selector';
 
-export const BoardPage: FC = () => {
+export type BoardPageProps = {
+  skywayApiKey: string;
+};
+
+export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const meDeckId = useRecoilValue(boardDeckIdSelector('me'));
+  const opponentDeckId = useRecoilValue(boardDeckIdSelector('opponent'));
+
   return (
     <>
       <Box>
-        <Heading as="h1">battle</Heading>
+        <Heading as="h1" hidden>
+          battle board
+        </Heading>
+        <Box p={4}>
+          <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
+        </Box>
         <Button onClick={onOpen}>デッキ選択</Button>
         <PlayerContext.Provider value="opponent">
-          <Board deckId="3cae3f56-bf43-4525-b421-5274ea91678f" />
+          {opponentDeckId && <Board deckId={opponentDeckId} />}
         </PlayerContext.Provider>
         memory
         <PlayerContext.Provider value="me">
-          <Board deckId="ca5602c2-135d-433f-8580-e81f449054e7" />
+          {meDeckId && <Board deckId={meDeckId} />}
         </PlayerContext.Provider>
       </Box>
       <SelectDeckModalDialog isOpen={isOpen} onClose={onClose} />
