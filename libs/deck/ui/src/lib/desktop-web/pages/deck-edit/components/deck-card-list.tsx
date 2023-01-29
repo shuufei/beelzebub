@@ -11,7 +11,7 @@ import {
 import { FC, memo, useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
 import { categorizeDeckCards } from '@beelzebub/deck/domain';
-import { categorizeCards } from '@beelzebub/deck/domain';
+import { categorizeCards } from '@beelzebub/shared/domain';
 import { DeckCard } from '@beelzebub/deck/domain';
 import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
 import { adjustmentCardsState } from '../state/adjustment-cards-state';

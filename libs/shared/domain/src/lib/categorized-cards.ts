@@ -1,4 +1,4 @@
-import { Card } from '@beelzebub/shared/domain';
+import { Card } from './card';
 
 export type CategorizedCards<T = Card> = {
   digitama: T[];

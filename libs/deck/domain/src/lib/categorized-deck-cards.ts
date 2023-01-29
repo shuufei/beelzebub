@@ -1,4 +1,4 @@
-import { CategorizedCards } from './categorized-cards';
+import { CategorizedCards } from '@beelzebub/shared/domain';
 import { DeckCard } from './deck-card';
 
 export type CategorizedDeckCards = CategorizedCards<DeckCard>;

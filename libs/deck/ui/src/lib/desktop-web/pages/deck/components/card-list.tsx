@@ -1,5 +1,5 @@
 import { useGetCardsByImgFileNames } from '@beelzebub/deck/db';
-import { categorizeCards } from '@beelzebub/deck/domain';
+import { categorizeCards } from '@beelzebub/shared/domain';
 import { Card } from '@beelzebub/shared/domain';
 import { CardImg } from '@beelzebub/shared/ui';
 import { Wrap, WrapItem } from '@chakra-ui/react';
