@@ -28,7 +28,6 @@ export const Navigation: FC = () => {
       <NavigationItem href="/cards" label="カードリスト" />
       <NavigationItem href="/decks" label="デッキリスト" />
       <NavigationItem href="/vs" label="対戦" />
-      <NavigationItem href="/_tmp/deck-recipe" label="tmp/デッキレシピ" />
     </HStack>
   );
 };
