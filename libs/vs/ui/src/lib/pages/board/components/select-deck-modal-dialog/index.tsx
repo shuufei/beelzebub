@@ -9,11 +9,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
+  VStack,
 } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useRecoilState } from 'recoil';
-import { boardsState } from '../state/boards-state';
+import { boardsState } from '../../state/boards-state';
+import { DeckItem } from './deck-item';
 
 export const SelectDeckModalDialog: FC<{
   isOpen: boolean;
@@ -22,18 +23,19 @@ export const SelectDeckModalDialog: FC<{
   const { data: decks } = useGetDecksJoinLatestDeckVersion();
   const [, setBoards] = useRecoilState(boardsState);
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>デッキ選択</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {decks?.map((deck) => {
-            return (
-              <HStack key={deck.id}>
-                <Text>{deck.name}</Text>
-                <Button
-                  onClick={() => {
+          <VStack spacing={2} alignItems={'flex-start'} w={'full'}>
+            {decks?.map((deck) => {
+              return (
+                <DeckItem
+                  key={deck.id}
+                  deck={deck}
+                  onSelect={() => {
                     setBoards((current) => {
                       return {
                         ...current,
@@ -43,21 +45,15 @@ export const SelectDeckModalDialog: FC<{
                         },
                       };
                     });
+                    onClose();
                   }}
-                >
-                  選択
-                </Button>
-              </HStack>
-            );
-          })}
+                />
+              );
+            })}
+          </VStack>
         </ModalBody>
         <ModalFooter>
           <HStack justifyContent={'flex-start'} w={'full'}>
-            {/* <Button
-          colorScheme={'blue'}
-        >
-          {!isLoading ? '更新' : <Spinner size={'sm'} />}
-        </Button> */}
             <Button colorScheme={'blue'} variant={'ghost'} onClick={onClose}>
               キャンセル
             </Button>
