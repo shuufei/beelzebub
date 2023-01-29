@@ -1,12 +1,14 @@
-import { Card, Category } from '@beelzebub/shared/domain';
+import {
+  Card,
+  CARD_IMG_HEIGHT,
+  CARD_IMG_WIDTH,
+  Category,
+} from '@beelzebub/shared/domain';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FC } from 'react';
 import { CardPreviewModalDialog } from './card-preview-modal-dialog';
 import { useCardImageUrl } from './hooks/use-card-image-url';
-
-const CARD_IMG_HEIGHT = 600;
-const CARD_IMG_WIDTH = 430;
 
 export const CardImg: FC<{
   categoryId: Category['id'];

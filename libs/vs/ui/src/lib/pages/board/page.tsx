@@ -1,4 +1,4 @@
-import { Box, Button, Heading, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, useDisclosure } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Board } from './components/board';
@@ -25,11 +25,13 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
         <Box p={4}>
           <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
         </Box>
-        <Button onClick={onOpen}>デッキ選択</Button>
         <PlayerContext.Provider value="opponent">
           {opponentDeckId && <Board deckId={opponentDeckId} />}
         </PlayerContext.Provider>
-        memory
+        <HStack>
+          memory
+          <Button onClick={onOpen}>デッキ選択</Button>
+        </HStack>
         <PlayerContext.Provider value="me">
           {meDeckId && <Board deckId={meDeckId} />}
         </PlayerContext.Provider>

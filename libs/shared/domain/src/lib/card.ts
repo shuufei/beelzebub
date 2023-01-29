@@ -28,3 +28,6 @@ export const Card = z.object({
 });
 
 export type Card = z.infer<typeof Card>;
+
+export const CARD_IMG_HEIGHT = 600;
+export const CARD_IMG_WIDTH = 430;

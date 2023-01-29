@@ -25,3 +25,16 @@ export const DeckVersion = z.object({
 });
 
 export type DeckVersion = z.infer<typeof DeckVersion>;
+
+export const flatDeckCards = (
+  deckCards: DeckVersion['cards'],
+  cards: Card[]
+): Card[] => {
+  return deckCards
+    .map(({ imgFileName, count }) => {
+      const card = cards?.find((v) => v.imgFileName === imgFileName);
+      if (card == null) return [];
+      return new Array<Card>(count).fill(card);
+    })
+    .flat();
+};

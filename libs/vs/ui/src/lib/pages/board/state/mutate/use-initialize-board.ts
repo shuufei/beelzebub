@@ -1,6 +1,6 @@
 import { useGetCardsByImgFileNames } from '@beelzebub/deck/db';
 import { useGetDeckJoinLatestDeckVersion } from '@beelzebub/shared/db';
-import { Card, Deck } from '@beelzebub/shared/domain';
+import { Deck, flatDeckCards } from '@beelzebub/shared/domain';
 import { BoardState, initializeBoardCards, Player } from '@beelzebub/vs/domain';
 import { useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
@@ -14,13 +14,7 @@ export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
   const { data: cards } = useGetCardsByImgFileNames(imgFileNames ?? []);
 
   const flatted = useMemo(() => {
-    return deck?.latestDeckVersion.cards
-      .map(({ imgFileName, count }) => {
-        const card = cards?.find((v) => v.imgFileName === imgFileName);
-        if (card == null) return [];
-        return new Array<Card>(count).fill(card);
-      })
-      .flat();
+    return flatDeckCards(deck?.latestDeckVersion.cards ?? [], cards ?? []);
   }, [cards, deck?.latestDeckVersion.cards]);
 
   useEffect(() => {
