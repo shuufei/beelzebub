@@ -1,7 +1,7 @@
 import { Deck } from '@beelzebub/shared/domain';
-import { CardImg } from '@beelzebub/shared/ui';
 import Image from 'next/image';
 import { FC } from 'react';
+import { CardImg } from './card-img';
 
 export const KeyCardImg: FC<{ keyCard: Deck['keyCard']; width: number }> = ({
   keyCard,

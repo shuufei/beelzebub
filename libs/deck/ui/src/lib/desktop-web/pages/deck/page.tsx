@@ -10,6 +10,7 @@ import {
   useGetUsers,
 } from '@beelzebub/shared/db';
 import { Deck, DeckVersion } from '@beelzebub/shared/domain';
+import { KeyCardImg } from '@beelzebub/shared/ui';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -31,7 +32,6 @@ import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Lock, Unlock } from 'react-feather';
 import { v4 } from 'uuid';
-import { KeyCardImg } from '../../components/key-card-img';
 import { DeckDeleteButton } from './components/deck-delete-button';
 import { DeckVersionCard } from './components/deck-version-card';
 import { DeckVersionCardList } from './components/deck-version-card-list';

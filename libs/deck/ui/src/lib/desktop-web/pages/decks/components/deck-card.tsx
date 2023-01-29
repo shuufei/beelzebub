@@ -2,8 +2,8 @@ import { Box, HStack, Text } from '@chakra-ui/react';
 import d from 'dayjs';
 import { FC, memo } from 'react';
 import { Lock, Unlock } from 'react-feather';
-import { KeyCardImg } from '../../../components/key-card-img';
 import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
+import { KeyCardImg } from '@beelzebub/shared/ui';
 
 export const DeckCard: FC<{
   deck: DeckJoinedLatestDeckVersion;
