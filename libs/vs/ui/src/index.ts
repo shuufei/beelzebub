@@ -1,1 +1,1 @@
-export * from './lib/vs-ui';
+export * from './lib/pages/board/page';

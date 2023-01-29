@@ -6,3 +6,4 @@ export * from './lib/deck-joined-deck-versions';
 export * from './lib/users';
 export * from './lib/query/use-get-categories';
 export * from './lib/query/use-get-users';
+export * from './lib/query/use-get-deck-join-latest-deck-versioin';
