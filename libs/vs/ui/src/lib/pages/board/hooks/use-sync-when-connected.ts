@@ -1,10 +1,9 @@
 import { BoardState, INITIALI_BOARD_STATE } from '@beelzebub/vs/domain';
-import { useUser } from '@supabase/auth-helpers-react';
 import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { dataConnectionState } from '../state/data-connection-state';
-import { useDispatcher } from '../state/dispatcher';
 import { boardSelector } from '../state/selectors/board-selector';
+import { useSendDataToOpponent } from './use-send-data-to-opponent';
 
 export const useSyncWhenConnected = () => {
   const boardState = useRecoilValue(boardSelector('me'));
@@ -15,17 +14,15 @@ export const useSyncWhenConnected = () => {
   }, [boardState]);
 
   const connection = useRecoilValue(dataConnectionState);
-  const dispatch = useDispatcher();
-  const user = useUser();
+  const send = useSendDataToOpponent();
 
   useEffect(() => {
-    if (connection == null || user == null) {
+    if (connection == null) {
       return;
     }
-    dispatch({
-      userId: user.id,
+    send({
       actionName: 'sync',
       data: boardStateRef.current,
     });
-  }, [connection, dispatch, user]);
+  }, [connection, send]);
 };

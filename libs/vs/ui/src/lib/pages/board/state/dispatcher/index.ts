@@ -1,9 +1,8 @@
 import { Player } from '@beelzebub/vs/domain';
-import { useUser } from '@supabase/auth-helpers-react';
 import { useCallback } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { useSendDataToOpponent } from '../../hooks/use-send-data-to-opponent';
 import { boardsState, BoardsState } from '../boards-state';
-import { dataConnectionState } from '../data-connection-state';
 import {
   Action,
   reducerChangeMemoryAction,
@@ -30,25 +29,23 @@ const getNewState = (
 
 export const useDispatcher = () => {
   const [, setBoards] = useRecoilState(boardsState);
-  const connection = useRecoilValue(dataConnectionState);
-  const user = useUser();
+  const send = useSendDataToOpponent();
 
   const dispatch = useCallback(
-    (action: Action) => {
-      const player: Player = user?.id === action.userId ? 'me' : 'opponent';
+    (actionPlayer: Player, action: Action) => {
       // 新しい状態をcommit
-      console.info(`[DISPATCH] ${player}: ${action.actionName}`);
+      console.info(`[DISPATCH] ${actionPlayer}: ${action.actionName}`);
       setBoards((current) => {
-        const newState = getNewState(player, { ...current }, action);
+        const newState = getNewState(actionPlayer, { ...current }, action);
         return newState;
       });
 
       // 自身のactionだった場合、対戦相手に通知する
-      if (player === 'me') {
-        connection?.send(action);
+      if (actionPlayer === 'me') {
+        send(action);
       }
     },
-    [connection, setBoards, user?.id]
+    [send, setBoards]
   );
 
   return dispatch;

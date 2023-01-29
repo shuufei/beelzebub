@@ -1,16 +1,13 @@
-import { User } from '@beelzebub/shared/domain';
 import { BoardState, Player } from '@beelzebub/vs/domain';
 import { z } from 'zod';
 import { BoardsState } from '../boards-state';
 
 export const Action = z.object({
-  userId: User.shape.userId,
   actionName: z.string(),
   data: z.any(),
 });
 
 type _Action<A, T> = {
-  userId: User['userId'];
   actionName: A;
   data: T;
 };

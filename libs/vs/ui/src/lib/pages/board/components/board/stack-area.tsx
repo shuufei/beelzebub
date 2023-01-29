@@ -1,5 +1,4 @@
-import { VStack, Text } from '@chakra-ui/react';
-import { useUser } from '@supabase/auth-helpers-react';
+import { Text, VStack } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
@@ -12,14 +11,12 @@ export const StackArea: FC = () => {
   const player = useContext(PlayerContext);
   const stackArea = useRecoilValue(boardStackAreaSelector(player));
   const dispatch = useDispatcher();
-  const user = useUser();
 
   const draw = () => {
-    if (player === 'opponent' || user == null) {
+    if (player === 'opponent') {
       return;
     }
-    dispatch({
-      userId: user.id,
+    dispatch('me', {
       actionName: 'draw',
       data: undefined,
     });

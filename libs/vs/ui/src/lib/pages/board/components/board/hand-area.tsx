@@ -30,10 +30,9 @@ export const HandArea: FC = () => {
       <Wrap spacing={2}>
         {handArea.map(({ id, card }) => {
           return (
-            <WrapItem>
+            <WrapItem key={id}>
               {player === 'me' ? (
                 <CardImg
-                  key={id}
                   categoryId={card.categoryId}
                   imgFileName={card.imgFileName}
                   width={CARD_WIDTH}

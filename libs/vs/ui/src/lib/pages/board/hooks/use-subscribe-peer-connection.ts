@@ -18,10 +18,8 @@ export const useSubscribePeerConnection = () => {
     const listener = (action: Action) => {
       try {
         Action.parse(action); // 念の為schema validate
-        console.info(
-          `[Peer] subscribe action: ${action.userId} ${action.actionName}`
-        );
-        dispatch(action);
+        console.info(`[Peer] subscribe action: ${action.actionName}`);
+        dispatch('opponent', action);
       } catch (error: unknown) {
         if (error instanceof ZodError) {
           console.error(error.errors);

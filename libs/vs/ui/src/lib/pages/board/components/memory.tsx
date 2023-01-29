@@ -1,6 +1,5 @@
 import { Player } from '@beelzebub/vs/domain';
 import { Box, Button, Center, HStack } from '@chakra-ui/react';
-import { useUser } from '@supabase/auth-helpers-react';
 import { FC, memo, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useDispatcher } from '../state/dispatcher';
@@ -65,15 +64,10 @@ const MemoryOneSide: FC<{
 export const Memory: FC = memo(() => {
   const memory = useRecoilValue(boardMemorySelector);
   const dispatch = useDispatcher();
-  const user = useUser();
 
   const changeMemory = useCallback(
     (count: number, player?: Player) => {
-      if (user == null) {
-        return;
-      }
-      dispatch({
-        userId: user.id,
+      dispatch('me', {
         actionName: 'change-memory',
         data: {
           player,
@@ -81,7 +75,7 @@ export const Memory: FC = memo(() => {
         },
       });
     },
-    [dispatch, user]
+    [dispatch]
   );
 
   return (
