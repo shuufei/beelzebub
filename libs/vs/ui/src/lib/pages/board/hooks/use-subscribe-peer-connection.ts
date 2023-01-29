@@ -3,7 +3,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { ZodError } from 'zod';
 import { boardsState } from '../state/boards-state';
 import { dataConnectionState } from '../state/data-connection-state';
-import { Action, useDispatcher } from '../state/dispatcher';
+import { useDispatcher } from '../state/dispatcher';
+import { Action } from '../state/dispatcher/actions';
 
 export const useSubscribePeerConnection = () => {
   const connection = useRecoilValue(dataConnectionState);
@@ -14,7 +15,7 @@ export const useSubscribePeerConnection = () => {
     if (connection == null) {
       return;
     }
-    connection.on('data', (action: Action) => {
+    const listener = (action: Action) => {
       try {
         Action.parse(action); // 念の為schema validate
         console.info(
@@ -27,6 +28,10 @@ export const useSubscribePeerConnection = () => {
         }
         throw error;
       }
-    });
+    };
+    connection.on('data', listener);
+    return () => {
+      connection.off('data', listener);
+    };
   }, [connection, dispatch, setBoards]);
 };
