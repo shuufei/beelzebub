@@ -4,7 +4,7 @@ import { Deck, flatDeckCards } from '@beelzebub/shared/domain';
 import { BoardState, initializeBoardCards, Player } from '@beelzebub/vs/domain';
 import { useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
-import { boardsState } from '../boards-state';
+import { boardsState } from '../state/boards-state';
 
 export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
   const [, setBoard] = useRecoilState(boardsState);

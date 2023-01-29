@@ -1,8 +1,9 @@
 import { Deck } from '@beelzebub/shared/domain';
-import { Box } from '@chakra-ui/react';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import { FC, memo, useContext } from 'react';
 import { PlayerContext } from '../../context/player-context';
-import { useInitializeBoard } from '../../state/mutate/use-initialize-board';
+import { useInitializeBoard } from '../../hooks/use-initialize-board';
+import { HandArea } from './hand-area';
 import { StackArea } from './stack-area';
 
 export const Board: FC<{ deckId: Deck['id'] }> = memo(({ deckId }) => {
@@ -10,8 +11,20 @@ export const Board: FC<{ deckId: Deck['id'] }> = memo(({ deckId }) => {
   useInitializeBoard(deckId, player);
 
   return (
-    <Box transform={player === 'opponent' ? 'rotate(180deg)' : ''}>
-      <StackArea />
-    </Box>
+    <VStack
+      transform={player === 'opponent' ? 'rotate(180deg)' : ''}
+      p={2}
+      w={'full'}
+      spacing={6}
+    >
+      <HStack justifyContent={'space-between'} w={'full'}>
+        <Box></Box>
+        <Box flex={1}></Box>
+        <Box>
+          <StackArea />
+        </Box>
+      </HStack>
+      <HandArea />
+    </VStack>
   );
 });

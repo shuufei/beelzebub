@@ -1,4 +1,11 @@
-import { Box, Button, Heading, HStack, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 import { FC } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Board } from './components/board';
@@ -24,23 +31,31 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
 
   return (
     <>
-      <Box>
+      <Box as="main">
         <Heading as="h1" hidden>
           battle board
         </Heading>
         <Box p={4}>
           <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
         </Box>
-        <PlayerContext.Provider value="opponent">
-          {opponentDeckId && <Board deckId={opponentDeckId} />}
-        </PlayerContext.Provider>
-        <HStack>
-          <Memory />
-          <Button onClick={onOpen}>デッキ選択</Button>
-        </HStack>
-        <PlayerContext.Provider value="me">
-          {meDeckId && <Board deckId={meDeckId} />}
-        </PlayerContext.Provider>
+        <VStack px={8}>
+          <PlayerContext.Provider value="opponent">
+            {opponentDeckId && <Board deckId={opponentDeckId} />}
+          </PlayerContext.Provider>
+
+          <HStack justifyContent={'center'} w={'full'}>
+            <Memory />
+          </HStack>
+          <HStack mt={2} justifyContent={'flex-end'} w={'full'}>
+            <Button size={'sm'} onClick={onOpen}>
+              デッキ選択
+            </Button>
+          </HStack>
+
+          <PlayerContext.Provider value="me">
+            {meDeckId && <Board deckId={meDeckId} />}
+          </PlayerContext.Provider>
+        </VStack>
       </Box>
       <SelectDeckModalDialog isOpen={isOpen} onClose={onClose} />
     </>
