@@ -1,10 +1,11 @@
 import { useGetCardsByImgFileNames } from '@beelzebub/deck/db';
 import { useGetDeckJoinLatestDeckVersion } from '@beelzebub/shared/db';
 import { Deck, flatDeckCards } from '@beelzebub/shared/domain';
-import { BoardState, initializeBoardCards, Player } from '@beelzebub/vs/domain';
+import { initializeBoardCards, Player } from '@beelzebub/vs/domain';
 import { useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
 import { boardsState } from '../state/boards-state';
+import { useDispatcher } from '../state/dispatcher';
 
 export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
   const [, setBoard] = useRecoilState(boardsState);
@@ -17,7 +18,12 @@ export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
     return flatDeckCards(deck?.latestDeckVersion.cards ?? [], cards ?? []);
   }, [cards, deck?.latestDeckVersion.cards]);
 
+  const dispatch = useDispatcher();
+
   useEffect(() => {
+    if (player === 'opponent') {
+      return;
+    }
     if (flatted == null) {
       return;
     }
@@ -28,18 +34,13 @@ export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
     const stackBoardCards = boardCards.filter(
       (boardCard) => boardCard.card.cardtype !== 'デジタマ'
     );
-    setBoard((current) => {
-      const newPlayerBoardState: BoardState = {
-        ...current[player],
+    dispatch('me', {
+      actionName: 'set-deck',
+      data: {
+        deckId,
         stack: stackBoardCards,
         digitamaStack: digitamaStackBoardCards,
-      };
-      return {
-        ...current,
-        [player]: {
-          ...newPlayerBoardState,
-        },
-      };
+      },
     });
-  }, [cards, flatted, player, setBoard]);
+  }, [cards, deckId, dispatch, flatted, player, setBoard]);
 };

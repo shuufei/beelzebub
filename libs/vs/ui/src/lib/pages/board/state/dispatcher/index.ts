@@ -7,6 +7,7 @@ import {
   Action,
   reducerChangeMemoryAction,
   reducerDrawAction,
+  reducerSetDeckAction,
   reducerSyncAction,
 } from './actions';
 
@@ -22,6 +23,8 @@ const getNewState = (
       return reducerSyncAction(player, currentState, action.data);
     case 'change-memory':
       return reducerChangeMemoryAction(player, currentState, action.data);
+    case 'set-deck':
+      return reducerSetDeckAction(player, currentState, action.data);
     default:
       return currentState;
   }
