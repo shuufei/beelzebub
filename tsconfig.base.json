@@ -26,7 +26,8 @@
       "@beelzebub/shared/domain": ["libs/shared/domain/src/index.ts"],
       "@beelzebub/shared/errors": ["libs/shared/errors/src/index.ts"],
       "@beelzebub/shared/libs": ["libs/shared/libs/src/index.ts"],
-      "@beelzebub/shared/ui": ["libs/shared/ui/src/index.ts"]
+      "@beelzebub/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@beelzebub/vs/ui": ["libs/vs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
