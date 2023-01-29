@@ -1,6 +1,8 @@
-import { useGetDecksJoinLatestDeckVersion } from '@beelzebub/deck/db';
 import { DeckJoinedLatestDeckVersion } from '@beelzebub/deck/domain';
-import { useGetUsers } from '@beelzebub/shared/db';
+import {
+  useGetUsers,
+  useGetDecksJoinLatestDeckVersion,
+} from '@beelzebub/shared/db';
 import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
