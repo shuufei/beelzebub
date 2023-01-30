@@ -42,7 +42,7 @@ export const DeckCardListModalDialog: FC<{
     <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>デッキ カードリスト</ModalHeader>
+        <ModalHeader fontSize={'md'}>デッキ カードリスト</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Wrap spacing={3}>

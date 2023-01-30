@@ -8,6 +8,7 @@ import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
 import { SecurityArea } from './security-area';
 import { StackArea } from './stack-area';
+import { TrashArea } from './trash-area';
 
 export const Board: FC = memo(() => {
   const player = useContext(PlayerContext);
@@ -31,9 +32,10 @@ export const Board: FC = memo(() => {
           <DigitamaStackArea />
         </VStack>
         <Box flex={1}></Box>
-        <Box>
+        <VStack spacing={3}>
           <StackArea />
-        </Box>
+          <TrashArea />
+        </VStack>
       </HStack>
       <HandArea />
     </VStack>

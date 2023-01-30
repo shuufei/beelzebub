@@ -60,6 +60,14 @@ export const useSetupBoard = () => {
       digitamaStack: digitamaCards,
       security: securityCards,
       hand: handCards,
+      battleDigimon: [],
+      battleOption: [],
+      battleTamer: [],
+      securityOpen: [],
+      securitySelfCheck: [],
+      stackOpen: [],
+      standby: [],
+      trash: [],
     };
 
     dispatch('me', {
