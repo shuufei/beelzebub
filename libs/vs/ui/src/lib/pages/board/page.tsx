@@ -36,6 +36,9 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   const tmpTrash = () => {
     setBoards((current) => {
       const stack = [...current.me.stack];
+      if (stack.length < 4) {
+        return current;
+      }
       const newTrash = new Array(4).fill(null).reduce((acc) => {
         const card = stack.shift();
         return [...acc, card];
@@ -54,16 +57,42 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   const tmpOpenStack = () => {
     setBoards((current) => {
       const stack = [...current.me.stack];
+      if (stack.length < 2) {
+        return current;
+      }
       const newOpen = new Array(2).fill(null).reduce((acc) => {
         const card = stack.shift();
         return [...acc, card];
       }, []);
+
       return {
         ...current,
         me: {
           ...current.me,
           stack,
           stackOpen: [...current.me.stackOpen, ...newOpen],
+        },
+      };
+    });
+  };
+
+  const tmpOpenSecurity = () => {
+    setBoards((current) => {
+      const security = [...current.me.security];
+      if (security.length < 1) {
+        return current;
+      }
+
+      const newOpenSecurity = new Array(1).fill(null).reduce((acc) => {
+        const card = security.shift();
+        return [...acc, card];
+      }, []);
+      return {
+        ...current,
+        me: {
+          ...current.me,
+          security,
+          securityOpen: [...current.me.securityOpen, ...newOpenSecurity],
         },
       };
     });
@@ -97,7 +126,10 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
               tmp破棄
             </Button>
             <Button size={'xs'} onClick={tmpOpenStack}>
-              open
+              open stack
+            </Button>
+            <Button size={'xs'} onClick={tmpOpenSecurity}>
+              open security
             </Button>
           </HStack>
 

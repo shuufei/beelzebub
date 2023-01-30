@@ -4,16 +4,18 @@ import { FC, memo, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
-import { boardStackOpenAreaSelector } from '../../state/selectors/board-stack-open-area-selector';
+import { boardSecurityOpenAreaSelector } from '../../state/selectors/board-security-open-area-selector';
 
-export const StackOpenArea: FC = memo(() => {
+export const SecurityOpenArea: FC = memo(() => {
   const player = useContext(PlayerContext);
-  const stackOpenArea = useRecoilValue(boardStackOpenAreaSelector(player));
+  const securityOpenArea = useRecoilValue(
+    boardSecurityOpenAreaSelector(player)
+  );
 
-  return stackOpenArea.length > 0 ? (
-    <VStack spacing={1} justifyContent={'flex-end'}>
+  return securityOpenArea.length > 0 ? (
+    <VStack spacing={1} justifyContent={'flex-start'}>
       <HStack>
-        {stackOpenArea.map(({ card, id }) => {
+        {securityOpenArea.map(({ card, id }) => {
           return (
             <CardImg
               key={id}
