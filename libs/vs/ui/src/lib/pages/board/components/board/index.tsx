@@ -6,6 +6,7 @@ import { useInitializeBoard } from '../../hooks/use-initialize-board';
 import { boardDeckIdSelector } from '../../state/selectors/board-deck-id-selector';
 import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
+import { SecurityArea } from './security-area';
 import { StackArea } from './stack-area';
 
 export const Board: FC = memo(() => {
@@ -20,10 +21,15 @@ export const Board: FC = memo(() => {
       w={'full'}
       spacing={6}
     >
-      <HStack justifyContent={'space-between'} w={'full'}>
-        <Box>
+      <HStack
+        alignItems={'flex-start'}
+        justifyContent={'space-between'}
+        w={'full'}
+      >
+        <VStack spacing={3}>
+          <SecurityArea />
           <DigitamaStackArea />
-        </Box>
+        </VStack>
         <Box flex={1}></Box>
         <Box>
           <StackArea />
