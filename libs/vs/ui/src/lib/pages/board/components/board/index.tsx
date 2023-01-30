@@ -10,6 +10,7 @@ import { SecurityArea } from './security-area';
 import { SecurityOpenArea } from './security-open-area';
 import { StackArea } from './stack-area';
 import { StackOpenArea } from './stack-open-area';
+import { StandbyArea } from './standby-area';
 import { TrashArea } from './trash-area';
 
 export const Board: FC = memo(() => {
@@ -33,9 +34,12 @@ export const Board: FC = memo(() => {
         justifyContent={'space-between'}
         w={'full'}
       >
-        <VStack spacing={3}>
+        <VStack spacing={3} alignItems={'center'}>
           <SecurityArea />
-          <DigitamaStackArea />
+          <HStack alignItems={'flex-start'}>
+            <DigitamaStackArea />
+            <StandbyArea />
+          </HStack>
         </VStack>
         <Box flex={1}></Box>
         <VStack spacing={3}>

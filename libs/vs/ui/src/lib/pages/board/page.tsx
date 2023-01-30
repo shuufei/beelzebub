@@ -98,6 +98,28 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
     });
   };
 
+  const tmpHatching = () => {
+    setBoards((current) => {
+      const digitama = [...current.me.digitamaStack];
+      if (digitama.length < 1) {
+        return current;
+      }
+      const standby = new Array(1).fill(null).reduce((acc) => {
+        const card = digitama.shift();
+        return [...acc, card];
+      }, []);
+
+      return {
+        ...current,
+        me: {
+          ...current.me,
+          digitamaStack: digitama,
+          standby: [...current.me.standby, ...standby],
+        },
+      };
+    });
+  };
+
   return (
     <>
       <Box as="main">
@@ -130,6 +152,9 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
             </Button>
             <Button size={'xs'} onClick={tmpOpenSecurity}>
               open security
+            </Button>
+            <Button size={'xs'} onClick={tmpHatching}>
+              孵化
             </Button>
           </HStack>
 
