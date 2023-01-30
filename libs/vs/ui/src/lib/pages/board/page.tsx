@@ -51,6 +51,24 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
     });
   };
 
+  const tmpOpenStack = () => {
+    setBoards((current) => {
+      const stack = [...current.me.stack];
+      const newOpen = new Array(2).fill(null).reduce((acc) => {
+        const card = stack.shift();
+        return [...acc, card];
+      }, []);
+      return {
+        ...current,
+        me: {
+          ...current.me,
+          stack,
+          stackOpen: [...current.me.stackOpen, ...newOpen],
+        },
+      };
+    });
+  };
+
   return (
     <>
       <Box as="main">
@@ -69,14 +87,17 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
             <Memory />
           </HStack>
           <HStack mt={2} justifyContent={'flex-end'} w={'full'}>
-            <Button size={'sm'} onClick={onOpen}>
+            <Button size={'xs'} onClick={onOpen}>
               デッキ選択
             </Button>
-            <Button size={'sm'} onClick={setup}>
+            <Button size={'xs'} onClick={setup}>
               対戦セットアップ
             </Button>
-            <Button size={'sm'} onClick={tmpTrash}>
+            <Button size={'xs'} onClick={tmpTrash}>
               tmp破棄
+            </Button>
+            <Button size={'xs'} onClick={tmpOpenStack}>
+              open
             </Button>
           </HStack>
 

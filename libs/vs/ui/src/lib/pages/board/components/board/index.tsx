@@ -8,6 +8,7 @@ import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
 import { SecurityArea } from './security-area';
 import { StackArea } from './stack-area';
+import { StackOpenArea } from './stack-open-area';
 import { TrashArea } from './trash-area';
 
 export const Board: FC = memo(() => {
@@ -20,8 +21,12 @@ export const Board: FC = memo(() => {
       transform={player === 'opponent' ? 'rotate(180deg)' : ''}
       p={2}
       w={'full'}
-      spacing={6}
+      spacing={3}
     >
+      <HStack justifyContent={'space-between'} w={'full'}>
+        <Box>hoge</Box>
+        <StackOpenArea />
+      </HStack>
       <HStack
         alignItems={'flex-start'}
         justifyContent={'space-between'}
