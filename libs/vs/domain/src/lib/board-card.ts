@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 export type BoardCard = {
   id: string;
   card: Card;
-  evolutionOriginCards: Card[];
+  evolutionOriginCards: BoardCard[];
   isRest: boolean;
 };
 

@@ -4,13 +4,15 @@ import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
 import { useDispatcher } from '../../state/dispatcher';
-import { boardStackAreaSelector } from '../../state/selectors/board-stack-area-selector';
+import { boardDigitamaStackAreaSelector } from '../../state/selectors/board-digitama-stack-area-selector';
 import { AreaEmptyImg } from '../area-empty-img';
-import { CardBackImg } from '../card-back-img';
+import { DigitamaCardBackImg } from '../digitama-card-back-img';
 
-export const StackArea: FC = memo(() => {
+export const DigitamaStackArea: FC = memo(() => {
   const player = useContext(PlayerContext);
-  const stackArea = useRecoilValue(boardStackAreaSelector(player));
+  const digitamaStackArea = useRecoilValue(
+    boardDigitamaStackAreaSelector(player)
+  );
   const dispatch = useDispatcher();
 
   const draw = () => {
@@ -25,14 +27,14 @@ export const StackArea: FC = memo(() => {
 
   return (
     <VStack spacing={1}>
-      {stackArea.length > 0 ? (
-        <CardBackImg width={CARD_WIDTH} onClick={draw} />
+      {digitamaStackArea.length > 0 ? (
+        <DigitamaCardBackImg width={CARD_WIDTH} onClick={draw} />
       ) : (
         <AreaEmptyImg width={CARD_WIDTH} />
       )}
 
       <Text fontSize={'xs'} fontWeight={'semibold'}>
-        {stackArea.length}
+        {digitamaStackArea.length}
       </Text>
     </VStack>
   );

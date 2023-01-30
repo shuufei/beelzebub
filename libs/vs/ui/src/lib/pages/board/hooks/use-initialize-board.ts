@@ -3,16 +3,15 @@ import { useGetDeckJoinLatestDeckVersion } from '@beelzebub/shared/db';
 import { Deck, flatDeckCards } from '@beelzebub/shared/domain';
 import { initializeBoardCards, Player } from '@beelzebub/vs/domain';
 import { useEffect, useMemo } from 'react';
-import { useRecoilState } from 'recoil';
-import { boardsState } from '../state/boards-state';
 import { useDispatcher } from '../state/dispatcher';
 
-export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
-  const [, setBoard] = useRecoilState(boardsState);
-
+export const useInitializeBoard = (player: Player, deckId?: Deck['id']) => {
   const { data: deck } = useGetDeckJoinLatestDeckVersion(deckId);
-  const imgFileNames = deck?.latestDeckVersion.cards.map((v) => v.imgFileName);
-  const { data: cards } = useGetCardsByImgFileNames(imgFileNames ?? []);
+  const imgFileNames = useMemo(
+    () => deck?.latestDeckVersion.cards.map((v) => v.imgFileName),
+    [deck?.latestDeckVersion.cards]
+  );
+  const { data: cards } = useGetCardsByImgFileNames(imgFileNames);
 
   const flatted = useMemo(() => {
     return flatDeckCards(deck?.latestDeckVersion.cards ?? [], cards ?? []);
@@ -24,7 +23,7 @@ export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
     if (player === 'opponent') {
       return;
     }
-    if (flatted == null) {
+    if (flatted == null || deckId == null) {
       return;
     }
     const boardCards = initializeBoardCards(flatted);
@@ -42,5 +41,5 @@ export const useInitializeBoard = (deckId: Deck['id'], player: Player) => {
         digitamaStack: digitamaStackBoardCards,
       },
     });
-  }, [cards, deckId, dispatch, flatted, player, setBoard]);
+  }, [cards, deckId, dispatch, flatted, player]);
 };

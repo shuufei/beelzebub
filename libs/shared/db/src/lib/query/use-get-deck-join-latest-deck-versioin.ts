@@ -7,10 +7,10 @@ import { DeckDBJoinedDeckVersionsDB } from '../deck-joined-deck-versions';
 import { DeckVersionDB, convertToDeckVersion } from '../deck-versions';
 import { convertToDeck } from '../decks';
 
-export const useGetDeckJoinLatestDeckVersion = (deckId: Deck['id']) => {
+export const useGetDeckJoinLatestDeckVersion = (deckId?: Deck['id']) => {
   const supabaseClient = useSupabaseClient();
   return useSWR(
-    `/supabase/db/me/decks/${deckId}?joinLatestDeckVersion`,
+    deckId && `/supabase/db/me/decks/${deckId}?joinLatestDeckVersion`,
     async () => {
       const { data } = await supabaseClient
         .from('decks')

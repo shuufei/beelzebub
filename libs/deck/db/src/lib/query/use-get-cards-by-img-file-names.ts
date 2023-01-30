@@ -5,16 +5,17 @@ import { z } from 'zod';
 import useSWR from 'swr';
 
 export const useGetCardsByImgFileNames = (
-  imgFileNames: Card['imgFileName'][]
+  imgFileNames?: Card['imgFileName'][]
 ) => {
   const supabaseClient = useSupabaseClient();
   return useSWR(
-    `/supabase/database/cards?imgFileNames=${imgFileNames.join(',')}`,
+    imgFileNames &&
+      `/supabase/database/cards?imgFileNames=${imgFileNames.join(',')}`,
     async () => {
       const res = await supabaseClient
         .from('cards')
         .select()
-        .in('img_file_name', imgFileNames);
+        .in('img_file_name', imgFileNames ?? []);
       if (res.error != null) {
         console.error('failed get cards: ', res.error);
         return [];

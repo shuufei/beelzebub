@@ -7,14 +7,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FC } from 'react';
-import { useRecoilValue } from 'recoil';
 import { Board } from './components/board';
 import { Memory } from './components/memory';
 import { PeerConnectionSetUpAccordion } from './components/peer-connection-accordion';
 import { SelectDeckModalDialog } from './components/select-deck-modal-dialog';
 import { PlayerContext } from './context/player-context';
+import { useSetupBoard } from './hooks/use-setup-board';
 import { useSyncWhenConnected } from './hooks/use-sync-when-connected';
-import { boardDeckIdSelector } from './state/selectors/board-deck-id-selector';
 
 export type BoardPageProps = {
   skywayApiKey: string;
@@ -24,8 +23,12 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   useSyncWhenConnected();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const meDeckId = useRecoilValue(boardDeckIdSelector('me'));
-  const opponentDeckId = useRecoilValue(boardDeckIdSelector('opponent'));
+  const setupBoard = useSetupBoard();
+
+  const setup = () => {
+    setupBoard();
+    return;
+  };
 
   return (
     <>
@@ -38,7 +41,7 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
         </Box>
         <VStack px={8}>
           <PlayerContext.Provider value="opponent">
-            {opponentDeckId && <Board deckId={opponentDeckId} />}
+            <Board />
           </PlayerContext.Provider>
 
           <HStack justifyContent={'center'} w={'full'}>
@@ -48,10 +51,13 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
             <Button size={'sm'} onClick={onOpen}>
               デッキ選択
             </Button>
+            <Button size={'sm'} onClick={setup}>
+              対戦セットアップ
+            </Button>
           </HStack>
 
           <PlayerContext.Provider value="me">
-            {meDeckId && <Board deckId={meDeckId} />}
+            <Board />
           </PlayerContext.Provider>
         </VStack>
       </Box>

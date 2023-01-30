@@ -1,14 +1,17 @@
-import { Deck } from '@beelzebub/shared/domain';
 import { Box, HStack, VStack } from '@chakra-ui/react';
 import { FC, memo, useContext } from 'react';
+import { useRecoilValue } from 'recoil';
 import { PlayerContext } from '../../context/player-context';
 import { useInitializeBoard } from '../../hooks/use-initialize-board';
+import { boardDeckIdSelector } from '../../state/selectors/board-deck-id-selector';
+import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
 import { StackArea } from './stack-area';
 
-export const Board: FC<{ deckId: Deck['id'] }> = memo(({ deckId }) => {
+export const Board: FC = memo(() => {
   const player = useContext(PlayerContext);
-  useInitializeBoard(deckId, player);
+  const deckId = useRecoilValue(boardDeckIdSelector(player));
+  useInitializeBoard(player, deckId);
 
   return (
     <VStack
@@ -18,7 +21,9 @@ export const Board: FC<{ deckId: Deck['id'] }> = memo(({ deckId }) => {
       spacing={6}
     >
       <HStack justifyContent={'space-between'} w={'full'}>
-        <Box></Box>
+        <Box>
+          <DigitamaStackArea />
+        </Box>
         <Box flex={1}></Box>
         <Box>
           <StackArea />
