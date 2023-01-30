@@ -6,6 +6,7 @@ import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
 import { boardHandAreaSelector } from '../../state/selectors/board-hand-area-selector';
 import { CardBackImg } from '../card-back-img';
+import { ActionMenu } from './actioin-menu';
 
 export const HandArea: FC = memo(() => {
   const player = useContext(PlayerContext);
@@ -27,16 +28,42 @@ export const HandArea: FC = memo(() => {
         <Text>手札</Text>
         <Text>({handArea.length})</Text>
       </HStack>
-      <Wrap spacing={2}>
-        {handArea.map(({ id, card }) => {
+      <Wrap spacing={2} overflow={'visible'}>
+        {handArea.map((card) => {
           return (
-            <WrapItem key={id}>
+            <WrapItem key={card.id}>
               {player === 'me' ? (
-                <CardImg
-                  categoryId={card.categoryId}
-                  imgFileName={card.imgFileName}
-                  width={CARD_WIDTH}
-                />
+                <ActionMenu
+                  actionMenuItems={[
+                    {
+                      id: 'appear',
+                      label: '登場',
+                      onClick: () => {
+                        return;
+                      },
+                    },
+                    {
+                      id: 'trash',
+                      label: '破棄',
+                      onClick: () => {
+                        return;
+                      },
+                    },
+                    {
+                      id: 'appendToEvolutionOrigin',
+                      label: '進化元に追加',
+                      onClick: () => {
+                        return;
+                      },
+                    },
+                  ]}
+                >
+                  <CardImg
+                    categoryId={card.card.categoryId}
+                    imgFileName={card.card.imgFileName}
+                    width={CARD_WIDTH}
+                  />
+                </ActionMenu>
               ) : (
                 <CardBackImg width={CARD_WIDTH * 0.5} />
               )}
