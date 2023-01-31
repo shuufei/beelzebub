@@ -1,6 +1,7 @@
-import { HStack, VStack } from '@chakra-ui/react';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import { FC, memo, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
+import { BoardAreaContext } from '../../context/board-area-context';
 import { PlayerContext } from '../../context/player-context';
 import { useInitializeBoard } from '../../hooks/use-initialize-board';
 import { boardDeckIdSelector } from '../../state/selectors/board-deck-id-selector';
@@ -27,8 +28,12 @@ export const Board: FC = memo(() => {
       spacing={4}
     >
       <HStack justifyContent={'space-between'} w={'full'}>
-        <SecurityOpenArea />
-        <StackOpenArea />
+        <BoardAreaContext.Provider value={'securityOpen'}>
+          <SecurityOpenArea />
+        </BoardAreaContext.Provider>
+        <BoardAreaContext.Provider value={'stackOpen'}>
+          <StackOpenArea />
+        </BoardAreaContext.Provider>
       </HStack>
       <HStack
         alignItems={'flex-start'}
@@ -36,16 +41,30 @@ export const Board: FC = memo(() => {
         w={'full'}
       >
         <VStack spacing={3} alignItems={'center'}>
-          <SecurityArea />
+          <BoardAreaContext.Provider value={'security'}>
+            <SecurityArea />
+          </BoardAreaContext.Provider>
           <HStack alignItems={'flex-start'}>
-            <DigitamaStackArea />
-            <StandbyArea />
+            <BoardAreaContext.Provider value={'digitamaStack'}>
+              <DigitamaStackArea />
+            </BoardAreaContext.Provider>
+            <BoardAreaContext.Provider value={'standby'}>
+              <StandbyArea />
+            </BoardAreaContext.Provider>
           </HStack>
         </VStack>
-        <BattleArea />
+
+        <Box>
+          <BattleArea />
+        </Box>
+
         <VStack spacing={3}>
-          <StackArea />
-          <TrashArea />
+          <BoardAreaContext.Provider value={'stack'}>
+            <StackArea />
+          </BoardAreaContext.Provider>
+          <BoardAreaContext.Provider value={'trash'}>
+            <TrashArea />
+          </BoardAreaContext.Provider>
         </VStack>
       </HStack>
       <HandArea />

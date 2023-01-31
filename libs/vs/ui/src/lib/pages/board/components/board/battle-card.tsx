@@ -4,6 +4,7 @@ import { Box, Button, VStack, Wrap } from '@chakra-ui/react';
 import { FC, memo, useCallback, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
+import { BoardAreaContext } from '../../context/board-area-context';
 import { PlayerContext } from '../../context/player-context';
 import { useDispatchAddToEvolutionOrigin } from '../../hooks/use-dispatch-add-to-evolution-origin';
 import { useDispatchEvolution } from '../../hooks/use-dispatch-evolution';
@@ -12,27 +13,30 @@ import { actionModeSelector } from '../../state/selectors/actioin-mode-selector'
 export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
   const actionMode = useRecoilValue(actionModeSelector);
   const player = useContext(PlayerContext);
+  const boardArea = useContext(BoardAreaContext);
   const dispatchEvolution = useDispatchEvolution();
   const dispatchAddToEvolutionOrigin = useDispatchAddToEvolutionOrigin();
 
   const commitMode = useCallback(() => {
-    // TODO: 育成エリアの考慮
-    const currentArea =
-      card.card.cardtype === 'オプション'
-        ? 'battleOption'
-        : card.card.cardtype === 'テイマー'
-        ? 'battleTamer'
-        : 'battleDigimon';
+    if (boardArea == null) {
+      throw new Error('boardArea context is undefined');
+    }
     switch (actionMode.mode) {
       case 'evolution':
-        dispatchEvolution(card, currentArea);
+        dispatchEvolution(card, boardArea);
         return;
       case 'addToEvolutionOrigin':
         // TODO: select add index
-        dispatchAddToEvolutionOrigin(card, currentArea);
+        dispatchAddToEvolutionOrigin(card, boardArea);
         return;
     }
-  }, [actionMode.mode, card, dispatchAddToEvolutionOrigin, dispatchEvolution]);
+  }, [
+    actionMode.mode,
+    boardArea,
+    card,
+    dispatchAddToEvolutionOrigin,
+    dispatchEvolution,
+  ]);
 
   return (
     <VStack>

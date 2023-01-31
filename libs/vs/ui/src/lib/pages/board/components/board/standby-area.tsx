@@ -7,6 +7,7 @@ import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
 import { boardStandbyAreaSelector } from '../../state/selectors/board-standby-area-selector';
 import { AreaEmptyImg } from '../area-empty-img';
+import { BattleCard } from './battle-card';
 
 export const StandbyArea: FC = memo(() => {
   const player = useContext(PlayerContext);
@@ -14,17 +15,9 @@ export const StandbyArea: FC = memo(() => {
   const standbyCard = useMemo(() => {
     return last(standbyArea);
   }, [standbyArea]);
-  return (
-    <VStack spacing={1}>
-      {standbyCard != null ? (
-        <CardImg
-          width={CARD_WIDTH}
-          categoryId={standbyCard.card.categoryId}
-          imgFileName={standbyCard.card.imgFileName}
-        />
-      ) : (
-        <AreaEmptyImg width={CARD_WIDTH} />
-      )}
-    </VStack>
+  return standbyCard != null ? (
+    <BattleCard card={standbyCard} />
+  ) : (
+    <AreaEmptyImg width={CARD_WIDTH} />
   );
 });
