@@ -1,3 +1,4 @@
+import { AddToEvolutionOriginAction } from './add-to-evolution-origin-action';
 import { ChangeCardStateAction } from './change-card-state-action';
 import type { ChangeMemoryAction } from './change-memory-action';
 import type { DrawAction } from './draw-action';
@@ -18,4 +19,5 @@ export type Action =
   | SetDeckAction
   | MoveAction
   | ChangeCardStateAction
-  | EvolutionAction;
+  | EvolutionAction
+  | AddToEvolutionOriginAction;

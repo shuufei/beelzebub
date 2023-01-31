@@ -5,6 +5,7 @@ import { FC, memo, useCallback, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
+import { useDispatchAddToEvolutionOrigin } from '../../hooks/use-dispatch-add-to-evolution-origin';
 import { useDispatchEvolution } from '../../hooks/use-dispatch-evolution';
 import { actionModeSelector } from '../../state/selectors/actioin-mode-selector';
 
@@ -12,8 +13,10 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
   const actionMode = useRecoilValue(actionModeSelector);
   const player = useContext(PlayerContext);
   const dispatchEvolution = useDispatchEvolution();
+  const dispatchAddToEvolutionOrigin = useDispatchAddToEvolutionOrigin();
 
   const commitMode = useCallback(() => {
+    // TODO: 育成エリアの考慮
     const currentArea =
       card.card.cardtype === 'オプション'
         ? 'battleOption'
@@ -26,11 +29,10 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
         return;
       case 'addToEvolutionOrigin':
         // TODO: select add index
-        // TODO: dispatch addToEvolutionOrigin
-        // TODO: reset actionMode
+        dispatchAddToEvolutionOrigin(card, currentArea);
         return;
     }
-  }, [actionMode.mode, card, dispatchEvolution]);
+  }, [actionMode.mode, card, dispatchAddToEvolutionOrigin, dispatchEvolution]);
 
   return (
     <VStack>

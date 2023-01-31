@@ -10,6 +10,7 @@ import {
   reducerSetDeckAction,
   reducerSyncAction,
 } from './actions';
+import { reducerAddToEvolutionOriginAction } from './actions/add-to-evolution-origin-action';
 import { reducerChangeCardStateAction } from './actions/change-card-state-action';
 import { reducerEvolutionAction } from './actions/evolution-action';
 import { reducerMoveAction } from './actions/move-action';
@@ -34,6 +35,12 @@ const getNewState = (
       return reducerChangeCardStateAction(player, currentState, action.data);
     case 'evolution':
       return reducerEvolutionAction(player, currentState, action.data);
+    case 'add-to-evolution-origin':
+      return reducerAddToEvolutionOriginAction(
+        player,
+        currentState,
+        action.data
+      );
     default:
       return currentState;
   }
