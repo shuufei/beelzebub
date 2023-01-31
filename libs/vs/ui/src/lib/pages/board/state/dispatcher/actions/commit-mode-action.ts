@@ -47,11 +47,48 @@ export const reducerCommitModeAction: Reducer<CommitModeAction> = (
           [srcArea]: srcCards,
           [destArea]: destCards,
         },
+        actionMode: {
+          mode: 'none',
+        },
+      };
+    }
+    case 'addToEvolutionOrigin': {
+      // TODO: 挿入位置を指定できるようにする
+      const srcArea = trigger.area;
+      const destArea = data.area;
+      const srcCard = { ...trigger.card };
+      const selectedCard = { ...data.card };
+      selectedCard.evolutionOriginCards = [
+        ...selectedCard.evolutionOriginCards,
+        srcCard,
+        ...srcCard.evolutionOriginCards,
+      ];
+      srcCard.evolutionOriginCards = [];
+      const destCards = [...currentState.me[destArea]];
+      const index = destCards.findIndex((v) => v.id === data.card.id);
+      destCards.splice(index, 1, selectedCard);
+      const srcCards = currentState.me[srcArea].filter(
+        (v) => v.id !== srcCard.id
+      );
+      console.log('---- ', srcCards, destCards);
+      return {
+        ...currentState,
+        me: {
+          ...currentState.me,
+          [srcArea]: srcCards,
+          [destArea]: destCards,
+        },
+        actionMode: {
+          mode: 'none',
+        },
       };
     }
     default:
       return {
         ...currentState,
+        actionMode: {
+          mode: 'none',
+        },
       };
   }
 };
