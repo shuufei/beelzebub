@@ -1,5 +1,5 @@
 import { BoardState } from '@beelzebub/vs/domain';
-import { Reducer, _Action } from '.';
+import { Reducer, _Action } from './action-type';
 
 export type SyncAction = _Action<'sync', BoardState>;
 export const reducerSyncAction: Reducer<SyncAction> = (

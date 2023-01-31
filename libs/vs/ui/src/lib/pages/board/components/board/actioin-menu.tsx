@@ -1,30 +1,61 @@
 import {
   Box,
   Button,
-  Text,
   useDisclosure,
   useOutsideClick,
   VStack,
 } from '@chakra-ui/react';
-import { FC, memo, ReactNode, useRef } from 'react';
+import { FC, memo, ReactNode, useContext, useRef } from 'react';
+import { PlayerContext } from '../../context/player-context';
 
-type ActionMenuItem = {
-  id: string;
+export type CardAction =
+  | 'appear'
+  | 'appearAsDigimon'
+  | 'evolution'
+  | 'rest'
+  | 'active'
+  | 'trash'
+  | 'addToHand'
+  | 'reverseToStackTop'
+  | 'reverseToStackBottom'
+  | 'degeneration'
+  | 'addToSecurityTop'
+  | 'addToSecurityBottom'
+  | 'addToEvolutionOrigin'
+  | 'reverseToDigitamaStackTop'
+  | 'reverseToDigitamaStackBottom';
+
+export type AreaAction =
+  | 'shuffle'
+  | 'openStack'
+  | 'draw'
+  | 'recovery'
+  | 'selfCheck'
+  | 'reverseToOriginalLocation'
+  | 'hatching'
+  | 'restAll'
+  | 'activeAll'
+  | 'trashAll';
+
+export type ActionMenuItem = {
+  id: CardAction | AreaAction;
   label: string;
-  onClick: () => void;
+  // onClick: () => void;
 };
 
 export const ActionMenu: FC<{
   children: ReactNode;
   actionMenuItems?: ActionMenuItem[];
-}> = memo(({ children, actionMenuItems }) => {
+  onClickAction?: (actionId: ActionMenuItem['id']) => void;
+}> = memo(({ children, actionMenuItems, onClickAction }) => {
+  const player = useContext(PlayerContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const ref = useRef(null);
   useOutsideClick({
     ref: ref,
     handler: () => onClose(),
   });
-  return (
+  return player === 'me' ? (
     <Box
       onContextMenu={(event) => {
         event.preventDefault();
@@ -57,7 +88,8 @@ export const ActionMenu: FC<{
                 px={4}
                 w={'full'}
                 onClick={() => {
-                  item.onClick();
+                  // item.onClick();
+                  onClickAction?.(item.id);
                   onClose();
                 }}
               >
@@ -68,5 +100,8 @@ export const ActionMenu: FC<{
         </VStack>
       )}
     </Box>
+  ) : (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>{children}</>
   );
 });

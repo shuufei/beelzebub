@@ -1,9 +1,10 @@
-import { Box, HStack, VStack } from '@chakra-ui/react';
+import { HStack, VStack } from '@chakra-ui/react';
 import { FC, memo, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { PlayerContext } from '../../context/player-context';
 import { useInitializeBoard } from '../../hooks/use-initialize-board';
 import { boardDeckIdSelector } from '../../state/selectors/board-deck-id-selector';
+import { BattleArea } from './battle-area';
 import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
 import { SecurityArea } from './security-area';
@@ -23,7 +24,7 @@ export const Board: FC = memo(() => {
       transform={player === 'opponent' ? 'rotate(180deg)' : ''}
       p={2}
       w={'full'}
-      spacing={3}
+      spacing={4}
     >
       <HStack justifyContent={'space-between'} w={'full'}>
         <SecurityOpenArea />
@@ -41,7 +42,7 @@ export const Board: FC = memo(() => {
             <StandbyArea />
           </HStack>
         </VStack>
-        <Box flex={1}></Box>
+        <BattleArea />
         <VStack spacing={3}>
           <StackArea />
           <TrashArea />

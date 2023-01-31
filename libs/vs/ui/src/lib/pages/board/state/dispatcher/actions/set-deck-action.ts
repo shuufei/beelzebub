@@ -1,5 +1,5 @@
 import { BoardState, INITIALI_BOARD_STATE } from '@beelzebub/vs/domain';
-import { Reducer, _Action } from '.';
+import { Reducer, _Action } from './action-type';
 
 export type SetDeckAction = _Action<
   'set-deck',

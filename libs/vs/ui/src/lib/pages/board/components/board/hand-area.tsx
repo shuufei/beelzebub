@@ -1,16 +1,58 @@
 import { CardImg } from '@beelzebub/shared/ui';
+import { BoardArea, BoardCard } from '@beelzebub/vs/domain';
 import { HStack, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import { FC, memo, useContext } from 'react';
+import { FC, memo, useCallback, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
+import { useDispatcher } from '../../state/dispatcher';
 import { boardHandAreaSelector } from '../../state/selectors/board-hand-area-selector';
 import { CardBackImg } from '../card-back-img';
-import { ActionMenu } from './actioin-menu';
+import { ActionMenu, ActionMenuItem } from './actioin-menu';
+import { CARD_ACTIONS } from './board-actions';
 
 export const HandArea: FC = memo(() => {
   const player = useContext(PlayerContext);
   const handArea = useRecoilValue(boardHandAreaSelector(player));
+
+  const dispatch = useDispatcher();
+
+  const actionMenuItems: ActionMenuItem[] = [
+    CARD_ACTIONS.appear,
+    CARD_ACTIONS.evolution,
+    CARD_ACTIONS.trash,
+    CARD_ACTIONS.reverseToStackTop,
+    CARD_ACTIONS.reverseToStackBottom,
+    CARD_ACTIONS.addToSecurityTop,
+    CARD_ACTIONS.addToSecurityBottom,
+    CARD_ACTIONS.addToEvolutionOrigin,
+  ];
+
+  const onClickActionMenuItem = useCallback(
+    (actionId: ActionMenuItem['id'], card: BoardCard) => {
+      switch (actionId) {
+        case 'appear': {
+          const destArea: BoardArea =
+            card.card.cardtype === 'オプション'
+              ? 'battleOption'
+              : card.card.cardtype === 'テイマー'
+              ? 'battleTamer'
+              : 'battleDigimon';
+          dispatch('me', {
+            actionName: 'move',
+            data: {
+              srcArea: 'hand',
+              destArea: destArea,
+              card,
+              position: 'bottom',
+            },
+          });
+          return;
+        }
+      }
+    },
+    []
+  );
 
   return (
     <VStack
@@ -34,29 +76,10 @@ export const HandArea: FC = memo(() => {
             <WrapItem key={card.id}>
               {player === 'me' ? (
                 <ActionMenu
-                  actionMenuItems={[
-                    {
-                      id: 'appear',
-                      label: '登場',
-                      onClick: () => {
-                        return;
-                      },
-                    },
-                    {
-                      id: 'trash',
-                      label: '破棄',
-                      onClick: () => {
-                        return;
-                      },
-                    },
-                    {
-                      id: 'appendToEvolutionOrigin',
-                      label: '進化元に追加',
-                      onClick: () => {
-                        return;
-                      },
-                    },
-                  ]}
+                  actionMenuItems={actionMenuItems}
+                  onClickAction={(id) => {
+                    onClickActionMenuItem(id, card);
+                  }}
                 >
                   <CardImg
                     categoryId={card.card.categoryId}

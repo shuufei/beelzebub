@@ -1,5 +1,5 @@
 import { Player } from '@beelzebub/vs/domain';
-import { Reducer, _Action } from '.';
+import { Reducer, _Action } from './action-type';
 
 export type ChangeMemoryAction = _Action<
   'change-memory',

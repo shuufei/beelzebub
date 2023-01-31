@@ -1,5 +1,5 @@
 import { BoardState } from '@beelzebub/vs/domain';
-import { Reducer, _Action } from '.';
+import { Reducer, _Action } from './action-type';
 
 export type DrawAction = _Action<'draw', undefined>;
 export const reducerDrawAction: Reducer<DrawAction> = (

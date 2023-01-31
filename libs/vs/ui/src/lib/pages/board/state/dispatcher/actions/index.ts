@@ -1,32 +1,17 @@
-import { Player } from '@beelzebub/vs/domain';
-import { z } from 'zod';
-import { BoardsState } from '../../boards-state';
 import type { ChangeMemoryAction } from './change-memory-action';
 import type { DrawAction } from './draw-action';
-import type { SyncAction } from './sync-action';
+import { MoveAction } from './move-action';
 import type { SetDeckAction } from './set-deck-action';
+import type { SyncAction } from './sync-action';
+export * from './action-type';
 export * from './change-memory-action';
 export * from './draw-action';
-export * from './sync-action';
 export * from './set-deck-action';
-
-export const Action = z.object({
-  actionName: z.string(),
-  data: z.any(),
-});
-
-export type _Action<A, T> = {
-  actionName: A;
-  data: T;
-};
-export type Reducer<T extends _Action<unknown, unknown>> = (
-  player: Player,
-  currentState: BoardsState,
-  data: T['data']
-) => BoardsState;
+export * from './sync-action';
 
 export type Action =
   | ChangeMemoryAction
   | DrawAction
   | SyncAction
-  | SetDeckAction;
+  | SetDeckAction
+  | MoveAction;

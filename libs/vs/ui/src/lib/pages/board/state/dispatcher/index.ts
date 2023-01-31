@@ -10,6 +10,7 @@ import {
   reducerSetDeckAction,
   reducerSyncAction,
 } from './actions';
+import { reducerMoveAction } from './actions/move-action';
 
 const getNewState = (
   player: Player,
@@ -25,6 +26,8 @@ const getNewState = (
       return reducerChangeMemoryAction(player, currentState, action.data);
     case 'set-deck':
       return reducerSetDeckAction(player, currentState, action.data);
+    case 'move':
+      return reducerMoveAction(player, currentState, action.data);
     default:
       return currentState;
   }
