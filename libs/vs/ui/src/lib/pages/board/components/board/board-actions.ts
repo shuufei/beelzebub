@@ -1,7 +1,7 @@
-import { AreaAction, CardAction } from './actioin-menu';
+import { ActionMenuItem, AreaAction, CardAction } from './actioin-menu';
 
 export const CARD_ACTIONS: {
-  [key in CardAction]: { id: key; label: string };
+  [key in CardAction]: ActionMenuItem;
 } = {
   appear: {
     id: 'appear',
@@ -49,7 +49,7 @@ export const CARD_ACTIONS: {
   },
   addToSecurityBottom: {
     id: 'addToSecurityBottom',
-    label: '山札の下に戻す',
+    label: 'セキュリティの下に戻す',
   },
   addToEvolutionOrigin: {
     id: 'addToEvolutionOrigin',
@@ -66,7 +66,7 @@ export const CARD_ACTIONS: {
 };
 
 export const AREA_ACTIONS: {
-  [key in AreaAction]: { id: key; label: string };
+  [key in AreaAction]: ActionMenuItem;
 } = {
   shuffle: {
     id: 'shuffle',

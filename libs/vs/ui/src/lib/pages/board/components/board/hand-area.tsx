@@ -49,9 +49,68 @@ export const HandArea: FC = memo(() => {
           });
           return;
         }
+        case 'trash':
+          dispatch('me', {
+            actionName: 'move',
+            data: {
+              srcArea: 'hand',
+              destArea: 'trash',
+              card,
+              position: 'bottom',
+            },
+          });
+          return;
+        case 'reverseToStackTop':
+          dispatch('me', {
+            actionName: 'move',
+            data: {
+              srcArea: 'hand',
+              destArea: 'stack',
+              card,
+              position: 'top',
+            },
+          });
+          return;
+        case 'reverseToStackBottom':
+          dispatch('me', {
+            actionName: 'move',
+            data: {
+              srcArea: 'hand',
+              destArea: 'stack',
+              card,
+              position: 'bottom',
+            },
+          });
+          return;
+        case 'addToSecurityTop':
+          dispatch('me', {
+            actionName: 'move',
+            data: {
+              srcArea: 'hand',
+              destArea: 'security',
+              card,
+              position: 'top',
+            },
+          });
+          return;
+        case 'addToSecurityBottom':
+          dispatch('me', {
+            actionName: 'move',
+            data: {
+              srcArea: 'hand',
+              destArea: 'security',
+              card,
+              position: 'bottom',
+            },
+          });
+          return;
+        case 'evolution':
+        case 'addToEvolutionOrigin':
+          // TODO: mode
+          return;
       }
     },
-    []
+    [dispatch]
   );
 
   return (
