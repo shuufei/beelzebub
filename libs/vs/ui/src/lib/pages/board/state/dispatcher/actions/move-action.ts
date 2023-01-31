@@ -8,6 +8,7 @@ export type MoveAction = _Action<
     srcArea: BoardArea;
     destArea: BoardArea;
     position: 'top' | 'bottom';
+    withEvolutionOrigins?: boolean;
   }
 >;
 export const reducerMoveAction: Reducer<MoveAction> = (
@@ -19,10 +20,13 @@ export const reducerMoveAction: Reducer<MoveAction> = (
     (v) => v.id !== data.card.id
   );
   const currentDestAreaCards = [...currentState[player][data.destArea]];
+  const addedDestAreaCards = data.withEvolutionOrigins
+    ? [data.card, ...data.card.evolutionOriginCards]
+    : [data.card];
   const destAreaCards =
     data.position === 'top'
-      ? [data.card, ...currentDestAreaCards]
-      : [...currentDestAreaCards, data.card];
+      ? [...addedDestAreaCards, ...currentDestAreaCards]
+      : [...currentDestAreaCards, ...addedDestAreaCards];
 
   const newBoardState: BoardState = {
     ...currentState[player],

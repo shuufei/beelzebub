@@ -12,7 +12,7 @@ export const BattleTamerArea: FC = memo(() => {
   const battleTamer = useRecoilValue(boardBattleTamerAreaSelector(player));
 
   return (
-    <Wrap spacing={2} overflow={'visible'} justify={'center'} w={'full'}>
+    <Wrap spacing={4} overflow={'visible'} justify={'center'} w={'full'}>
       {battleTamer.map((card) => {
         return (
           <WrapItem key={card.id}>

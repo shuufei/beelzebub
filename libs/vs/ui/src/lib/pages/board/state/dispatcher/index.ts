@@ -10,6 +10,7 @@ import {
   reducerSetDeckAction,
   reducerSyncAction,
 } from './actions';
+import { reducerChangeCardStateAction } from './actions/change-card-state-action';
 import { reducerMoveAction } from './actions/move-action';
 
 const getNewState = (
@@ -28,6 +29,8 @@ const getNewState = (
       return reducerSetDeckAction(player, currentState, action.data);
     case 'move':
       return reducerMoveAction(player, currentState, action.data);
+    case 'chagne-card-state':
+      return reducerChangeCardStateAction(player, currentState, action.data);
     default:
       return currentState;
   }

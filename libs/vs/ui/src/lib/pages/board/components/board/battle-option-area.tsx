@@ -12,7 +12,7 @@ export const BattleOptionArea: FC = memo(() => {
   const battleOption = useRecoilValue(boardBattleOptionAreaSelector(player));
 
   return (
-    <Wrap spacing={2} overflow={'visible'} justify={'center'} w={'full'}>
+    <Wrap spacing={4} overflow={'visible'} justify={'center'} w={'full'}>
       {battleOption.map((card) => {
         return (
           <WrapItem key={card.id}>

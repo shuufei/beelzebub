@@ -1,3 +1,4 @@
+import { ChangeCardStateAction } from './change-card-state-action';
 import type { ChangeMemoryAction } from './change-memory-action';
 import type { DrawAction } from './draw-action';
 import { MoveAction } from './move-action';
@@ -14,4 +15,5 @@ export type Action =
   | DrawAction
   | SyncAction
   | SetDeckAction
-  | MoveAction;
+  | MoveAction
+  | ChangeCardStateAction;
