@@ -5,28 +5,32 @@ import { FC, memo, useCallback, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
-import { useDispatcher } from '../../state/dispatcher';
-import { boardActionModeSelector } from '../../state/selectors/board-actioin-mode-selector';
+import { useDispatchEvolution } from '../../hooks/use-dispatch-evolution';
+import { actionModeSelector } from '../../state/selectors/actioin-mode-selector';
 
 export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
-  const actionMode = useRecoilValue(boardActionModeSelector);
+  const actionMode = useRecoilValue(actionModeSelector);
   const player = useContext(PlayerContext);
-  const dispatch = useDispatcher();
+  const dispatchEvolution = useDispatchEvolution();
 
   const commitMode = useCallback(() => {
-    dispatch('me', {
-      actionName: 'commit-mode',
-      data: {
-        card,
-        area:
-          card.card.cardtype === 'オプション'
-            ? 'battleOption'
-            : card.card.cardtype === 'テイマー'
-            ? 'battleTamer'
-            : 'battleDigimon',
-      },
-    });
-  }, [card, dispatch]);
+    const currentArea =
+      card.card.cardtype === 'オプション'
+        ? 'battleOption'
+        : card.card.cardtype === 'テイマー'
+        ? 'battleTamer'
+        : 'battleDigimon';
+    switch (actionMode.mode) {
+      case 'evolution':
+        dispatchEvolution(card, currentArea);
+        return;
+      case 'addToEvolutionOrigin':
+        // TODO: select add index
+        // TODO: dispatch addToEvolutionOrigin
+        // TODO: reset actionMode
+        return;
+    }
+  }, [actionMode.mode, card, dispatchEvolution]);
 
   return (
     <VStack>

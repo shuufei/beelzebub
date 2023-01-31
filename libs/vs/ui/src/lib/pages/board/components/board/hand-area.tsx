@@ -2,9 +2,10 @@ import { CardImg } from '@beelzebub/shared/ui';
 import { BoardArea, BoardCard } from '@beelzebub/vs/domain';
 import { HStack, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import { FC, memo, useCallback, useContext } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
+import { actionModeState } from '../../state/action-mode-state';
 import { useDispatcher } from '../../state/dispatcher';
 import { boardHandAreaSelector } from '../../state/selectors/board-hand-area-selector';
 import { CardBackImg } from '../card-back-img';
@@ -14,6 +15,7 @@ import { CARD_ACTIONS } from './board-actions';
 export const HandArea: FC = memo(() => {
   const player = useContext(PlayerContext);
   const handArea = useRecoilValue(boardHandAreaSelector(player));
+  const [, setActionMode] = useRecoilState(actionModeState);
 
   const dispatch = useDispatcher();
 
@@ -105,32 +107,26 @@ export const HandArea: FC = memo(() => {
           });
           return;
         case 'evolution':
-          dispatch('me', {
-            actionName: 'set-mode',
+          setActionMode({
+            mode: 'evolution',
             data: {
-              mode: 'evolutioin',
-              trigger: {
-                card,
-                area: 'hand',
-              },
+              card,
+              area: 'hand',
             },
           });
           return;
         case 'addToEvolutionOrigin':
-          dispatch('me', {
-            actionName: 'set-mode',
+          setActionMode({
+            mode: 'addToEvolutionOrigin',
             data: {
-              mode: 'addToEvolutionOrigin',
-              trigger: {
-                card,
-                area: 'hand',
-              },
+              card,
+              area: 'hand',
             },
           });
           return;
       }
     },
-    [dispatch]
+    [dispatch, setActionMode]
   );
 
   return (

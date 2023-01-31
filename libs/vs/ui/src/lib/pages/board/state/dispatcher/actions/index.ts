@@ -1,10 +1,9 @@
 import { ChangeCardStateAction } from './change-card-state-action';
 import type { ChangeMemoryAction } from './change-memory-action';
-import { CommitModeAction } from './commit-mode-action';
 import type { DrawAction } from './draw-action';
+import { EvolutionAction } from './evolution-action';
 import { MoveAction } from './move-action';
 import type { SetDeckAction } from './set-deck-action';
-import { SetModeAction } from './set-mode-action';
 import type { SyncAction } from './sync-action';
 export * from './action-type';
 export * from './change-memory-action';
@@ -19,5 +18,4 @@ export type Action =
   | SetDeckAction
   | MoveAction
   | ChangeCardStateAction
-  | SetModeAction
-  | CommitModeAction;
+  | EvolutionAction;

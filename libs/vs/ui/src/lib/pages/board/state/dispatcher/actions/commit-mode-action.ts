@@ -1,6 +1,9 @@
 import { BoardArea, BoardCard } from '@beelzebub/vs/domain';
 import { Reducer, _Action } from './action-type';
 
+/**
+ * 進化元に追加処理を別ファイルに切り出したのちにこのファイルは削除する
+ */
 export type CommitModeAction = _Action<
   'commit-mode',
   {
@@ -8,6 +11,7 @@ export type CommitModeAction = _Action<
     area: BoardArea;
   }
 >;
+
 export const reducerCommitModeAction: Reducer<CommitModeAction> = (
   player,
   currentState,
@@ -24,34 +28,6 @@ export const reducerCommitModeAction: Reducer<CommitModeAction> = (
   const trigger = currentState.actionMode.trigger;
 
   switch (currentState.actionMode.mode) {
-    case 'evolutioin': {
-      const srcArea = trigger.area;
-      const destArea = data.area;
-      const evolutionCard = { ...trigger.card };
-      const selectedCard = { ...data.card };
-      evolutionCard.evolutionOriginCards = [
-        selectedCard,
-        ...selectedCard.evolutionOriginCards,
-      ];
-      selectedCard.evolutionOriginCards = [];
-      const destCards = [...currentState.me[destArea]];
-      const index = destCards.findIndex((v) => v.id === data.card.id);
-      destCards.splice(index, 1, evolutionCard);
-      const srcCards = currentState.me[srcArea].filter(
-        (v) => v.id !== evolutionCard.id
-      );
-      return {
-        ...currentState,
-        me: {
-          ...currentState.me,
-          [srcArea]: srcCards,
-          [destArea]: destCards,
-        },
-        actionMode: {
-          mode: 'none',
-        },
-      };
-    }
     case 'addToEvolutionOrigin': {
       // TODO: 挿入位置を指定できるようにする
       const srcArea = trigger.area;
