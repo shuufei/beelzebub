@@ -16,6 +16,7 @@ import { PlayerContext } from './context/player-context';
 import { useSetupBoard } from './hooks/use-setup-board';
 import { useSyncWhenConnected } from './hooks/use-sync-when-connected';
 import { boardsState } from './state/boards-state';
+import { useDispatcher } from './state/dispatcher';
 
 export type BoardPageProps = {
   skywayApiKey: string;
@@ -27,6 +28,8 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setupBoard = useSetupBoard();
   const [boards, setBoards] = useRecoilState(boardsState);
+
+  const dispatch = useDispatcher();
 
   const setup = () => {
     setupBoard();
@@ -120,6 +123,15 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
     });
   };
 
+  const cancelActionMode = () => {
+    dispatch('me', {
+      actionName: 'set-mode',
+      data: {
+        mode: 'none',
+      },
+    });
+  };
+
   return (
     <>
       <Box as="main">
@@ -156,6 +168,11 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
             <Button size={'xs'} onClick={tmpHatching}>
               孵化
             </Button>
+            {boards.actionMode.mode !== 'none' && (
+              <Button size={'xs'} onClick={cancelActionMode}>
+                mode キャンセル
+              </Button>
+            )}
           </HStack>
 
           <PlayerContext.Provider value="me">

@@ -6,6 +6,7 @@ import { CARD_WIDTH } from '../../constants/card-width';
 import { PlayerContext } from '../../context/player-context';
 import { boardBattleOptionAreaSelector } from '../../state/selectors/board-battle-option-area-selector';
 import { ActionMenu } from './actioin-menu';
+import { BattleCard } from './battle-card';
 
 export const BattleOptionArea: FC = memo(() => {
   const player = useContext(PlayerContext);
@@ -17,11 +18,7 @@ export const BattleOptionArea: FC = memo(() => {
         return (
           <WrapItem key={card.id}>
             <ActionMenu actionMenuItems={[]}>
-              <CardImg
-                categoryId={card.card.categoryId}
-                imgFileName={card.card.imgFileName}
-                width={CARD_WIDTH}
-              />
+              <BattleCard card={card} />
             </ActionMenu>
           </WrapItem>
         );

@@ -105,8 +105,28 @@ export const HandArea: FC = memo(() => {
           });
           return;
         case 'evolution':
+          dispatch('me', {
+            actionName: 'set-mode',
+            data: {
+              mode: 'evolutioin',
+              trigger: {
+                card,
+                area: 'hand',
+              },
+            },
+          });
+          return;
         case 'addToEvolutionOrigin':
-          // TODO: mode
+          dispatch('me', {
+            actionName: 'set-mode',
+            data: {
+              mode: 'addToEvolutionOrigin',
+              trigger: {
+                card,
+                area: 'hand',
+              },
+            },
+          });
           return;
       }
     },
