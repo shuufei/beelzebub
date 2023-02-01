@@ -8,7 +8,7 @@ export type MoveAction = _Action<
     srcArea: BoardArea;
     destArea: BoardArea;
     position: 'top' | 'bottom';
-    withEvolutionOrigins?: boolean;
+    withOutEvolutionOrigins?: boolean;
   }
 >;
 export const reducerMoveAction: Reducer<MoveAction> = (
@@ -16,13 +16,31 @@ export const reducerMoveAction: Reducer<MoveAction> = (
   currentState,
   data
 ) => {
+  const card = { ...data.card };
   const srcAreaCards = currentState[player][data.srcArea].filter(
-    (v) => v.id !== data.card.id
+    (v) => v.id !== card.id
   );
   const currentDestAreaCards = [...currentState[player][data.destArea]];
-  const addedDestAreaCards = data.withEvolutionOrigins
-    ? [data.card, ...data.card.evolutionOriginCards]
-    : [data.card];
+
+  const evolutionOriginCards = [...card.evolutionOriginCards];
+  card.evolutionOriginCards = [];
+  const addedDestAreaCards = data.withOutEvolutionOrigins
+    ? [card]
+    : [card, ...evolutionOriginCards];
+
+  // NOTE: 進化元を含めずに移動する場合は、進化元を元のエリアにとどめる
+  if (data.withOutEvolutionOrigins) {
+    const shiftted = evolutionOriginCards.shift();
+    if (shiftted != null) {
+      const srcCardCurrentIndex = currentState[player][data.srcArea].findIndex(
+        (v) => v.id === card.id
+      );
+      const remainedCard = { ...shiftted };
+      remainedCard.evolutionOriginCards = [...evolutionOriginCards];
+      srcAreaCards.splice(srcCardCurrentIndex, 0, remainedCard);
+    }
+  }
+
   const destAreaCards =
     data.position === 'top'
       ? [...addedDestAreaCards, ...currentDestAreaCards]

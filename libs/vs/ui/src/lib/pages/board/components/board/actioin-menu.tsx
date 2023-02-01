@@ -78,6 +78,7 @@ export const ActionMenu: FC<{
           borderColor={'gray.100'}
           borderRadius={'md'}
           boxShadow={'md'}
+          zIndex={'popover'}
         >
           {actionMenuItems?.map((item) => {
             return (
