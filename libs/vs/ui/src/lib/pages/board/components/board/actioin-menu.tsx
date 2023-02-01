@@ -10,7 +10,6 @@ import { PlayerContext } from '../../context/player-context';
 
 export type CardAction =
   | 'appear'
-  | 'appearAsDigimon'
   | 'evolution'
   | 'rest'
   | 'active'
