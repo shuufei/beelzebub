@@ -7,10 +7,6 @@ export const CARD_ACTIONS: {
     id: 'appear',
     label: '登場',
   },
-  appearAsDigimon: {
-    id: 'appearAsDigimon',
-    label: '登場',
-  },
   evolution: {
     id: 'evolution',
     label: '進化',
