@@ -39,7 +39,6 @@ export type AreaAction =
 export type ActionMenuItem = {
   id: CardAction | AreaAction;
   label: string;
-  // onClick: () => void;
 };
 
 export const ActionMenu: FC<{
@@ -77,7 +76,7 @@ export const ActionMenu: FC<{
           borderColor={'gray.100'}
           borderRadius={'md'}
           boxShadow={'md'}
-          zIndex={'popover'}
+          zIndex={'modal'}
         >
           {actionMenuItems?.map((item) => {
             return (
@@ -88,7 +87,6 @@ export const ActionMenu: FC<{
                 px={4}
                 w={'full'}
                 onClick={() => {
-                  // item.onClick();
                   onClickAction?.(item.id);
                   onClose();
                 }}
