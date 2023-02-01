@@ -22,12 +22,12 @@ export const HandArea: FC = memo(() => {
   const actionMenuItems: ActionMenuItem[] = [
     CARD_ACTIONS.appear,
     CARD_ACTIONS.evolution,
+    CARD_ACTIONS.addToEvolutionOrigin,
     CARD_ACTIONS.trash,
     CARD_ACTIONS.reverseToStackTop,
     CARD_ACTIONS.reverseToStackBottom,
     CARD_ACTIONS.addToSecurityTop,
     CARD_ACTIONS.addToSecurityBottom,
-    CARD_ACTIONS.addToEvolutionOrigin,
   ];
 
   const onClickActionMenuItem = useCallback(

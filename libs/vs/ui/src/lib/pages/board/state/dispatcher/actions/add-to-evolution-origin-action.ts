@@ -15,14 +15,14 @@ export type AddToEvolutionOriginAction = _Action<
 export const reducerAddToEvolutionOriginAction: Reducer<
   AddToEvolutionOriginAction
 > = (player, currentState, data) => {
-  // TODO: 挿入位置を指定できるようにする
   const newEvolutionOriginCard = { ...data.newEvolutionOriginCard };
   const destCard = { ...data.destCard };
-  destCard.evolutionOriginCards = [
-    ...destCard.evolutionOriginCards,
-    newEvolutionOriginCard,
-    ...newEvolutionOriginCard.evolutionOriginCards,
-  ];
+  destCard.evolutionOriginCards = [...destCard.evolutionOriginCards];
+  destCard.evolutionOriginCards.splice(
+    data.addIndex,
+    0,
+    ...[newEvolutionOriginCard, ...newEvolutionOriginCard.evolutionOriginCards]
+  );
   newEvolutionOriginCard.evolutionOriginCards = [];
   const destAreaCards = [...currentState[player][data.destCardArea]];
   const replaceTargetIndex = destAreaCards.findIndex(

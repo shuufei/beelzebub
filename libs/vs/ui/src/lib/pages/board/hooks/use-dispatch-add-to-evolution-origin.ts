@@ -9,7 +9,7 @@ export const useDispatchAddToEvolutionOrigin = () => {
   const dispatch = useDispatcher();
 
   const dispatchEvolution = useCallback(
-    (selectedCard: BoardCard, selectedCardArea: BoardArea) => {
+    (selectedCard: BoardCard, selectedCardArea: BoardArea, index: number) => {
       if (actionMode.mode !== 'addToEvolutionOrigin') {
         return;
       }
@@ -20,7 +20,7 @@ export const useDispatchAddToEvolutionOrigin = () => {
           newEvolutionOriginCardArea: actionMode.data.area,
           destCard: selectedCard,
           destCardArea: selectedCardArea,
-          addIndex: 0,
+          addIndex: index,
         },
       });
       setActionMode({

@@ -1,5 +1,3 @@
-import { CardImg } from '@beelzebub/shared/ui';
-import { VStack } from '@chakra-ui/react';
 import { last } from 'lodash';
 import { FC, memo, useContext, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
