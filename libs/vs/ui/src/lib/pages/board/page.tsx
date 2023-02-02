@@ -1,19 +1,11 @@
-import {
-  Box,
-  Button,
-  Heading,
-  HStack,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useRecoilState } from 'recoil';
 import { Board } from './components/board';
+import { BoardSetupMenu } from './components/board-setup-menu';
 import { Memory } from './components/memory';
 import { PeerConnectionSetUpAccordion } from './components/peer-connection-accordion';
-import { SelectDeckModalDialog } from './components/select-deck-modal-dialog';
 import { PlayerContext } from './context/player-context';
-import { useSetupBoard } from './hooks/use-setup-board';
 import { useSyncWhenConnected } from './hooks/use-sync-when-connected';
 import { actionModeState } from './state/action-mode-state';
 
@@ -24,56 +16,41 @@ export type BoardPageProps = {
 export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   useSyncWhenConnected();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const setupBoard = useSetupBoard();
   const [actionMode, setActionMode] = useRecoilState(actionModeState);
-
-  const setup = () => {
-    setupBoard();
-    return;
-  };
 
   const cancelActionMode = () => {
     setActionMode({ mode: 'none', data: undefined });
   };
 
   return (
-    <>
-      <Box as="main">
-        <Heading as="h1" hidden>
-          battle board
-        </Heading>
-        <Box p={4}>
-          <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
-        </Box>
-        <VStack px={8} pb={8}>
-          <PlayerContext.Provider value="opponent">
-            <Board />
-          </PlayerContext.Provider>
-
-          <HStack justifyContent={'center'} w={'full'}>
-            <Memory />
-          </HStack>
-          <HStack mt={2} justifyContent={'flex-end'} w={'full'}>
-            <Button size={'xs'} onClick={onOpen}>
-              デッキ選択
-            </Button>
-            <Button size={'xs'} onClick={setup}>
-              対戦セットアップ
-            </Button>
-            {actionMode.mode !== 'none' && (
-              <Button size={'xs'} onClick={cancelActionMode}>
-                操作キャンセル
-              </Button>
-            )}
-          </HStack>
-
-          <PlayerContext.Provider value="me">
-            <Board />
-          </PlayerContext.Provider>
-        </VStack>
+    <Box as="main">
+      <Heading as="h1" hidden>
+        battle board
+      </Heading>
+      <Box p={4}>
+        <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
       </Box>
-      <SelectDeckModalDialog isOpen={isOpen} onClose={onClose} />
-    </>
+      <VStack px={8} pb={8}>
+        <PlayerContext.Provider value="opponent">
+          <Board />
+        </PlayerContext.Provider>
+
+        <HStack justifyContent={'center'} w={'full'}>
+          <Memory />
+          <BoardSetupMenu />
+        </HStack>
+
+        <PlayerContext.Provider value="me">
+          <Board />
+        </PlayerContext.Provider>
+        <HStack mt={2} justifyContent={'center'} w={'full'}>
+          {actionMode.mode !== 'none' && (
+            <Button size={'xs'} onClick={cancelActionMode}>
+              操作キャンセル
+            </Button>
+          )}
+        </HStack>
+      </VStack>
+    </Box>
   );
 };
