@@ -19,8 +19,8 @@ export const StackArea: FC = memo(() => {
 
   const actionMenuItems: ActionMenuItem[] = [
     AREA_ACTIONS.draw,
-    AREA_ACTIONS.shuffle,
     AREA_ACTIONS.openStack,
+    AREA_ACTIONS.shuffle,
     CARD_ACTIONS.addToSecurityTop,
     CARD_ACTIONS.addToSecurityBottom,
     CARD_ACTIONS.trash,
