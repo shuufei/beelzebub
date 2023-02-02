@@ -51,11 +51,13 @@ export const DeckItem: FC<{
           選択
         </Button>
       </HStack>
-      <DeckCardListModalDialog
-        isOpen={isOpen}
-        cards={deck.latestDeckVersion.cards ?? []}
-        onClose={onClose}
-      />
+      {isOpen && (
+        <DeckCardListModalDialog
+          isOpen={isOpen}
+          cards={deck.latestDeckVersion.cards ?? []}
+          onClose={onClose}
+        />
+      )}
     </>
   );
 });

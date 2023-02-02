@@ -1,5 +1,6 @@
 import { Box, Heading, HStack, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { SWRConfig } from 'swr';
 import { Board } from './components/board';
 import { BoardSetupMenu } from './components/board-setup-menu';
 import { Memory } from './components/memory';
@@ -15,27 +16,34 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   useSyncWhenConnected();
 
   return (
-    <Box as="main">
-      <Heading as="h1" hidden>
-        battle board
-      </Heading>
-      <Box p={4}>
-        <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
+    <SWRConfig
+      value={{
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+      }}
+    >
+      <Box as="main">
+        <Heading as="h1" hidden>
+          battle board
+        </Heading>
+        <Box p={4}>
+          <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
+        </Box>
+        <VStack px={8} pb={8}>
+          <PlayerContext.Provider value="opponent">
+            <Board />
+          </PlayerContext.Provider>
+
+          <HStack justifyContent={'center'} w={'full'}>
+            <Memory />
+            <BoardSetupMenu />
+          </HStack>
+
+          <PlayerContext.Provider value="me">
+            <Board />
+          </PlayerContext.Provider>
+        </VStack>
       </Box>
-      <VStack px={8} pb={8}>
-        <PlayerContext.Provider value="opponent">
-          <Board />
-        </PlayerContext.Provider>
-
-        <HStack justifyContent={'center'} w={'full'}>
-          <Memory />
-          <BoardSetupMenu />
-        </HStack>
-
-        <PlayerContext.Provider value="me">
-          <Board />
-        </PlayerContext.Provider>
-      </VStack>
-    </Box>
+    </SWRConfig>
   );
 };
