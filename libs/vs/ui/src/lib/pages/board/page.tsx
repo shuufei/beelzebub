@@ -16,7 +16,6 @@ import { PlayerContext } from './context/player-context';
 import { useSetupBoard } from './hooks/use-setup-board';
 import { useSyncWhenConnected } from './hooks/use-sync-when-connected';
 import { actionModeState } from './state/action-mode-state';
-import { boardsState } from './state/boards-state';
 
 export type BoardPageProps = {
   skywayApiKey: string;
@@ -27,99 +26,11 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setupBoard = useSetupBoard();
-  const [, setBoards] = useRecoilState(boardsState);
   const [actionMode, setActionMode] = useRecoilState(actionModeState);
 
   const setup = () => {
     setupBoard();
     return;
-  };
-
-  const tmpTrash = () => {
-    setBoards((current) => {
-      const stack = [...current.me.stack];
-      if (stack.length < 4) {
-        return current;
-      }
-      const newTrash = new Array(4).fill(null).reduce((acc) => {
-        const card = stack.shift();
-        return [...acc, card];
-      }, []);
-      return {
-        ...current,
-        me: {
-          ...current.me,
-          stack,
-          trash: [...current.me.trash, ...newTrash],
-        },
-      };
-    });
-  };
-
-  const tmpOpenStack = () => {
-    setBoards((current) => {
-      const stack = [...current.me.stack];
-      if (stack.length < 2) {
-        return current;
-      }
-      const newOpen = new Array(2).fill(null).reduce((acc) => {
-        const card = stack.shift();
-        return [...acc, card];
-      }, []);
-
-      return {
-        ...current,
-        me: {
-          ...current.me,
-          stack,
-          stackOpen: [...current.me.stackOpen, ...newOpen],
-        },
-      };
-    });
-  };
-
-  const tmpOpenSecurity = () => {
-    setBoards((current) => {
-      const security = [...current.me.security];
-      if (security.length < 1) {
-        return current;
-      }
-
-      const newOpenSecurity = new Array(1).fill(null).reduce((acc) => {
-        const card = security.shift();
-        return [...acc, card];
-      }, []);
-      return {
-        ...current,
-        me: {
-          ...current.me,
-          security,
-          securityOpen: [...current.me.securityOpen, ...newOpenSecurity],
-        },
-      };
-    });
-  };
-
-  const tmpHatching = () => {
-    setBoards((current) => {
-      const digitama = [...current.me.digitamaStack];
-      if (digitama.length < 1) {
-        return current;
-      }
-      const standby = new Array(1).fill(null).reduce((acc) => {
-        const card = digitama.shift();
-        return [...acc, card];
-      }, []);
-
-      return {
-        ...current,
-        me: {
-          ...current.me,
-          digitamaStack: digitama,
-          standby: [...current.me.standby, ...standby],
-        },
-      };
-    });
   };
 
   const cancelActionMode = () => {
@@ -150,21 +61,9 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
             <Button size={'xs'} onClick={setup}>
               対戦セットアップ
             </Button>
-            <Button size={'xs'} onClick={tmpTrash}>
-              tmp破棄
-            </Button>
-            <Button size={'xs'} onClick={tmpOpenStack}>
-              open stack
-            </Button>
-            <Button size={'xs'} onClick={tmpOpenSecurity}>
-              open security
-            </Button>
-            <Button size={'xs'} onClick={tmpHatching}>
-              孵化
-            </Button>
             {actionMode.mode !== 'none' && (
               <Button size={'xs'} onClick={cancelActionMode}>
-                mode キャンセル
+                操作キャンセル
               </Button>
             )}
           </HStack>
