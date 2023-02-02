@@ -10,6 +10,7 @@ import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
 import { SecurityArea } from './security-area';
 import { SecurityOpenArea } from './security-open-area';
+import { SecuritySelfCheckArea } from './security-self-check-area';
 import { StackArea } from './stack-area';
 import { StackOpenArea } from './stack-open-area';
 import { StandbyArea } from './standby-area';
@@ -68,6 +69,7 @@ export const Board: FC = memo(() => {
         </VStack>
       </HStack>
       <HandArea />
+      <SecuritySelfCheckArea />
     </VStack>
   );
 });
