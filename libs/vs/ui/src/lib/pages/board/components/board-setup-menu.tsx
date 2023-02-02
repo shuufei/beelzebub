@@ -32,7 +32,7 @@ export const BoardSetupMenu: FC = memo(() => {
         <MenuList>
           <MenuItem onClick={onOpen}>デッキ選択</MenuItem>
           <MenuItem onClick={setup}>対戦セットアップ</MenuItem>
-          <MenuItem>リセット</MenuItem>
+          {/* <MenuItem>リセット</MenuItem> */}
         </MenuList>
       </Menu>
       <SelectDeckModalDialog isOpen={isOpen} onClose={onClose} />
