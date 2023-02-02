@@ -10,4 +10,5 @@ export type BoardArea =
   | 'securitySelfCheck'
   | 'battleDigimon'
   | 'battleTamer'
-  | 'battleOption';
+  | 'battleOption'
+  | 'tmp';

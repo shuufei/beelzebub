@@ -14,6 +14,7 @@ import { reducerAddToEvolutionOriginAction } from './actions/add-to-evolution-or
 import { reducerChangeCardStateAction } from './actions/change-card-state-action';
 import { reducerEvolutionAction } from './actions/evolution-action';
 import { reducerMoveAction } from './actions/move-action';
+import { reducerMoveToTmpFromEvolutionCardAction } from './actions/move-to-tmp-from-evolution-origin-action';
 
 const getNewState = (
   player: Player,
@@ -37,6 +38,12 @@ const getNewState = (
       return reducerEvolutionAction(player, currentState, action.data);
     case 'add-to-evolution-origin':
       return reducerAddToEvolutionOriginAction(
+        player,
+        currentState,
+        action.data
+      );
+    case 'move-to-tmp-from-evolution-card':
+      return reducerMoveToTmpFromEvolutionCardAction(
         player,
         currentState,
         action.data

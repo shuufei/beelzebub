@@ -135,7 +135,7 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
         <Box p={4}>
           <PeerConnectionSetUpAccordion skywayApiKey={skywayApiKey} />
         </Box>
-        <VStack px={8}>
+        <VStack px={8} pb={8}>
           <PlayerContext.Provider value="opponent">
             <Board />
           </PlayerContext.Provider>

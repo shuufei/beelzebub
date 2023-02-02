@@ -28,6 +28,7 @@ export const useSetupBoard = () => {
       ...boardMe.standby,
       ...boardMe.trash,
       ...boardMe.digitamaStack,
+      ...boardMe.tmp,
     ]
       .map((card) => {
         return [card, ...card.evolutionOriginCards].map((v) => v);
@@ -68,6 +69,7 @@ export const useSetupBoard = () => {
       stackOpen: [],
       standby: [],
       trash: [],
+      tmp: [],
     };
 
     dispatch('me', {

@@ -20,4 +20,5 @@ export const INITIALI_BOARD_STATE: BoardState = {
   battleDigimon: [],
   battleTamer: [],
   battleOption: [],
+  tmp: [],
 };
