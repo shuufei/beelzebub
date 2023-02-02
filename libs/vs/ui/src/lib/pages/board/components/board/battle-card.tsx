@@ -51,13 +51,15 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
   );
 
   const actionMenuItems: ActionMenuItem[] = [
+    // バトルデジモンエリアのカードは登場できいない
+    // バトルテイマー、バトルオプションエリアのカードはバトルデジモンエリアに登場できる
+    ...(boardArea === 'battleDigimon' ? [] : [CARD_ACTIONS.appear]),
     CARD_ACTIONS.rest,
     CARD_ACTIONS.active,
     CARD_ACTIONS.trash,
     CARD_ACTIONS.degeneration,
     CARD_ACTIONS.addToEvolutionOrigin,
     CARD_ACTIONS.addToHand,
-    CARD_ACTIONS.appear,
     CARD_ACTIONS.reverseToStackTop,
     CARD_ACTIONS.reverseToStackBottom,
     CARD_ACTIONS.addToSecurityTop,
