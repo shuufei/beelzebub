@@ -27,6 +27,7 @@ export type CardAction =
 export type AreaAction =
   | 'shuffle'
   | 'openStack'
+  | 'openSecurity'
   | 'draw'
   | 'recovery'
   | 'selfCheck'

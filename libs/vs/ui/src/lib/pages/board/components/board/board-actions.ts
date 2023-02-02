@@ -72,6 +72,10 @@ export const AREA_ACTIONS: {
     id: 'openStack',
     label: '山札をオープン',
   },
+  openSecurity: {
+    id: 'openSecurity',
+    label: 'セキュリティをオープン',
+  },
   draw: {
     id: 'draw',
     label: 'ドロー',
