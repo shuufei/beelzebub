@@ -21,12 +21,19 @@ export const reducerMoveAction: Reducer<MoveAction> = (
     (v) => v.id !== card.id
   );
   const currentDestAreaCards = [...currentState[player][data.destArea]];
-
   const evolutionOriginCards = [...card.evolutionOriginCards];
-  card.evolutionOriginCards = [];
-  const addedDestAreaCards = data.withOutEvolutionOrigins
-    ? [card]
-    : [card, ...evolutionOriginCards];
+
+  // バトルエリアに移動する場合は、進化元を展開して移動させない
+  const noDeployEvolutioinOrigins = data.destArea.startsWith('battle');
+  if (!noDeployEvolutioinOrigins) {
+    // バトルエリア以外への移動の場合は、進化元を展開した形で移動させるため、進化元を空にする
+    card.evolutionOriginCards = [];
+  }
+  // バトルエリアへの移動でないかつ、明示的に進化元を含める移動の場合は、進化元を移動先エリアで展開する必要がある
+  const addedDestAreaCards =
+    data.withOutEvolutionOrigins || noDeployEvolutioinOrigins
+      ? [card]
+      : [card, ...evolutionOriginCards];
 
   // NOTE: 進化元を含めずに移動する場合は、進化元を元のエリアにとどめる
   if (data.withOutEvolutionOrigins) {
