@@ -177,14 +177,17 @@ export const SecurityOpenArea: FC = memo(() => {
 
   return securityOpenArea.length > 0 ? (
     <VStack spacing={1} justifyContent={'flex-start'} alignItems={'flex-start'}>
-      <HStack justifyContent={'flex-end'}>
-        <Button size={'xs'} onClick={() => onClickAreaAction('trashAll')}>
-          全て破棄
-        </Button>
-        <Button size={'xs'} onClick={() => onClickAreaAction('addToHand')}>
-          全て手札に加える
-        </Button>
-      </HStack>
+      {player === 'me' && (
+        <HStack justifyContent={'flex-end'}>
+          <Button size={'xs'} onClick={() => onClickAreaAction('trashAll')}>
+            全て破棄
+          </Button>
+          <Button size={'xs'} onClick={() => onClickAreaAction('addToHand')}>
+            全て手札に加える
+          </Button>
+        </HStack>
+      )}
+
       <HStack>
         {securityOpenArea.map((card) => {
           return player === 'me' ? (

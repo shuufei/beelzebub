@@ -175,17 +175,20 @@ export const StackOpenArea: FC = memo(() => {
 
   return stackOpenArea.length > 0 ? (
     <VStack spacing={1} justifyContent={'flex-end'} alignItems={'flex-end'}>
-      <HStack justifyContent={'flex-end'}>
-        <Button size={'xs'} onClick={() => onClickAreaAction('trashAll')}>
-          全て破棄
-        </Button>
-        <Button
-          size={'xs'}
-          onClick={() => onClickAreaAction('reverseToStackBottom')}
-        >
-          全て山札の上に戻す
-        </Button>
-      </HStack>
+      {player === 'me' && (
+        <HStack justifyContent={'flex-end'}>
+          <Button size={'xs'} onClick={() => onClickAreaAction('trashAll')}>
+            全て破棄
+          </Button>
+          <Button
+            size={'xs'}
+            onClick={() => onClickAreaAction('reverseToStackBottom')}
+          >
+            全て山札の上に戻す
+          </Button>
+        </HStack>
+      )}
+
       <HStack justifyContent={'flex-end'}>
         {stackOpenArea.map((card) => {
           return player === 'me' ? (
