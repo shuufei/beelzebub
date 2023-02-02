@@ -8,7 +8,7 @@ export const AreaEmptyImg: FC<{ width: number; onClick?: () => void }> = memo(
     return (
       <Box onClick={onClick}>
         <Image
-          src={'/images/card-placeholder.png'}
+          src={'/images/area-empty.png'}
           width={width}
           height={width * (CARD_IMG_HEIGHT / CARD_IMG_WIDTH)}
           alt="empty"

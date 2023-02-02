@@ -57,11 +57,11 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
     CARD_ACTIONS.degeneration,
     CARD_ACTIONS.addToEvolutionOrigin,
     CARD_ACTIONS.addToHand,
+    CARD_ACTIONS.appear,
     CARD_ACTIONS.reverseToStackTop,
     CARD_ACTIONS.reverseToStackBottom,
     CARD_ACTIONS.addToSecurityTop,
     CARD_ACTIONS.addToSecurityBottom,
-    CARD_ACTIONS.appear,
   ];
 
   const evolutionOriginActionMenuItems: ActionMenuItem[] = [
