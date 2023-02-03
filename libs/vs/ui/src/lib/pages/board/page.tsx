@@ -6,6 +6,7 @@ import { BoardSetupMenu } from './components/board-setup-menu';
 import { Memory } from './components/memory';
 import { PeerConnectionSetUpAccordion } from './components/peer-connection-accordion';
 import { PlayerContext } from './context/player-context';
+import { usePersistBoardMe } from './hooks/use-persist-board-me';
 import { useSyncWhenConnected } from './hooks/use-sync-when-connected';
 
 export type BoardPageProps = {
@@ -14,6 +15,7 @@ export type BoardPageProps = {
 
 export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
   useSyncWhenConnected();
+  usePersistBoardMe();
 
   return (
     <SWRConfig

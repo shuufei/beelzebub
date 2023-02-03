@@ -12,8 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FC } from 'react';
-import { useRecoilState } from 'recoil';
-import { boardsState } from '../../state/boards-state';
+import { useSetDeck } from '../../hooks/use-set-deck';
 import { DeckItem } from './deck-item';
 
 export const SelectDeckModalDialog: FC<{
@@ -21,7 +20,7 @@ export const SelectDeckModalDialog: FC<{
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {
   const { data: decks } = useGetDecksJoinLatestDeckVersion();
-  const [, setBoards] = useRecoilState(boardsState);
+  const setDeck = useSetDeck();
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
       <ModalOverlay />
@@ -36,15 +35,7 @@ export const SelectDeckModalDialog: FC<{
                   key={deck.id}
                   deck={deck}
                   onSelect={() => {
-                    setBoards((current) => {
-                      return {
-                        ...current,
-                        me: {
-                          ...current.me,
-                          deckId: deck.id,
-                        },
-                      };
-                    });
+                    setDeck(deck.id);
                     onClose();
                   }}
                 />

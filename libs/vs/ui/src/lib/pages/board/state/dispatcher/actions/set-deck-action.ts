@@ -3,7 +3,7 @@ import { Reducer, _Action } from './action-type';
 
 export type SetDeckAction = _Action<
   'set-deck',
-  Pick<BoardState, 'stack' | 'digitamaStack' | 'deckId'>
+  Pick<BoardState, 'stack' | 'digitamaStack'>
 >;
 
 export const reducerSetDeckAction: Reducer<SetDeckAction> = (

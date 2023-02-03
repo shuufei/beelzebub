@@ -1,12 +1,10 @@
 import { Box, Button, HStack, VStack } from '@chakra-ui/react';
 import { FC, memo, useCallback, useContext } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { BoardAreaContext } from '../../context/board-area-context';
 import { PlayerContext } from '../../context/player-context';
-import { useInitializeBoard } from '../../hooks/use-initialize-board';
 import { actionModeState } from '../../state/action-mode-state';
 import { useDispatcher } from '../../state/dispatcher';
-import { boardDeckIdSelector } from '../../state/selectors/board-deck-id-selector';
 import { BattleArea } from './battle-area';
 import { DigitamaStackArea } from './digitama-stack-area';
 import { HandArea } from './hand-area';
@@ -20,10 +18,7 @@ import { TrashArea } from './trash-area';
 
 export const Board: FC = memo(() => {
   const player = useContext(PlayerContext);
-  const deckId = useRecoilValue(boardDeckIdSelector(player));
   const dispatch = useDispatcher();
-
-  useInitializeBoard(player, deckId);
 
   const [actionMode, setActionMode] = useRecoilState(actionModeState);
 

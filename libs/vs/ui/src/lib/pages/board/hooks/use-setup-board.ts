@@ -11,9 +11,6 @@ export const useSetupBoard = () => {
 
   const setup = useCallback(() => {
     const boardMe = { ...boards.me };
-    if (boardMe.deckId == null) {
-      return;
-    }
 
     const allCards = [
       ...boardMe.battleDigimon,

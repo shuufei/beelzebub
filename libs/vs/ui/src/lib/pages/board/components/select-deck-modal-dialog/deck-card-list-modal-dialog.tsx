@@ -1,4 +1,4 @@
-import { useGetCardsByImgFileNames } from '@beelzebub/deck/db';
+import { useGetCardsByImgFileNames } from '@beelzebub/shared/db';
 import { Card, categorizeCards, DeckVersion } from '@beelzebub/shared/domain';
 import { CardImg } from '@beelzebub/shared/ui';
 import {

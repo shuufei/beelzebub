@@ -1,23 +1,10 @@
-import {
-  BoardArea,
-  BoardCard,
-  BoardState,
-  INITIALI_BOARD_STATE,
-  Player,
-} from '@beelzebub/vs/domain';
+import { BoardState, INITIALI_BOARD_STATE, Player } from '@beelzebub/vs/domain';
 import { atom } from 'recoil';
 
 export type BoardsState = { [p in Player]: BoardState } & {
   memory: {
     player?: Player;
     count: number;
-  };
-  actionMode: {
-    mode: 'none' | 'evolutioin' | 'addToEvolutionOrigin';
-    trigger?: {
-      card: BoardCard;
-      area: BoardArea;
-    };
   };
 };
 
@@ -29,9 +16,6 @@ export const boardsState = atom<BoardsState>({
     memory: {
       player: undefined,
       count: 0,
-    },
-    actionMode: {
-      mode: 'none',
     },
   },
 });
