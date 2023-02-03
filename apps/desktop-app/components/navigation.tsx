@@ -27,7 +27,7 @@ export const Navigation: FC = () => {
     <HStack spacing={'4'}>
       <NavigationItem href="/cards" label="カードリスト" />
       <NavigationItem href="/decks" label="デッキリスト" />
-      <NavigationItem href="/vs" label="対戦" />
+      <NavigationItem href="/vs/board" label="対戦" />
     </HStack>
   );
 };
