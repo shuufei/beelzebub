@@ -18,13 +18,13 @@ export const BattleCardPreviewModalDialog: FC<{
   onClose: () => void;
 }> = memo(({ isOpen, card, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'md'}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'sm'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontSize={'md'}>トラッシュ カードリスト</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <VStack spacing={-8} overflow={'visible'} pb={20}>
+          <VStack spacing={-48} overflow={'visible'} pb={20}>
             {[card, ...card.evolutionOriginCards].map((card, i) => {
               return (
                 <Box
@@ -35,7 +35,7 @@ export const BattleCardPreviewModalDialog: FC<{
                   <CardImg
                     categoryId={card.card.categoryId}
                     imgFileName={card.card.imgFileName}
-                    width={240}
+                    width={300}
                   />
                 </Box>
               );

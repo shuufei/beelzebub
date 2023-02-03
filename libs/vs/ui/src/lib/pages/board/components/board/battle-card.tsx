@@ -242,7 +242,7 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
   return (
     <>
       <VStack>
-        <Box onClick={onOpenBattleCard}>
+        <Box>
           {player === 'me' ? (
             <ActionMenu
               actionMenuItems={actionMenuItems}
@@ -253,6 +253,7 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
               <Box
                 transform={card.isRest ? 'rotate(90deg)' : ''}
                 px={card.isRest ? '3' : ''}
+                onClick={onOpenBattleCard}
               >
                 <CardImg
                   categoryId={card.card.categoryId}
