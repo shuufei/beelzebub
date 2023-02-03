@@ -184,7 +184,7 @@ export const StackOpenArea: FC = memo(() => {
             size={'xs'}
             onClick={() => onClickAreaAction('reverseToStackBottom')}
           >
-            全て山札の上に戻す
+            全て山札の下に戻す
           </Button>
         </HStack>
       )}

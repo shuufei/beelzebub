@@ -11,6 +11,7 @@ import { useDispatchEvolution } from '../../hooks/use-dispatch-evolution';
 import { actionModeState } from '../../state/action-mode-state';
 import { useDispatcher } from '../../state/dispatcher';
 import { ActionMenu, ActionMenuItem } from './actioin-menu';
+import { BattleCardPreviewModalDialog } from './battle-carad-preview-modal-dialog';
 import { CARD_ACTIONS } from './board-actions';
 import { SelectPositionForAddEvolutionOriginModalDialog } from './select-position-for-add-evolution-origin-modal-dialog';
 
@@ -20,6 +21,11 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
 
   const [actionMode, setActionMode] = useRecoilState(actionModeState);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenBattleCard,
+    onOpen: onOpenBattleCard,
+    onClose: onCloseBattleCard,
+  } = useDisclosure();
 
   const dispatchEvolution = useDispatchEvolution();
   const dispatchAddToEvolutionOrigin = useDispatchAddToEvolutionOrigin();
@@ -236,13 +242,27 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
   return (
     <>
       <VStack>
-        {player === 'me' ? (
-          <ActionMenu
-            actionMenuItems={actionMenuItems}
-            onClickAction={(id) => {
-              onClickActionMenuItem(id, card);
-            }}
-          >
+        <Box onClick={onOpenBattleCard}>
+          {player === 'me' ? (
+            <ActionMenu
+              actionMenuItems={actionMenuItems}
+              onClickAction={(id) => {
+                onClickActionMenuItem(id, card);
+              }}
+            >
+              <Box
+                transform={card.isRest ? 'rotate(90deg)' : ''}
+                px={card.isRest ? '3' : ''}
+              >
+                <CardImg
+                  categoryId={card.card.categoryId}
+                  imgFileName={card.card.imgFileName}
+                  width={CARD_WIDTH}
+                  isEnabledPreview={false}
+                />
+              </Box>
+            </ActionMenu>
+          ) : (
             <Box
               transform={card.isRest ? 'rotate(90deg)' : ''}
               px={card.isRest ? '3' : ''}
@@ -251,21 +271,11 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
                 categoryId={card.card.categoryId}
                 imgFileName={card.card.imgFileName}
                 width={CARD_WIDTH}
+                isEnabledPreview={false}
               />
             </Box>
-          </ActionMenu>
-        ) : (
-          <Box
-            transform={card.isRest ? 'rotate(90deg)' : ''}
-            px={card.isRest ? '3' : ''}
-          >
-            <CardImg
-              categoryId={card.card.categoryId}
-              imgFileName={card.card.imgFileName}
-              width={CARD_WIDTH}
-            />
-          </Box>
-        )}
+          )}
+        </Box>
 
         {card.evolutionOriginCards.length > 0 && (
           <Wrap maxWidth={CARD_WIDTH} spacing={1} overflow={'visible'}>
@@ -306,6 +316,11 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
         isOpen={isOpen}
         onClose={onClose}
         onSelectIndex={commitAddToEvolutionOrigin}
+      />
+      <BattleCardPreviewModalDialog
+        isOpen={isOpenBattleCard}
+        onClose={onCloseBattleCard}
+        card={card}
       />
     </>
   );

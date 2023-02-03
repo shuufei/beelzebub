@@ -81,7 +81,7 @@ export const TrashCardsModalDialog: FC<{
               srcArea: 'trash',
               destArea: 'hand',
               card,
-              position: 'top',
+              position: 'bottom',
             },
           });
           return;
