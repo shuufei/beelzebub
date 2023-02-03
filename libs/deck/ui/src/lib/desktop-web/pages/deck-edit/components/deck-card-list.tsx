@@ -18,7 +18,7 @@ import { adjustmentCardsState } from '../state/adjustment-cards-state';
 import { deckCardsState } from '../state/deck-cards-state';
 import { AdjustmentDeckCardItem } from './adjustment-deck-card-item';
 import { DeckCardItem } from './deck-card-item';
-import { useGetCardsByImgFileNames } from '@beelzebub/deck/db';
+import { useGetCardsByImgFileNames } from '@beelzebub/shared/db';
 
 export const DeckCardList: FC<{ deck: DeckJoinedLatestDeckVersion }> = memo(
   ({ deck }) => {
