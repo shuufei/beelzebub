@@ -5,6 +5,7 @@ import { Board } from './components/board';
 import { BoardSetupMenu } from './components/board-setup-menu';
 import { Memory } from './components/memory';
 import { PeerConnectionSetUpAccordion } from './components/peer-connection-accordion';
+import { RandomNumberButton } from './components/random-number-button';
 import { PlayerContext } from './context/player-context';
 import { usePersistBoardMe } from './hooks/use-persist-board-me';
 import { useSyncWhenConnected } from './hooks/use-sync-when-connected';
@@ -37,6 +38,7 @@ export const BoardPage: FC<BoardPageProps> = ({ skywayApiKey }) => {
           </PlayerContext.Provider>
 
           <HStack justifyContent={'center'} w={'full'}>
+            <RandomNumberButton />
             <Memory />
             <BoardSetupMenu />
           </HStack>

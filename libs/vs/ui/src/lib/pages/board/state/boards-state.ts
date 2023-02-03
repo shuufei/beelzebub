@@ -6,6 +6,7 @@ export type BoardsState = { [p in Player]: BoardState } & {
     player?: Player;
     count: number;
   };
+  randomNumber?: number;
 };
 
 export const boardsState = atom<BoardsState>({
@@ -17,5 +18,6 @@ export const boardsState = atom<BoardsState>({
       player: undefined,
       count: 0,
     },
+    randomNumber: 0,
   },
 });

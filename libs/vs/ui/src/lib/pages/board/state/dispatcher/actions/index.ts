@@ -4,6 +4,7 @@ import { ChangeCardStateAction } from './change-card-state-action';
 import type { ChangeMemoryAction } from './change-memory-action';
 import type { DrawAction } from './draw-action';
 import { EvolutionAction } from './evolution-action';
+import { SetRandomNumberAction } from './set-random-number-action';
 import { MoveAction } from './move-action';
 import { MoveToTmpFromEvolutionCardAction } from './move-to-tmp-from-evolution-origin-action';
 import type { SetDeckAction } from './set-deck-action';
@@ -24,4 +25,5 @@ export type Action =
   | EvolutionAction
   | AddToEvolutionOriginAction
   | MoveToTmpFromEvolutionCardAction
-  | AllActiveAction;
+  | AllActiveAction
+  | SetRandomNumberAction;

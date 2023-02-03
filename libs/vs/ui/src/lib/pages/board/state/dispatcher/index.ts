@@ -14,6 +14,7 @@ import { reducerAddToEvolutionOriginAction } from './actions/add-to-evolution-or
 import { reducerAllActiveAction } from './actions/all-active-action';
 import { reducerChangeCardStateAction } from './actions/change-card-state-action';
 import { reducerEvolutionAction } from './actions/evolution-action';
+import { reducerSetRandomNumberAction } from './actions/set-random-number-action';
 import { reducerMoveAction } from './actions/move-action';
 import { reducerMoveToTmpFromEvolutionCardAction } from './actions/move-to-tmp-from-evolution-origin-action';
 
@@ -51,6 +52,8 @@ const getNewState = (
       );
     case 'all-active':
       return reducerAllActiveAction(player, currentState, action.data);
+    case 'set-random-number':
+      return reducerSetRandomNumberAction(player, currentState, action.data);
     default:
       return currentState;
   }
