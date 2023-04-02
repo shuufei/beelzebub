@@ -1,0 +1,46 @@
+{
+  "name": "cli-app-auto-play",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cli-app/auto-play/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/cli-app/auto-play",
+        "format": ["cjs"],
+        "main": "apps/cli-app/auto-play/src/main.ts",
+        "tsConfig": "apps/cli-app/auto-play/tsconfig.app.json",
+        "assets": ["apps/cli-app/auto-play/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "cli-app-auto-play:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "cli-app-auto-play:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cli-app/auto-play/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/cli-app/auto-play/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
