@@ -68,6 +68,10 @@ const gameEventSubject = new Subject<GameEvent>();
 const gameEvent$ = gameEventSubject.asObservable();
 
 const currentGameEvent$ = gameEvent$.pipe(share());
+const currentPhase$ = gameEvent$.pipe(
+  // TODO: phase eventをもとに現在のphaseなのか、どちらのターンなのかを保持する
+  share()
+);
 
 type ScheduledGameEvent = GameEvent & {
   effects: Effect[];
@@ -85,6 +89,18 @@ const completedGame$ = completedGameSubject.asObservable();
 const dispatchNextGameEventByAuto = (
   completedGameEvent: ScheduledGameEvent
 ) => {
+  /**
+   * TODO:
+   * - stateから、それぞれのカードがとりうる選択肢を算出
+   * - mustで実行する必要があるものは即座に実行
+   * - mustでないものは、選択肢の中からランダムで実行
+   *    - ここの選択が強化学習により最適化
+   * - 実行可能かどうかの判定は下記を考慮
+   *    - ターンやフェイズ内での実行回数
+   *    - 現在のフェイズ
+   *    - 自分や相手のバトルゾーンのカードの状態
+   *    - どちらのターンか
+   */
   const nextGameEventId: GameEvent['id'] = v4();
   switch (completedGameEvent.type) {
     case 'start-turn':
@@ -154,8 +170,13 @@ const scheduleHandler$ = gameEvent$.pipe(
   distinctUntilChanged(isEqualGameEvent),
   tap((gameEvent) => {
     console.log('[Scheduling Task Start] ', gameEvent);
-    // TODO: scheduling task
-    // ===
+    /**
+     * TODO: schedule task
+     * - eventをもとに発火するeffectの洗い出し
+     * - effectの分岐と収束をderivedEffectsCountでカウント
+     * - derivedEffectsCountが-1になったら収束とし、scheduling taskは完了となる
+     * ===
+     */
     const scheduledGameEvent: ScheduledGameEvent = {
       ...gameEvent,
       effects: [],
@@ -169,8 +190,11 @@ const applyEffectsHandler$ = completedScheduling$.pipe(
   distinctUntilChanged(isEqualGameEvent),
   tap((scheduledGameEvent) => {
     console.log('[Apply Effects Task Start] ', scheduledGameEvent);
-    // TODO: apply task
-    // ===
+    /**
+     * TODO: apply task
+     * - effectsを順番に実行し、stateを更新していく
+     * ===
+     */
     completedApplyEffectsSubject.next(scheduledGameEvent);
   })
 );
@@ -182,7 +206,6 @@ const dispatchNextGameEventHandler$ = completedApplyEffects$.pipe(
     if (completedGameEvent.nextGameEvent != null) {
       gameEventSubject.next(completedGameEvent.nextGameEvent);
     }
-    // TODO: stateから次にとりうる行動をランダムで決定し、dispatchする
     dispatchNextGameEventByAuto(completedGameEvent);
   })
 );
