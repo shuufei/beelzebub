@@ -18,7 +18,8 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "cli-app-auto-play:build"
+        "buildTarget": "cli-app-auto-play:build",
+        "watch": false
       },
       "configurations": {
         "production": {
