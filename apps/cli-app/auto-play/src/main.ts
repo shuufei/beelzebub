@@ -3,12 +3,14 @@ import {
   BehaviorSubject,
   Subject,
   distinctUntilChanged,
+  interval,
   map,
   merge,
   share,
   take,
   takeUntil,
   tap,
+  zip,
 } from 'rxjs';
 import { v4 } from 'uuid';
 import { SETUP_DECK } from './data/setup-deck';
@@ -141,14 +143,16 @@ type DispatchedGameEvent = GameEvent & {
 };
 
 const gameEventSubject = new Subject<DispatchedGameEvent>();
-const gameEvent$ = gameEventSubject.asObservable();
+/**
+ * NOTE:
+ * - debugしやすいように、1イベントごとのintervalを設定する
+ * - 無限ループ発生時の対策として、最大イベント発行数を指定する
+ */
+const gameEvent$ = zip(interval(100), gameEventSubject.asObservable()).pipe(
+  take(100)
+);
 
 const currentGameEvent$ = gameEvent$.pipe(share());
-const currentPhase$ = gameEvent$.pipe(
-  // TODO: phase eventをもとに現在のphaseなのか、どちらのターンなのかを保持する
-
-  share()
-);
 
 type ScheduledGameEvent = DispatchedGameEvent & {
   effects: Effect[];
@@ -353,7 +357,9 @@ const dispatchNextGameEventByAuto = (
 const isEqualGameEvent = <T extends DispatchedGameEvent>(prev: T, curr: T) => {
   return prev.id === curr.id;
 };
+
 const scheduleHandler$ = gameEvent$.pipe(
+  map(([, v]) => v),
   distinctUntilChanged(isEqualGameEvent),
   tap((gameEvent) => {
     console.log('===== [Dispatched Game Event] ', gameEvent);
@@ -415,14 +421,13 @@ const dispatchNextGameEventHandler$ = completedApplyEffects$.pipe(
 const main = () => {
   merge(scheduleHandler$, applyEffectsHandler$, dispatchNextGameEventHandler$)
     .pipe(
-      take(2)
-      // takeUntil(
-      //   completedGame$.pipe(
-      //     tap(() => {
-      //       console.log('[Complete!]');
-      //     })
-      //   )
-      // )
+      takeUntil(
+        completedGame$.pipe(
+          tap(() => {
+            console.log('[Complete!]');
+          })
+        )
+      )
     )
     .subscribe();
 
