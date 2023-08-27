@@ -19,9 +19,9 @@ export const CardDB = z.object({
   appearance_cost: z.string().optional(),
   evolution_cost1: z.string().optional(),
   evolution_cost2: z.string().optional(),
-  effect: z.string().optional(),
-  evolutionary_origin_effect: z.string().optional(),
-  security_effect: z.string().optional(),
+  effect: z.string().nullable().optional(),
+  evolutionary_origin_effect: z.string().nullable().optional(),
+  security_effect: z.string().nullable().optional(),
   category_id: CategoryDB.shape.id,
 });
 

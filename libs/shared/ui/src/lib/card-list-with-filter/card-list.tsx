@@ -69,12 +69,16 @@ const useGetCards = (page: number, query: CardsQuery) => {
     }
     const { data, error } = await dbQuery;
     if (data != null) {
-      const cards = z.array(CardDB).parse(data);
-      const parsed: GetCardsResponseBody = {
-        cards: cards.map(convertToCard),
-        hasNext: cards.length >= MAX_FETCH_COUNT,
-      };
-      return parsed;
+      try {
+        const cards = z.array(CardDB).parse(data);
+        const parsed: GetCardsResponseBody = {
+          cards: cards.map(convertToCard),
+          hasNext: cards.length >= MAX_FETCH_COUNT,
+        };
+        return parsed;
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       throw new Error(
         `failed get cards from supabase: ${JSON.stringify(error)}`
