@@ -26,8 +26,3 @@
 - cookie を set するリクエストをブラウザから実行
 - Google アカウントでログイン
 - supabase DB の users テーブルに手動でユーザ情報を登録
-
-## Tmp
-
-test1
-
