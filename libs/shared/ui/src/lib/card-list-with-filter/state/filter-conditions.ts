@@ -28,6 +28,7 @@ export const filterConditionState = atom<FilterCondition>({
     },
     lv: {
       '-': true,
+      'Lv.-': true,
       'Lv.2': true,
       'Lv.3': true,
       'Lv.4': true,
