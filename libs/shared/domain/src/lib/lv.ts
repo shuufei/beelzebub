@@ -8,6 +8,7 @@ export const Lv = z.union([
   z.literal('Lv.6'),
   z.literal('Lv.7'),
   z.literal('-'),
+  z.literal('Lv.-'),
 ]);
 
 export type Lv = z.infer<typeof Lv>;
