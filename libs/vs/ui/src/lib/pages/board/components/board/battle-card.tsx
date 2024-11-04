@@ -272,7 +272,7 @@ export const BattleCard: FC<{ card: BoardCard }> = memo(({ card }) => {
                 categoryId={card.card.categoryId}
                 imgFileName={card.card.imgFileName}
                 width={CARD_WIDTH}
-                isEnabledPreview={false}
+                isEnabledPreview={true}
               />
             </Box>
           )}
